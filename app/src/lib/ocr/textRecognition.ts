@@ -6,13 +6,41 @@ export interface RecognitionResult {
   text: string;
 }
 
+const OCR_TIMEOUT_MS = 20_000;
+
+function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const id = setTimeout(() => {
+      reject(new Error(`${label} timed out after ${ms / 1000}s`));
+    }, ms);
+    promise.then(
+      (v) => {
+        clearTimeout(id);
+        resolve(v);
+      },
+      (err) => {
+        clearTimeout(id);
+        reject(err as Error);
+      },
+    );
+  });
+}
+
 /**
  * Run on-device ML Kit text recognition on a captured image.
- * Returns both the raw and cleaned text so callers can store the raw
- * output in the scan history without losing fidelity.
+ * Returns both the raw and cleaned text.
+ *
+ * Wrapped in a 20s timeout because ML Kit's promise has been observed
+ * to hang silently on some Android devices and label compositions
+ * (particularly dense aerosol cans). Without the timeout the calling
+ * spinner would never clear.
  */
 export async function recogniseText(imageUri: string): Promise<RecognitionResult> {
-  const result = await TextRecognition.recognize(imageUri);
+  const result = await withTimeout(
+    TextRecognition.recognize(imageUri),
+    OCR_TIMEOUT_MS,
+    "Text recognition",
+  );
   const rawText = result.text ?? "";
   return { rawText, text: cleanOcrOutput(rawText) };
 }

@@ -11,12 +11,6 @@ import {
 import { CameraView, useCameraPermissions } from "expo-camera";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "@/navigation/types";
-import { recogniseText } from "@/lib/ocr/textRecognition";
-import { parseIngredients } from "@/lib/matching/ingredientParser";
-import { matchIngredients } from "@/lib/matching/matcher";
-import { currentUid } from "@/lib/firebase/auth";
-import { saveScan } from "@/lib/firebase/scans";
-import { substanceDb, useScanStore } from "@/lib/store/scanStore";
 import { colors, radii, spacing } from "@/theme/colors";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Scan">;
@@ -26,65 +20,29 @@ export function ScanScreen({ navigation }: Props) {
   const capturing = useRef(false);
   const [permission, requestPermission] = useCameraPermissions();
   const [busy, setBusy] = useState(false);
-  const setCurrentScan = useScanStore((s) => s.setCurrentScan);
 
   const handleCapture = useCallback(async () => {
     if (capturing.current || !camera.current) return;
     capturing.current = true;
     setBusy(true);
-    const createdAt = Date.now();
     try {
       const photo = await camera.current.takePictureAsync({
-        quality: 0.85,
+        quality: 0.9,
         skipProcessing: false,
       });
       if (!photo?.uri) throw new Error("No image returned from camera");
-      const { rawText, text } = await recogniseText(photo.uri);
-      const parsed = parseIngredients(text);
-      if (parsed.length < 3) {
-        Alert.alert(
-          "Couldn't read that",
-          "We only picked up a few words. Try again with better lighting and the whole list in frame.",
-        );
-        return;
-      }
-      const matches = matchIngredients(parsed, substanceDb.index, substanceDb.lookup);
-
-      let scanId: string | null = null;
-      if (currentUid()) {
-        try {
-          const saved = await saveScan({
-            ocrText: rawText,
-            parsedIngredients: parsed,
-            matches,
-            imageStoragePath: null,
-            substancesDbVersion: substanceDb.version,
-          });
-          scanId = saved.id;
-        } catch (err) {
-          // eslint-disable-next-line no-console
-          console.warn("saveScan failed, continuing offline:", err);
-        }
-      }
-
-      setCurrentScan({
-        id: scanId,
-        createdAt,
-        ocrText: rawText,
-        parsedIngredients: parsed,
-        matches,
+      navigation.navigate("Crop", {
+        uri: photo.uri,
+        width: photo.width,
+        height: photo.height,
       });
-      navigation.navigate(
-        "Results",
-        scanId ? { scanId } : undefined,
-      );
     } catch (err) {
-      Alert.alert("Scan failed", (err as Error).message);
+      Alert.alert("Capture failed", (err as Error).message);
     } finally {
       setBusy(false);
       capturing.current = false;
     }
-  }, [navigation, setCurrentScan]);
+  }, [navigation]);
 
   if (!permission) {
     return (

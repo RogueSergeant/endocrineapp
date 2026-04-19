@@ -8,6 +8,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { RootStackParamList } from "@/navigation/types";
 import { ScanScreen } from "@/screens/ScanScreen";
+import { CropScreen } from "@/screens/CropScreen";
 import { ResultsScreen } from "@/screens/ResultsScreen";
 import { HistoryScreen } from "@/screens/HistoryScreen";
 import { SubstanceDetailScreen } from "@/screens/SubstanceDetailScreen";
@@ -66,6 +67,11 @@ export default function App() {
                 name="Scan"
                 component={ScanScreen}
                 options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Crop"
+                component={CropScreen}
+                options={{ headerShown: false, animation: "fade" }}
               />
               <Stack.Screen
                 name="Results"
