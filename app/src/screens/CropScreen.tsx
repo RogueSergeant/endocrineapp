@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -30,6 +30,27 @@ type Props = NativeStackScreenProps<RootStackParamList, "Crop">;
 
 const HANDLE_SIZE = 28;
 const MIN_RECT = 80;
+const CROP_TIMEOUT_MS = 15_000;
+const SAVE_TIMEOUT_MS = 8_000;
+
+function withTimeout<T>(p: Promise<T>, ms: number, label: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const id = setTimeout(
+      () => reject(new Error(`${label} timed out after ${ms / 1000}s`)),
+      ms,
+    );
+    p.then(
+      (v) => {
+        clearTimeout(id);
+        resolve(v);
+      },
+      (err) => {
+        clearTimeout(id);
+        reject(err as Error);
+      },
+    );
+  });
+}
 
 // Compute the on-screen rect of a "contain"-fit image.
 function containedRect(
@@ -53,6 +74,7 @@ function containedRect(
 export function CropScreen({ navigation, route }: Props) {
   const { uri, width: imgW, height: imgH } = route.params;
   const [busy, setBusy] = useState(false);
+  const runningRef = useRef(false);
   const setCurrentScan = useScanStore((s) => s.setCurrentScan);
 
   // Available drawing area = full screen minus header / footer chrome.
@@ -66,23 +88,32 @@ export function CropScreen({ navigation, route }: Props) {
     [imgW, imgH, screen.width, drawAreaH],
   );
 
+  // The Image container lives at screen y = drawAreaY, so the image
+  // content's absolute screen y is drawAreaY + fit.y. Rectangle coords
+  // are in absolute screen space (the rect sits on the root View) so
+  // every bound / init / conversion must use `imageTop` as the Y
+  // reference, not raw `fit.y`.
+  const imageTop = drawAreaY + fit.y;
+  const imageLeft = fit.x;
+  const imageBottom = imageTop + fit.h;
+  const imageRight = imageLeft + fit.w;
+
   // Initial selection: middle 90% × 35% of the image, biased downward
   // (ingredient lists usually live in the bottom half of a label).
-  const initX = fit.x + fit.w * 0.05;
+  const initX = imageLeft + fit.w * 0.05;
   const initW = fit.w * 0.9;
   const initH = fit.h * 0.35;
-  const initY = fit.y + fit.h * 0.5 - initH / 2;
+  const initY = imageTop + fit.h * 0.5 - initH / 2;
 
   const x = useSharedValue(initX);
   const y = useSharedValue(initY);
   const w = useSharedValue(initW);
   const h = useSharedValue(initH);
 
-  // Worklets get their own copies of the bounds.
-  const minX = fit.x;
-  const minY = fit.y;
-  const maxX = fit.x + fit.w;
-  const maxY = fit.y + fit.h;
+  const minX = imageLeft;
+  const minY = imageTop;
+  const maxX = imageRight;
+  const maxY = imageBottom;
 
   const bodyPan = Gesture.Pan().onChange((e) => {
     "worklet";
@@ -136,7 +167,7 @@ export function CropScreen({ navigation, route }: Props) {
     left: 0,
     top: drawAreaY,
     right: 0,
-    height: y.value - drawAreaY,
+    height: Math.max(0, y.value - drawAreaY),
   }));
   const dimBottomStyle = useAnimatedStyle(() => ({
     position: "absolute",
@@ -194,24 +225,37 @@ export function CropScreen({ navigation, route }: Props) {
       setBusy(true);
       const createdAt = Date.now();
       try {
-        // Map screen-space rect → image-space rect.
-        const sx = (cropX - fit.x) / fit.w;
-        const sy = (cropY - fit.y) / fit.h;
+        // Map screen-space rect → image-space rect. Critical: subtract
+        // imageTop / imageLeft (which are the actual on-screen top-left
+        // of the image) rather than fit.x / fit.y (which are relative
+        // to the Image container origin, not the root View).
+        const sx = (cropX - imageLeft) / fit.w;
+        const sy = (cropY - imageTop) / fit.h;
         const sw = cropW / fit.w;
         const sh = cropH / fit.h;
-        const result = await manipulateAsync(
-          uri,
-          [
-            {
-              crop: {
-                originX: Math.max(0, Math.round(sx * imgW)),
-                originY: Math.max(0, Math.round(sy * imgH)),
-                width: Math.max(1, Math.round(sw * imgW)),
-                height: Math.max(1, Math.round(sh * imgH)),
-              },
-            },
-          ],
-          { compress: 0.9, format: SaveFormat.JPEG },
+
+        // Clamp to the image bounds so we never ask manipulate for a
+        // region that hangs off the edge (which can make the native
+        // call hang or throw on some Android devices).
+        const originX = Math.min(imgW - 1, Math.max(0, Math.round(sx * imgW)));
+        const originY = Math.min(imgH - 1, Math.max(0, Math.round(sy * imgH)));
+        const width = Math.max(
+          16,
+          Math.min(imgW - originX, Math.round(sw * imgW)),
+        );
+        const height = Math.max(
+          16,
+          Math.min(imgH - originY, Math.round(sh * imgH)),
+        );
+
+        const result = await withTimeout(
+          manipulateAsync(
+            uri,
+            [{ crop: { originX, originY, width, height } }],
+            { compress: 0.9, format: SaveFormat.JPEG },
+          ),
+          CROP_TIMEOUT_MS,
+          "Image crop",
         );
         const { rawText, text } = await recogniseText(result.uri);
         const parsed = parseIngredients(text);
@@ -226,17 +270,24 @@ export function CropScreen({ navigation, route }: Props) {
         let scanId: string | null = null;
         if (currentUid()) {
           try {
-            const saved = await saveScan({
-              ocrText: rawText,
-              parsedIngredients: parsed,
-              matches,
-              imageStoragePath: null,
-              substancesDbVersion: substanceDb.version,
-            });
+            const saved = await withTimeout(
+              saveScan({
+                ocrText: rawText,
+                parsedIngredients: parsed,
+                matches,
+                imageStoragePath: null,
+                substancesDbVersion: substanceDb.version,
+              }),
+              SAVE_TIMEOUT_MS,
+              "Save",
+            );
             scanId = saved.id;
           } catch (err) {
+            // Offline or slow Firestore — ship the scan locally and
+            // let the RNFirebase queued write flush when connectivity
+            // comes back. User still sees results immediately.
             // eslint-disable-next-line no-console
-            console.warn("saveScan failed:", err);
+            console.warn("saveScan failed, continuing offline:", err);
           }
         }
         setCurrentScan({
@@ -251,18 +302,21 @@ export function CropScreen({ navigation, route }: Props) {
         Alert.alert("Scan failed", (err as Error).message);
       } finally {
         setBusy(false);
+        runningRef.current = false;
       }
     },
-    [fit, imgH, imgW, navigation, setCurrentScan, uri],
+    [fit, imageLeft, imageTop, imgH, imgW, navigation, setCurrentScan, uri],
   );
 
   const onConfirm = useCallback(() => {
-    if (busy) return;
-    // Snapshot the rect from the worklet onto JS thread before kicking
-    // off the async manipulate / OCR work.
+    // Ref guard (not just `busy`) because a second tap can pass the
+    // state-based check before React commits setBusy(true) from the
+    // first tap — leading to parallel runScans and a stuck spinner.
+    if (runningRef.current) return;
+    runningRef.current = true;
     const snap = { x: x.value, y: y.value, w: w.value, h: h.value };
     void runScan(snap.x, snap.y, snap.w, snap.h);
-  }, [busy, h, runScan, w, x, y]);
+  }, [h, runScan, w, x, y]);
 
   // Single tap inside body should also count as a "no movement" pan.
   const onTapMove = useCallback(
