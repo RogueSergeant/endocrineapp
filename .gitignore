@@ -57,8 +57,9 @@ pnpm-debug.log*
 coverage/
 
 # Data pipeline runtime artefacts
-data-pipeline/data/raw/
+data-pipeline/data/raw/*
 data-pipeline/data/cache/
 data-pipeline/data/cosing/
 !data-pipeline/data/raw/.gitkeep
+!data-pipeline/data/raw/list-*.xlsx
 !data-pipeline/data/cache/.gitkeep

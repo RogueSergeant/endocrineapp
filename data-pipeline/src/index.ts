@@ -1,4 +1,4 @@
-import { mkdir } from "node:fs/promises";
+import { mkdir, stat } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { fetchEdLists } from "./fetchEdLists.ts";
@@ -41,23 +41,51 @@ async function main(): Promise<void> {
     allRows.push(...SEED_ROWS);
     usedSeed = true;
   } else {
-    try {
-      log("fetch", "downloading edlists.org spreadsheets");
-      const fetched = await fetchEdLists(config.rawDir);
-      for (const f of fetched) {
-        log("fetch", `list ${f.listId}: ${f.bytes} bytes → ${f.filePath}`);
+    // Prefer pre-downloaded XLSX files checked into the repo. edlists.org
+    // sits behind a WAF that 403s non-browser clients, so we can't always
+    // fetch programmatically; committing the three spreadsheets to
+    // data-pipeline/data/raw/ lets the pipeline run fully offline.
+    const preDownloaded: { path: string; listId: ListId }[] = [];
+    for (const listId of [1, 2, 3] as ListId[]) {
+      const p = join(config.rawDir, `list-${listId}.xlsx`);
+      try {
+        const s = await stat(p);
+        if (s.isFile() && s.size > 0) preDownloaded.push({ path: p, listId });
+      } catch {
+        // file missing — fall through to fetch
       }
-      log("parse", "parsing XLSX files");
-      for (const f of fetched) {
-        const rows = await parseListFile(f.filePath, f.listId as ListId);
+    }
+
+    if (preDownloaded.length === 3) {
+      log("raw", `using ${preDownloaded.length} XLSX files in ${config.rawDir}`);
+      for (const f of preDownloaded) {
+        const rows = await parseListFile(f.path, f.listId);
         log("parse", `list ${f.listId}: ${rows.length} rows`);
         allRows.push(...rows);
       }
-    } catch (err) {
-      log("fetch", `failed: ${(err as Error).message}`);
-      log("seed", "falling back to curated seed dataset");
-      allRows.push(...SEED_ROWS);
-      usedSeed = true;
+    } else {
+      try {
+        log("fetch", "downloading edlists.org spreadsheets");
+        const fetched = await fetchEdLists(config.rawDir);
+        for (const f of fetched) {
+          log("fetch", `list ${f.listId}: ${f.bytes} bytes → ${f.filePath}`);
+        }
+        log("parse", "parsing XLSX files");
+        for (const f of fetched) {
+          const rows = await parseListFile(f.filePath, f.listId as ListId);
+          log("parse", `list ${f.listId}: ${rows.length} rows`);
+          allRows.push(...rows);
+        }
+      } catch (err) {
+        log("fetch", `failed: ${(err as Error).message}`);
+        log(
+          "fetch",
+          "if edlists.org is blocking the runner, download the three XLSX files by hand and commit them to data-pipeline/data/raw/list-{1,2,3}.xlsx",
+        );
+        log("seed", "falling back to curated seed dataset");
+        allRows.push(...SEED_ROWS);
+        usedSeed = true;
+      }
     }
   }
 
