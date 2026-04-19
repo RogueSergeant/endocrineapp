@@ -1,0 +1,33 @@
+{
+  "name": "ed-scanner-data-pipeline",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ETL for the Endocrine Disruptor Scanner substance database",
+  "license": "UNLICENSED",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "fetch": "tsx src/fetchEdLists.ts",
+    "build-seed": "tsx src/buildSeed.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "jest"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0",
+    "p-limit": "^5.0.0",
+    "undici": "^6.19.8",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.14.10",
+    "@types/uuid": "^10.0.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.3",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.3"
+  }
+}

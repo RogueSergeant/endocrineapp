@@ -1,0 +1,737 @@
+{
+  "version": "2026-04-19",
+  "source": "edlists.org",
+  "sourceLastUpdated": "2025-12",
+  "substanceCount": 30,
+  "substances": [
+    {
+      "id": "seed-0001-bpa-0000-000000000000",
+      "casNumber": "80-05-7",
+      "ecNumber": "201-245-8",
+      "canonicalName": "Bisphenol A (BPA)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified as endocrine disruptor (SVHC)",
+          "regulatoryField": "REACH",
+          "year": 2017
+        }
+      ],
+      "aliases": [
+        "Bisphenol A",
+        "BPA",
+        "4,4'-Isopropylidenediphenol",
+        "2,2-bis(4-hydroxyphenyl)propane",
+        "80-05-7"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "seed-0002-bps-0000-000000000000",
+      "casNumber": "80-09-1",
+      "ecNumber": "201-250-5",
+      "canonicalName": "Bisphenol S (BPS)",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Under EU investigation",
+          "regulatoryField": "REACH",
+          "year": 2021
+        }
+      ],
+      "aliases": [
+        "Bisphenol S",
+        "BPS",
+        "4,4'-sulfonyldiphenol"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "seed-0003-dehp-0000-000000000000",
+      "casNumber": "117-81-7",
+      "ecNumber": "204-211-0",
+      "canonicalName": "Di(2-ethylhexyl) phthalate (DEHP)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified as endocrine disruptor (SVHC)",
+          "regulatoryField": "REACH Annex XIV",
+          "year": 2014
+        }
+      ],
+      "aliases": [
+        "Di(2-ethylhexyl) phthalate",
+        "DEHP",
+        "Bis(2-ethylhexyl) phthalate",
+        "Dioctyl phthalate",
+        "117-81-7"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "seed-0004-dbp-0000-000000000000",
+      "casNumber": "84-74-2",
+      "ecNumber": "201-557-4",
+      "canonicalName": "Dibutyl phthalate (DBP)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified as endocrine disruptor (SVHC)",
+          "regulatoryField": "REACH Annex XIV",
+          "year": 2014
+        }
+      ],
+      "aliases": [
+        "Dibutyl phthalate",
+        "DBP",
+        "Di-n-butyl phthalate",
+        "84-74-2"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "seed-0005-bbp-0000-000000000000",
+      "casNumber": "85-68-7",
+      "ecNumber": "201-622-7",
+      "canonicalName": "Benzyl butyl phthalate (BBP)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified as endocrine disruptor (SVHC)",
+          "regulatoryField": "REACH Annex XIV",
+          "year": 2014
+        }
+      ],
+      "aliases": [
+        "Benzyl butyl phthalate",
+        "BBP",
+        "Butyl benzyl phthalate",
+        "85-68-7"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "seed-0006-dibp-0000-000000000000",
+      "casNumber": "84-69-5",
+      "ecNumber": "201-553-2",
+      "canonicalName": "Diisobutyl phthalate (DIBP)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified as endocrine disruptor (SVHC)",
+          "regulatoryField": "REACH Annex XIV",
+          "year": 2015
+        }
+      ],
+      "aliases": [
+        "Diisobutyl phthalate",
+        "DIBP",
+        "Di-isobutyl phthalate",
+        "84-69-5"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "seed-0007-butylparaben-0000-0000",
+      "casNumber": "94-26-8",
+      "ecNumber": "202-318-7",
+      "canonicalName": "Butylparaben",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified as endocrine disruptor",
+          "regulatoryField": "Cosmetics",
+          "year": 2020
+        }
+      ],
+      "aliases": [
+        "Butylparaben",
+        "Butyl paraben",
+        "Butyl 4-hydroxybenzoate",
+        "Butyl p-hydroxybenzoate",
+        "n-Butyl paraben",
+        "94-26-8"
+      ],
+      "inciName": "Butylparaben"
+    },
+    {
+      "id": "seed-0008-propylparaben-0000-000",
+      "casNumber": "94-13-3",
+      "ecNumber": "202-307-7",
+      "canonicalName": "Propylparaben",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified as endocrine disruptor",
+          "regulatoryField": "Cosmetics",
+          "year": 2020
+        }
+      ],
+      "aliases": [
+        "Propylparaben",
+        "Propyl paraben",
+        "Propyl 4-hydroxybenzoate",
+        "n-Propyl paraben",
+        "94-13-3"
+      ],
+      "inciName": "Propylparaben"
+    },
+    {
+      "id": "seed-0009-isobutylparaben-000000",
+      "casNumber": "4247-02-3",
+      "ecNumber": "224-208-8",
+      "canonicalName": "Isobutylparaben",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified as endocrine disruptor",
+          "regulatoryField": "Cosmetics",
+          "year": 2020
+        }
+      ],
+      "aliases": [
+        "Isobutylparaben",
+        "Isobutyl paraben",
+        "Isobutyl 4-hydroxybenzoate",
+        "4247-02-3"
+      ],
+      "inciName": "Isobutylparaben"
+    },
+    {
+      "id": "seed-0010-isopropylparaben-00000",
+      "casNumber": "4191-73-5",
+      "ecNumber": "224-069-3",
+      "canonicalName": "Isopropylparaben",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified as endocrine disruptor",
+          "regulatoryField": "Cosmetics",
+          "year": 2020
+        }
+      ],
+      "aliases": [
+        "Isopropylparaben",
+        "Isopropyl paraben",
+        "Isopropyl 4-hydroxybenzoate",
+        "4191-73-5"
+      ],
+      "inciName": "Isopropylparaben"
+    },
+    {
+      "id": "seed-0011-bha-00000-000000000000",
+      "casNumber": "25013-16-5",
+      "ecNumber": "246-563-8",
+      "canonicalName": "Butylated hydroxyanisole (BHA)",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Under EU investigation",
+          "regulatoryField": "REACH",
+          "year": 2019
+        }
+      ],
+      "aliases": [
+        "Butylated hydroxyanisole",
+        "BHA",
+        "tert-Butyl-4-hydroxyanisole",
+        "25013-16-5"
+      ],
+      "inciName": "BHA"
+    },
+    {
+      "id": "seed-0012-triclosan-0000-000000",
+      "casNumber": "3380-34-5",
+      "ecNumber": "222-182-2",
+      "canonicalName": "Triclosan",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified as endocrine disruptor (SVHC)",
+          "regulatoryField": "REACH / Biocides",
+          "year": 2015
+        }
+      ],
+      "aliases": [
+        "Triclosan",
+        "5-Chloro-2-(2,4-dichlorophenoxy)phenol",
+        "Irgasan DP300",
+        "3380-34-5"
+      ],
+      "inciName": "Triclosan"
+    },
+    {
+      "id": "seed-0013-triclocarban-0000-0000",
+      "casNumber": "101-20-2",
+      "ecNumber": "202-924-1",
+      "canonicalName": "Triclocarban",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Under investigation",
+          "regulatoryField": "Cosmetics",
+          "year": 2020
+        }
+      ],
+      "aliases": [
+        "Triclocarban",
+        "TCC",
+        "3,4,4'-Trichlorocarbanilide",
+        "101-20-2"
+      ],
+      "inciName": "Triclocarban"
+    },
+    {
+      "id": "seed-0014-bp3-oxybenzone-00000000",
+      "casNumber": "131-57-7",
+      "ecNumber": "205-031-5",
+      "canonicalName": "Benzophenone-3 (Oxybenzone)",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Under EU investigation",
+          "regulatoryField": "Cosmetics",
+          "year": 2021
+        }
+      ],
+      "aliases": [
+        "Benzophenone-3",
+        "Oxybenzone",
+        "BP-3",
+        "2-Hydroxy-4-methoxybenzophenone",
+        "131-57-7"
+      ],
+      "inciName": "Benzophenone-3"
+    },
+    {
+      "id": "seed-0015-bp1-00000000000000000000",
+      "casNumber": "131-56-6",
+      "ecNumber": "205-029-4",
+      "canonicalName": "Benzophenone-1 (BP-1)",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Under EU investigation",
+          "regulatoryField": "Cosmetics",
+          "year": 2021
+        }
+      ],
+      "aliases": [
+        "Benzophenone-1",
+        "BP-1",
+        "2,4-Dihydroxybenzophenone",
+        "131-56-6"
+      ],
+      "inciName": "Benzophenone-1"
+    },
+    {
+      "id": "seed-0016-octinoxate-0000-0000000",
+      "casNumber": "5466-77-3",
+      "ecNumber": "226-775-7",
+      "canonicalName": "Ethylhexyl methoxycinnamate (Octinoxate)",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Under EU investigation",
+          "regulatoryField": "Cosmetics",
+          "year": 2021
+        }
+      ],
+      "aliases": [
+        "Ethylhexyl methoxycinnamate",
+        "Octinoxate",
+        "Octyl methoxycinnamate",
+        "2-Ethylhexyl 4-methoxycinnamate",
+        "EHMC",
+        "OMC",
+        "5466-77-3"
+      ],
+      "inciName": "Ethylhexyl Methoxycinnamate"
+    },
+    {
+      "id": "seed-0017-4mbc-0000-0000000000000",
+      "casNumber": "36861-47-9",
+      "ecNumber": "253-242-6",
+      "canonicalName": "4-Methylbenzylidene camphor (4-MBC)",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Under EU investigation",
+          "regulatoryField": "Cosmetics",
+          "year": 2021
+        }
+      ],
+      "aliases": [
+        "4-Methylbenzylidene camphor",
+        "4-MBC",
+        "Enzacamene",
+        "3-(4-Methylbenzylidene)camphor",
+        "36861-47-9"
+      ],
+      "inciName": "4-Methylbenzylidene Camphor"
+    },
+    {
+      "id": "seed-0018-homosalate-0000-0000000",
+      "casNumber": "118-56-9",
+      "ecNumber": "204-260-8",
+      "canonicalName": "Homosalate",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Under EU investigation",
+          "regulatoryField": "Cosmetics",
+          "year": 2020
+        }
+      ],
+      "aliases": [
+        "Homosalate",
+        "Homomenthyl salicylate",
+        "3,3,5-Trimethylcyclohexyl salicylate",
+        "118-56-9"
+      ],
+      "inciName": "Homosalate"
+    },
+    {
+      "id": "seed-0019-octocrylene-0000-000000",
+      "casNumber": "6197-30-4",
+      "ecNumber": "228-250-8",
+      "canonicalName": "Octocrylene",
+      "evidenceTier": 3,
+      "healthEffects": false,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 3,
+          "status": "National authority evaluation",
+          "regulatoryField": "Cosmetics",
+          "year": 2019
+        }
+      ],
+      "aliases": [
+        "Octocrylene",
+        "2-Ethylhexyl 2-cyano-3,3-diphenylacrylate",
+        "6197-30-4"
+      ],
+      "inciName": "Octocrylene"
+    },
+    {
+      "id": "seed-0020-resorcinol-0000-0000000",
+      "casNumber": "108-46-3",
+      "ecNumber": "203-585-2",
+      "canonicalName": "Resorcinol",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Under EU investigation (thyroid)",
+          "regulatoryField": "REACH",
+          "year": 2022
+        }
+      ],
+      "aliases": [
+        "Resorcinol",
+        "1,3-Benzenediol",
+        "1,3-Dihydroxybenzene",
+        "108-46-3"
+      ],
+      "inciName": "Resorcinol"
+    },
+    {
+      "id": "seed-0021-cyclotetrasiloxane-d4-000",
+      "casNumber": "556-67-2",
+      "ecNumber": "209-136-7",
+      "canonicalName": "Octamethylcyclotetrasiloxane (D4)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified as endocrine disruptor (SVHC)",
+          "regulatoryField": "REACH",
+          "year": 2018
+        }
+      ],
+      "aliases": [
+        "Octamethylcyclotetrasiloxane",
+        "D4",
+        "Cyclotetrasiloxane",
+        "Cyclomethicone 4",
+        "556-67-2"
+      ],
+      "inciName": "Cyclotetrasiloxane"
+    },
+    {
+      "id": "seed-0022-cyclopentasiloxane-d5-00",
+      "casNumber": "541-02-6",
+      "ecNumber": "208-764-9",
+      "canonicalName": "Decamethylcyclopentasiloxane (D5)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified as endocrine disruptor (SVHC)",
+          "regulatoryField": "REACH",
+          "year": 2018
+        }
+      ],
+      "aliases": [
+        "Decamethylcyclopentasiloxane",
+        "D5",
+        "Cyclopentasiloxane",
+        "Cyclomethicone 5",
+        "541-02-6"
+      ],
+      "inciName": "Cyclopentasiloxane"
+    },
+    {
+      "id": "seed-0023-cyclohexasiloxane-d6-000",
+      "casNumber": "540-97-6",
+      "ecNumber": "208-762-8",
+      "canonicalName": "Dodecamethylcyclohexasiloxane (D6)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified as endocrine disruptor (SVHC)",
+          "regulatoryField": "REACH",
+          "year": 2018
+        }
+      ],
+      "aliases": [
+        "Dodecamethylcyclohexasiloxane",
+        "D6",
+        "Cyclohexasiloxane",
+        "540-97-6"
+      ],
+      "inciName": "Cyclohexasiloxane"
+    },
+    {
+      "id": "seed-0024-pfoa-0000-000000000000",
+      "casNumber": "335-67-1",
+      "ecNumber": "206-397-9",
+      "canonicalName": "Perfluorooctanoic acid (PFOA)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified as endocrine disruptor (SVHC)",
+          "regulatoryField": "REACH Annex XVII",
+          "year": 2020
+        }
+      ],
+      "aliases": [
+        "Perfluorooctanoic acid",
+        "PFOA",
+        "Pentadecafluorooctanoic acid",
+        "335-67-1"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "seed-0025-pfos-0000-000000000000",
+      "casNumber": "1763-23-1",
+      "ecNumber": "217-179-8",
+      "canonicalName": "Perfluorooctanesulfonic acid (PFOS)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified as endocrine disruptor",
+          "regulatoryField": "POPs",
+          "year": 2019
+        }
+      ],
+      "aliases": [
+        "Perfluorooctanesulfonic acid",
+        "PFOS",
+        "Heptadecafluorooctanesulfonic acid",
+        "1763-23-1"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "seed-0026-dea-0000-000000000000",
+      "casNumber": "111-42-2",
+      "ecNumber": "203-868-0",
+      "canonicalName": "Diethanolamine (DEA)",
+      "evidenceTier": 3,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 3,
+          "status": "National authority evaluation",
+          "regulatoryField": "Cosmetics",
+          "year": 2018
+        }
+      ],
+      "aliases": [
+        "Diethanolamine",
+        "DEA",
+        "2,2'-Iminodiethanol",
+        "111-42-2"
+      ],
+      "inciName": "Diethanolamine"
+    },
+    {
+      "id": "seed-0027-ethylparaben-0000-00000",
+      "casNumber": "120-47-8",
+      "ecNumber": "204-399-4",
+      "canonicalName": "Ethylparaben",
+      "evidenceTier": 3,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 3,
+          "status": "National authority evaluation",
+          "regulatoryField": "Cosmetics",
+          "year": 2019
+        }
+      ],
+      "aliases": [
+        "Ethylparaben",
+        "Ethyl paraben",
+        "Ethyl 4-hydroxybenzoate",
+        "120-47-8"
+      ],
+      "inciName": "Ethylparaben"
+    },
+    {
+      "id": "seed-0028-methylparaben-0000-0000",
+      "casNumber": "99-76-3",
+      "ecNumber": "202-785-7",
+      "canonicalName": "Methylparaben",
+      "evidenceTier": 3,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 3,
+          "status": "National authority evaluation",
+          "regulatoryField": "Cosmetics",
+          "year": 2019
+        }
+      ],
+      "aliases": [
+        "Methylparaben",
+        "Methyl paraben",
+        "Methyl 4-hydroxybenzoate",
+        "99-76-3"
+      ],
+      "inciName": "Methylparaben"
+    },
+    {
+      "id": "seed-0029-dmdm-hydantoin-0000-0000",
+      "casNumber": "6440-58-0",
+      "ecNumber": "229-222-8",
+      "canonicalName": "DMDM Hydantoin",
+      "evidenceTier": 3,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 3,
+          "status": "National authority evaluation (formaldehyde releaser)",
+          "regulatoryField": "Cosmetics",
+          "year": 2018
+        }
+      ],
+      "aliases": [
+        "DMDM Hydantoin",
+        "1,3-Dimethylol-5,5-dimethylhydantoin",
+        "6440-58-0"
+      ],
+      "inciName": "DMDM Hydantoin"
+    },
+    {
+      "id": "seed-0030-bht-0000-000000000000",
+      "casNumber": "128-37-0",
+      "ecNumber": "204-881-4",
+      "canonicalName": "Butylated hydroxytoluene (BHT)",
+      "evidenceTier": 3,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 3,
+          "status": "National authority evaluation",
+          "regulatoryField": "Cosmetics",
+          "year": 2019
+        }
+      ],
+      "aliases": [
+        "Butylated hydroxytoluene",
+        "BHT",
+        "2,6-Di-tert-butyl-4-methylphenol",
+        "128-37-0"
+      ],
+      "inciName": "BHT"
+    }
+  ]
+}

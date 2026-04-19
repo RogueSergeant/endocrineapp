@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "ED Scanner",
+    "slug": "ed-scanner",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "newArchEnabled": true,
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "org.edscanner.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "We use the camera to read cosmetic ingredient labels. Images never leave your device.",
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "googleServicesFile": "./GoogleService-Info.plist"
+    },
+    "android": {
+      "package": "org.edscanner.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": ["CAMERA"],
+      "googleServicesFile": "./google-services.json"
+    },
+    "plugins": [
+      "expo-dev-client",
+      [
+        "react-native-vision-camera",
+        {
+          "cameraPermissionText": "ED Scanner needs camera access to read ingredient labels."
+        }
+      ],
+      "@react-native-firebase/app"
+    ]
+  }
+}
