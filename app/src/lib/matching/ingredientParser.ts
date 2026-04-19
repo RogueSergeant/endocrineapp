@@ -5,7 +5,12 @@
 const HEADER_RE =
   /\b([il1]ngred[il1]ents?|[il1]ngr[eé3]d[il1]ents?|ingred[il1]entes?|inhaltsstoffe|sammensetning|sast[oa]v[il1]ne|skladniki|composici[oó]n|compos[il1]tion)\b\s*[:\-—]?/i;
 
-const SPLIT_RE = /[,;•·\u2022\n\r/]+/;
+// Primary separators for ingredient lists. Newlines are treated as
+// whitespace instead of separators when the list already uses commas,
+// so OCR that wraps "Potassium Sorbate" across two lines doesn't get
+// split into two separate ingredients.
+const COMMA_SPLIT_RE = /[,;•·\u2022/]+/;
+const NEWLINE_SPLIT_RE = /[,;•·\u2022\n\r/]+/;
 
 /**
  * Treat runs of `digit,digit` and `digit-digit` as atomic so that
@@ -34,8 +39,18 @@ export function parseIngredients(rawOcrText: string): string[] {
     text = text.slice(headerMatch.index + headerMatch[0].length);
   }
   const { protectedText, tokens } = protectNumericGroups(text);
-  const parts = protectedText
-    .split(SPLIT_RE)
+  // If the body already uses commas as separators, newlines are almost
+  // certainly mid-ingredient line-wraps from the OCR and should be
+  // folded into whitespace. Without this, "Potassium\nSorbate" splits
+  // into two tokens and "Potassium" then matches the wrong substance.
+  const commaCount = (protectedText.match(/,/g) ?? []).length;
+  const normalisedText =
+    commaCount >= 2
+      ? protectedText.replace(/[\r\n]+/g, " ")
+      : protectedText;
+  const splitRe = commaCount >= 2 ? COMMA_SPLIT_RE : NEWLINE_SPLIT_RE;
+  const parts = normalisedText
+    .split(splitRe)
     .map((p) => restoreNumericGroups(p, tokens))
     .map((p) => p.replace(/[.\s]+$/g, "").trim())
     .map((p) => p.replace(/^[\s.\-•·\u2022]+/g, ""))

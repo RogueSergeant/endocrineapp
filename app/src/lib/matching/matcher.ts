@@ -5,6 +5,47 @@ const FUZZY_MIN_LENGTH = 8;
 const FUZZY_MAX_DISTANCE = 2;
 
 /**
+ * PubChem enrichment sometimes adds overly generic single-word aliases
+ * (e.g. "Potassium" for Potassium chlorate, "Sodium" for sodium-based
+ * phosphates) that then match any cosmetic label mentioning the bare
+ * element name. Reject these at match time so the pipeline's baked
+ * index doesn't need re-running whenever we add to the list.
+ *
+ * Values are already normalised (lowercase, no punctuation).
+ */
+const GENERIC_ALIAS_DENYLIST: ReadonlySet<string> = new Set([
+  "acid",
+  "alcohol",
+  "aluminium",
+  "aluminum",
+  "ammonium",
+  "aqua",
+  "calcium",
+  "chloride",
+  "extract",
+  "fluoride",
+  "glycerin",
+  "glycerol",
+  "hydroxide",
+  "iron",
+  "magnesium",
+  "oil",
+  "oxide",
+  "peroxide",
+  "phosphate",
+  "potassium",
+  "salt",
+  "silicate",
+  "sodium",
+  "sulfate",
+  "sulfide",
+  "sulphate",
+  "titanium",
+  "water",
+  "zinc",
+]);
+
+/**
  * Levenshtein distance with an early-exit cap. Returns `cap + 1`
  * if the true distance exceeds the cap. OCR errors are dominated by
  * substitutions, insertions, and deletions; transpositions are rare
@@ -129,6 +170,7 @@ export function matchIngredients(
 
     const normalised = normalise(trimmed);
     if (!normalised) return;
+    if (GENERIC_ALIAS_DENYLIST.has(normalised)) return;
 
     const exactId = index[normalised];
     if (exactId) {

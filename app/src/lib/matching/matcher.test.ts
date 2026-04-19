@@ -144,6 +144,22 @@ describe("parseIngredients", () => {
       parseIngredients("1NGREDIENTS: Aqua, Glycerin, Butylparaben"),
     ).toEqual(["Aqua", "Glycerin", "Butylparaben"]);
   });
+
+  it("doesn't split on newlines when commas are the real separator", () => {
+    const out = parseIngredients(
+      "Ingredients: Aqua, Sodium Benzoate, Potassium\nSorbate, Parfum, Citric Acid",
+    );
+    expect(out).toContain("Potassium Sorbate");
+    expect(out).not.toContain("Potassium");
+    expect(out).not.toContain("Sorbate");
+  });
+
+  it("still splits on newlines when there are no commas", () => {
+    const out = parseIngredients(
+      "Ingredients:\nAqua\nGlycerin\nButylparaben",
+    );
+    expect(out).toEqual(["Aqua", "Glycerin", "Butylparaben"]);
+  });
 });
 
 describe("boundedDistance", () => {
