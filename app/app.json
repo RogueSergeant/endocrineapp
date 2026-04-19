@@ -32,10 +32,10 @@
       "expo-dev-client",
       "@react-native-firebase/app",
       [
-        "react-native-vision-camera",
+        "expo-camera",
         {
-          "cameraPermissionText": "ED Scanner needs camera access to read ingredient lists.",
-          "enableCodeScanner": false
+          "cameraPermission": "ED Scanner needs camera access to read ingredient lists.",
+          "recordAudioAndroid": false
         }
       ]
     ]

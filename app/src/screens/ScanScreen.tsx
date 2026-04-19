@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -8,12 +8,7 @@ import {
   Text,
   View,
 } from "react-native";
-import {
-  Camera,
-  useCameraDevice,
-  useCameraPermission,
-  type CameraDevice,
-} from "react-native-vision-camera";
+import { CameraView, useCameraPermissions } from "expo-camera";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "@/navigation/types";
 import { recogniseText } from "@/lib/ocr/textRecognition";
@@ -27,48 +22,11 @@ import { colors, radii, spacing } from "@/theme/colors";
 type Props = NativeStackScreenProps<RootStackParamList, "Scan">;
 
 export function ScanScreen({ navigation }: Props) {
-  const camera = useRef<Camera>(null);
+  const camera = useRef<CameraView>(null);
   const capturing = useRef(false);
-  const { hasPermission, requestPermission } = useCameraPermission();
-  const hookDevice = useCameraDevice("back");
-  const [fallbackDevice, setFallbackDevice] = useState<CameraDevice | null>(null);
-  const [denied, setDenied] = useState(false);
+  const [permission, requestPermission] = useCameraPermissions();
   const [busy, setBusy] = useState(false);
   const setCurrentScan = useScanStore((s) => s.setCurrentScan);
-  const device = hookDevice ?? fallbackDevice;
-
-  useEffect(() => {
-    let cancelled = false;
-    if (hasPermission) return;
-    (async () => {
-      const granted = await requestPermission();
-      if (cancelled) return;
-      if (!granted) setDenied(true);
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [hasPermission, requestPermission]);
-
-  // Force-enumerate devices if the hook hasn't returned one within a frame.
-  // Vision Camera's useCameraDevice occasionally stays empty on launches
-  // where permission was already granted (no permission-change event to
-  // trigger re-enumeration). getAvailableCameraDevices() is a direct query.
-  useEffect(() => {
-    if (!hasPermission || hookDevice) return;
-    let cancelled = false;
-    const id = setTimeout(() => {
-      if (cancelled) return;
-      const devices = Camera.getAvailableCameraDevices();
-      const back =
-        devices.find((d) => d.position === "back") ?? devices[0] ?? null;
-      if (back) setFallbackDevice(back);
-    }, 300);
-    return () => {
-      cancelled = true;
-      clearTimeout(id);
-    };
-  }, [hasPermission, hookDevice]);
 
   const handleCapture = useCallback(async () => {
     if (capturing.current || !camera.current) return;
@@ -76,12 +34,12 @@ export function ScanScreen({ navigation }: Props) {
     setBusy(true);
     const createdAt = Date.now();
     try {
-      const photo = await camera.current.takePhoto({
-        flash: "off",
-        enableShutterSound: false,
+      const photo = await camera.current.takePictureAsync({
+        quality: 0.85,
+        skipProcessing: false,
       });
-      const uri = `file://${photo.path}`;
-      const { rawText, text } = await recogniseText(uri);
+      if (!photo?.uri) throw new Error("No image returned from camera");
+      const { rawText, text } = await recogniseText(photo.uri);
       const parsed = parseIngredients(text);
       if (parsed.length < 3) {
         Alert.alert(
@@ -104,9 +62,6 @@ export function ScanScreen({ navigation }: Props) {
           });
           scanId = saved.id;
         } catch (err) {
-          // Don't block the scan on a Firestore write error — the user
-          // still gets their results locally. History will miss this
-          // scan, which is better than losing the capture entirely.
           // eslint-disable-next-line no-console
           console.warn("saveScan failed, continuing offline:", err);
         }
@@ -131,7 +86,7 @@ export function ScanScreen({ navigation }: Props) {
     }
   }, [navigation, setCurrentScan]);
 
-  if (!hasPermission && !denied) {
+  if (!permission) {
     return (
       <View style={styles.fullCenter}>
         <ActivityIndicator />
@@ -139,13 +94,29 @@ export function ScanScreen({ navigation }: Props) {
     );
   }
 
-  if (denied) {
+  if (!permission.granted) {
+    if (permission.canAskAgain) {
+      return (
+        <View style={styles.fullCenter}>
+          <Text style={styles.permissionTitle}>Camera permission needed</Text>
+          <Text style={styles.permissionBody}>
+            ED Scanner reads ingredient lists from product packaging. We never
+            upload your photos.
+          </Text>
+          <Pressable
+            style={styles.permissionBtn}
+            onPress={() => void requestPermission()}
+          >
+            <Text style={styles.permissionBtnText}>Grant access</Text>
+          </Pressable>
+        </View>
+      );
+    }
     return (
       <View style={styles.fullCenter}>
-        <Text style={styles.permissionTitle}>Camera permission needed</Text>
+        <Text style={styles.permissionTitle}>Camera permission denied</Text>
         <Text style={styles.permissionBody}>
-          ED Scanner reads ingredient lists from product packaging. We never
-          upload your photos.
+          Open Settings and enable the camera permission for ED Scanner.
         </Text>
         <Pressable
           style={styles.permissionBtn}
@@ -157,45 +128,13 @@ export function ScanScreen({ navigation }: Props) {
     );
   }
 
-  if (!device) {
-    const rawDevices = Camera.getAvailableCameraDevices();
-    return (
-      <View style={styles.fullCenter}>
-        <ActivityIndicator />
-        <Text style={[styles.permissionBody, styles.loadingText]}>
-          Loading camera…
-        </Text>
-        <View style={styles.debugPanel}>
-          <Text style={styles.debugText}>
-            hasPermission: {String(hasPermission)}
-          </Text>
-          <Text style={styles.debugText}>
-            hookDevice: {hookDevice ? hookDevice.id : "null"}
-          </Text>
-          <Text style={styles.debugText}>
-            fallbackDevice: {fallbackDevice ? fallbackDevice.id : "null"}
-          </Text>
-          <Text style={styles.debugText}>
-            enumerated: {rawDevices.length}
-          </Text>
-          {rawDevices.slice(0, 4).map((d) => (
-            <Text key={d.id} style={styles.debugText} numberOfLines={1}>
-              · {d.position} / {d.id} / {d.hardwareLevel ?? "?"}
-            </Text>
-          ))}
-        </View>
-      </View>
-    );
-  }
-
   return (
     <View style={styles.container}>
-      <Camera
+      <CameraView
         ref={camera}
         style={StyleSheet.absoluteFill}
-        device={device}
-        isActive
-        photo
+        facing="back"
+        autofocus="on"
       />
       <View style={styles.topBar}>
         <Text style={styles.title}>Scan ingredients</Text>
@@ -255,24 +194,6 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     textAlign: "center",
     marginBottom: spacing(4),
-  },
-  loadingText: {
-    marginTop: spacing(3),
-    marginBottom: 0,
-  },
-  debugPanel: {
-    marginTop: spacing(6),
-    padding: spacing(3),
-    borderRadius: radii.md,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-    alignSelf: "stretch",
-  },
-  debugText: {
-    fontSize: 11,
-    fontFamily: "monospace",
-    color: colors.text,
   },
   permissionBtn: {
     backgroundColor: colors.accent,
