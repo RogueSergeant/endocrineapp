@@ -21,7 +21,27 @@
         }
       ],
       "aliases": [
-        "Benzophenone-3 (Oxybenzone)"
+        "Benzophenone-3 (Oxybenzone)",
+        "oxybenzone",
+        "2-HYDROXY-4-METHOXYBENZOPHENONE",
+        "Benzophenone-3",
+        "2-Benzoyl-5-methoxyphenol",
+        "Advastab 45",
+        "Oxybenzon",
+        "Anuvex",
+        "4-Methoxy-2-hydroxybenzophenone",
+        "Methanone, (2-hydroxy-4-methoxyphenyl)phenyl-",
+        "Ongrostab HMB",
+        "Oxibenzona",
+        "Usaf cy-9",
+        "Spectra-sorb UV 9",
+        "Escalol 567",
+        "Chimassorb 90",
+        "Oxybenzonum",
+        "Uvinul 9",
+        "Syntase 62",
+        "Uvistat 24",
+        "Cyasorb UV 9"
       ],
       "inciName": null
     },
@@ -168,7 +188,26 @@
         }
       ],
       "aliases": [
-        "Butylparaben"
+        "Butylparaben",
+        "Butyl 4-hydroxybenzoate",
+        "Butyl paraben",
+        "Butyl p-hydroxybenzoate",
+        "Butoben",
+        "Nipabutyl",
+        "Butyl chemosept",
+        "Butyl parasept",
+        "Tegosept B",
+        "Butyl tegosept",
+        "Butyl parahydroxybenzoate",
+        "Aseptoform butyl",
+        "Solbrol B",
+        "n-Butyl p-hydroxybenzoate",
+        "Butyl butex",
+        "Tegosept Butyl",
+        "Preserval B",
+        "Butyl-Parasept",
+        "Benzoic acid, 4-hydroxy-, butyl ester",
+        "butyl p-hydroxy benzoate"
       ],
       "inciName": null
     },
@@ -316,26 +355,7 @@
       "aliases": [
         "D6",
         "Dodecamethylcyclohexasiloxane",
-        "Dodecamethylcyclohexasiloxane (D6)",
-        "Cyclohexasiloxane, dodecamethyl-",
-        "Cyclomethicone 6",
-        "XHK3U310BA",
-        "XIAMETER PMX-0246",
-        "DTXSID6027183",
-        "RefChem:590100",
-        "DTXCID507183",
-        "Cyclohexasiloxane",
-        "MFCD00144215",
-        "2,2,4,4,6,6,8,8,10,10,12,12-Dodecamethylcyclohexasiloxane",
-        "S08515",
-        "EINECS 208-762-8",
-        "UNII-XHK3U310BA",
-        "C12H36O6Si6",
-        "HSDB 7723",
-        "DC 246 fluid",
-        "Simethicone Impurity 5",
-        "Dodecamethylhexacyclosiloxane",
-        "EC 208-762-8"
+        "Dodecamethylcyclohexasiloxane (D6)"
       ],
       "inciName": null
     },
@@ -470,7 +490,26 @@
         }
       ],
       "aliases": [
-        "Resorcinol"
+        "Resorcinol",
+        "benzene-1,3-diol",
+        "1,3-Benzenediol",
+        "1,3-Dihydroxybenzene",
+        "Resorcin",
+        "m-Hydroxyphenol",
+        "m-Hydroquinone",
+        "m-Dihydroxybenzene",
+        "3-Hydroxyphenol",
+        "Resorcine",
+        "m-Benzenediol",
+        "m-Dioxybenzene",
+        "Pelagol RS",
+        "Dihydroxybenzol",
+        "Pelagol Grey RS",
+        "Resorzin",
+        "Developer O",
+        "Developer R",
+        "Developer RS",
+        "Fouramine RS"
       ],
       "inciName": null
     },
@@ -568,26 +607,7 @@
       "aliases": [
         "BPF",
         "Bisphenol F",
-        "Bisphenol F (BPF)",
-        "4,4'-Methylenediphenol",
-        "4,4'-Dihydroxydiphenylmethane",
-        "Bis(4-hydroxyphenyl)methane",
-        "Phenol, 4,4'-methylenebis-",
-        "p-(p-Hydroxybenzyl)phenol",
-        "4,4'-Methylenebisphenol",
-        "Phenol, 4,4'-methylenedi-",
-        "BIS(P-HYDROXYPHENYL)METHANE",
-        "p,p'-Bis(hydroxyphenyl)methane",
-        "4,4'-bisphenol F",
-        "4,4'-Methylene diphenol",
-        "4,4'-Methylenebis(phenol)",
-        "p,p'-BPF",
-        "PP-BIP-F",
-        "DTXSID9022445",
-        "QD2C19044Z",
-        "NSC-401136",
-        "4,4'-Methylenebis[Phenol]",
-        "DTXCID202445"
+        "Bisphenol F (BPF)"
       ],
       "inciName": null
     },
@@ -693,7 +713,25 @@
       "aliases": [
         "HHCB",
         "Galaxolide",
-        "Galaxolide (HHCB)"
+        "Galaxolide (HHCB)",
+        "Abbalide",
+        "Galoxolide",
+        "Pearlide",
+        "Galaxolide White",
+        "hexamethylindanopyran",
+        "Cyclopenta[g]-2-benzopyran, 1,3,4,6,7,8-hexahydro-4,6,6,7,8,8-hexamethyl-",
+        "Hexahydrohexamethyl cyclopentabenzopyran",
+        "1,3,4,6,7,8-Hexahydro-4,6,6,7,8,8-hexamethyl-cyclopenta-gamma-2-benzopyran",
+        "14170060AT",
+        "CHEBI:83784",
+        "Hexahydro-4,6,6,7,8,8-hexamethylcyclopenta-gamma-2-benzopyran",
+        "1,3,4,6,7,8-Hexahydro-4,6,6,7,8,8-hexamethylindeno(5,6-c)pyran",
+        "Cyclopenta(g)-2-benzopyran, 1,3,4,6,7,8-hexahydro-4,6,6,7,8,8-hexamethyl-",
+        "1,3,4,6,7,8-hexahydro-4,6,6,7,8,8-hexamethylindeno[5,6-c]pyran",
+        "hexahydro-hexamethylcyclopenta-benzopyran",
+        "RefChem:633508",
+        "4,6,6,7,8,8-Hexamethyl-1,3,4,6,7,8-hexahydrocyclopenta[g]isochromene",
+        "1,3,4,6,7,8-Hexahydro-4,6,6,7,8,8-hexamethylcyclopenta[g]-2-benzopyran"
       ],
       "inciName": null
     },
@@ -754,26 +792,7 @@
         }
       ],
       "aliases": [
-        "Isobutylparaben",
-        "Isobutyl 4-hydroxybenzoate",
-        "isobutyl paraben",
-        "Isobutyl p-hydroxybenzoate",
-        "Isobutyl-4-hydroxybenzoate",
-        "Isobutyl parahydroxybenzoate",
-        "Benzoic acid, 4-hydroxy-, 2-methylpropyl ester",
-        "DTXSID4020749",
-        "isobutyl-p-hydroxybenzoate",
-        "BENZOIC ACID, p-HYDROXY-, ISOBUTYL ESTER",
-        "0QQJ25X58G",
-        "DTXCID20749",
-        "i-BHB",
-        "RefChem:923642",
-        "2-Methylpropyl 4-hydroxybenzoate",
-        "4-Hydroxybenzoic Acid Isobutyl Ester",
-        "MFCD00020167",
-        "p-Hydroxybenzoic acid isobutyl ester",
-        "p-Oxybenzoesaureisobutylester",
-        "4-Hydroxybenzoic acid-isobutyl ester"
+        "Isobutylparaben"
       ],
       "inciName": null
     },
@@ -834,26 +853,7 @@
         }
       ],
       "aliases": [
-        "Musk ketone",
-        "4'-tert-Butyl-2',6'-dimethyl-3',5'-dinitroacetophenone",
-        "2-Acetyl-5-tert-butyl-4,6-dinitroxylene",
-        "DTXSID6025690",
-        "Acetophenone, 4'-tert-butyl-2',6'-dimethyl-3',5'-dinitro-",
-        "3,5-Dinitro-2,6-dimethyl-4-tert-butylacetophenone",
-        "4-tert-Butyl-3,5-dinitro-2,6-dimethylacetophenone",
-        "2,6-Dinitro-3,5-dimethyl-4-acetyl-tert-butylbenzene",
-        "2,6-Dimethyl-3,5-dinitro-4-t-butylacetophenone",
-        "4-tert-Butyl-2,6-dimethyl-3,5-dinitroacetophenone",
-        "483V3E1L6J",
-        "1-(4-tert-butyl-2,6-dimethyl-3,5-dinitrophenyl)ethan-1-one",
-        "NSC-15339",
-        "1-(4-(1,1-Dimethylethyl)-2,6-dimethyl-3,5-dinitrophenyl)ethanone",
-        "Ethanone, 1-(4-(1,1-dimethylethyl)-2,6-dimethyl-3,5-dinitrophenyl)-",
-        "DTXCID405690",
-        "Ethanone, 1-[4-(1,1-dimethylethyl)-2,6-dimethyl-3,5-dinitrophenyl]-",
-        "1-[4-(1,1-Dimethylethyl)-2,6-dimethyl-3,5-dinitrophenyl]ethanone",
-        "RefChem:160193",
-        "Ketone moschus"
+        "Musk ketone"
       ],
       "inciName": null
     },
@@ -874,27 +874,7 @@
         }
       ],
       "aliases": [
-        "Octyl methoxycinnamate (Ethylhexyl methoxycinnamate)",
-        "Octinoxate",
-        "2-Ethylhexyl p-methoxycinnamate",
-        "Parsol MCX",
-        "Parsol MOX",
-        "Parsol",
-        "Octyl methoxycinnamate",
-        "2-Ethylhexyl-p-methoxycinnamate",
-        "Escalol 557",
-        "Sunscreen AV",
-        "Ethylhexyl methoxycinnamate",
-        "Uvinul MC80",
-        "Ethylhexyl p-methoxycinnamate",
-        "2-ethylhexyl (E)-3-(4-methoxyphenyl)prop-2-enoate",
-        "Neo heliopan AV",
-        "Eusolex 2292",
-        "octyl-methoxycinnamate",
-        "2-Ethylhexyl methoxycinnamate",
-        "Uvinul MC 80",
-        "Ocinoxate",
-        "Octyl p-Methoxycinnamate"
+        "Octyl methoxycinnamate (Ethylhexyl methoxycinnamate)"
       ],
       "inciName": null
     },
@@ -915,26 +895,7 @@
         }
       ],
       "aliases": [
-        "Ethylhexyl salicylate",
-        "2-ETHYLHEXYL SALICYLATE",
-        "Octisalate",
-        "2-Ethylhexyl 2-hydroxybenzoate",
-        "Benzoic acid, 2-hydroxy-, 2-ethylhexyl ester",
-        "Escalol",
-        "Salicylic Acid 2-Ethylhexyl Ester",
-        "Octisalato",
-        "NSC-46151",
-        "DTXSID7040734",
-        "4X49Y0596W",
-        "DTXCID5020734",
-        "OCTYLSALICYLATE",
-        "octisalatum",
-        "Tanning Oil",
-        "RefChem:856053",
-        "Arizona Sun Tanning Oil SPF 3",
-        "Sunarome WMO",
-        "Ethyl hexyl salicylate",
-        "Sunarome O"
+        "Ethylhexyl salicylate"
       ],
       "inciName": null
     },
