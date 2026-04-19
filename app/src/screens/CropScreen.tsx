@@ -29,7 +29,7 @@ import { colors, radii, spacing } from "@/theme/colors";
 type Props = NativeStackScreenProps<RootStackParamList, "Crop">;
 
 const HANDLE_SIZE = 28;
-const MIN_RECT = 80;
+const MIN_RECT = 40;
 const CROP_TIMEOUT_MS = 15_000;
 const SAVE_TIMEOUT_MS = 8_000;
 

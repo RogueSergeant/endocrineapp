@@ -185,6 +185,28 @@ describe("parseIngredients", () => {
     );
     expect(out).toEqual(["Aqua", "Glycerin"]);
   });
+
+  it("cleans OCR artifacts (leading $, doubled initial caps, pipe→l)", () => {
+    const out = parseIngredients(
+      "INGREDIENTS: Aqua, $ Sodium BBenzoate, Linaly| Acetate, Methy|paraben",
+    );
+    expect(out).toEqual([
+      "Aqua",
+      "Sodium Benzoate",
+      "Linalyl Acetate",
+      "Methylparaben",
+    ]);
+  });
+
+  it("splits on period+space to peel off trailing non-ingredient text", () => {
+    const out = parseIngredients(
+      "INGREDIENTS: Aqua, Citric Acid, Linalyl Acetate. HYGIENE WIPES ULTIMATE",
+    );
+    expect(out).toContain("Aqua");
+    expect(out).toContain("Citric Acid");
+    expect(out).toContain("Linalyl Acetate");
+    expect(out).not.toContain("Linalyl Acetate. HYGIENE WIPES ULTIMATE");
+  });
 });
 
 describe("boundedDistance", () => {

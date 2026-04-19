@@ -51,9 +51,11 @@ const END_OF_LIST_RE = new RegExp(
 // Primary separators for ingredient lists. Newlines are treated as
 // whitespace instead of separators when the list already uses commas,
 // so OCR that wraps "Potassium Sorbate" across two lines doesn't get
-// split into two separate ingredients.
-const COMMA_SPLIT_RE = /[,;•·\u2022/]+/;
-const NEWLINE_SPLIT_RE = /[,;•·\u2022\n\r/]+/;
+// split into two separate ingredients. We also split on ". " so a
+// trailing fragment like "... Linalyl Acetate. HYGIENE WIPES" peels
+// off the non-ingredient text.
+const COMMA_SPLIT_RE = /[,;•·\u2022/]+|\.\s+/;
+const NEWLINE_SPLIT_RE = /[,;•·\u2022\n\r/]+|\.\s+/;
 
 function levenshtein(a: string, b: string, cap: number): number {
   if (a === b) return 0;
@@ -122,6 +124,53 @@ function restoreNumericGroups(s: string, tokens: string[]): string {
   return s.replace(/__NUM(\d+)__/g, (_match, idx: string) => tokens[Number(idx)] ?? "");
 }
 
+// Per-token OCR cleanup. ML Kit on Android has a handful of recurring
+// artifacts that our deterministic fixes below cover:
+//
+//   $Sodium Benzoate  → Sodium Benzoate   (strip leading currency /
+//                                           punctuation glyphs)
+//   BBenzoate         → Benzoate          (duplicated initial capital
+//                                           where the recogniser fired
+//                                           twice on a single letter)
+//   Linaly| Acetate   → Linalyl Acetate   (pipe between letters is
+//                                           almost always lowercase l)
+//
+// Intentionally conservative: only strip / collapse when a normal INCI
+// name couldn't plausibly start with the substituted character.
+function cleanToken(raw: string): string {
+  let s = raw;
+
+  // Strip leading non-letter junk (currency, asterisks, sigils, etc.)
+  // while preserving digit-leading names like "1,3-butanediol".
+  s = s.replace(/^[^A-Za-z0-9]+/, "");
+
+  // Replace pipe / broken-bar characters that fall between letters or
+  // at the end of a word with lowercase l (e.g. "Linaly|" → "Linalyl",
+  // "Methy|paraben" → "Methylparaben"). Lookahead covers letter, space,
+  // or end-of-string after the pipe.
+  s = s.replace(/([A-Za-z])[|¦](?=[A-Za-z]|\s|$)/g, "$1l");
+
+  // Per-word fixes. Split on whitespace, process each word, re-join.
+  s = s
+    .split(/\s+/)
+    .map((word) => {
+      if (word.length < 3) return word;
+      const c0 = word.charAt(0);
+      const c1 = word.charAt(1);
+      const c2 = word.charAt(2);
+      // Duplicated initial capital letter: "BBenzoate", "SSodium",
+      // "AAqua". Drop the duplicate if the second char matches the
+      // first (both uppercase) and the third is lowercase.
+      if (c0 === c1 && c0 >= "A" && c0 <= "Z" && c2 >= "a" && c2 <= "z") {
+        return word.slice(1);
+      }
+      return word;
+    })
+    .join(" ");
+
+  return s.trim();
+}
+
 export function parseIngredients(rawOcrText: string): string[] {
   if (!rawOcrText) return [];
   let text = rawOcrText;
@@ -152,6 +201,7 @@ export function parseIngredients(rawOcrText: string): string[] {
     .map((p) => restoreNumericGroups(p, tokens))
     .map((p) => p.replace(/[.\s]+$/g, "").trim())
     .map((p) => p.replace(/^[\s.\-•·\u2022]+/g, ""))
+    .map(cleanToken)
     .filter((p) => p.length > 0)
     // Drop common label scaffolding
     .filter((p) => !/^(may contain|caps?|n°|nº)\s*$/i.test(p))
