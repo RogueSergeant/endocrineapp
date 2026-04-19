@@ -160,6 +160,31 @@ describe("parseIngredients", () => {
     );
     expect(out).toEqual(["Aqua", "Glycerin", "Butylparaben"]);
   });
+
+  it("stops at warning / direction markers after the ingredient list", () => {
+    const out = parseIngredients(
+      "INGREDIENTS: Aqua, Glycerin, Butylparaben. CAUTION: avoid eyes. Do not use on broken skin.",
+    );
+    expect(out).toEqual(["Aqua", "Glycerin", "Butylparaben"]);
+  });
+
+  it("recovers a heavily OCR-mangled header (NGEDENTS)", () => {
+    // Real OCR output from a dry-shampoo can scan: "INGREDIENTS"
+    // arrived as "NGEDENTS" (lost I, R, I).
+    const out = parseIngredients(
+      "Marketing copy here. NGEDENTS: Butane, Isobutane, Propane, Alcohol Denat., Parfum",
+    );
+    expect(out).toContain("Butane");
+    expect(out).toContain("Parfum");
+    expect(out).not.toContain("Marketing copy here");
+  });
+
+  it("filters sentence-like tokens that aren't ingredients", () => {
+    const out = parseIngredients(
+      "INGREDIENTS: Aqua, Glycerin, Tolerance tested under dermatological control",
+    );
+    expect(out).toEqual(["Aqua", "Glycerin"]);
+  });
 });
 
 describe("boundedDistance", () => {
