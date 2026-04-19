@@ -47,12 +47,20 @@ async function main(): Promise<void> {
     // data-pipeline/data/raw/ lets the pipeline run fully offline.
     const preDownloaded: { path: string; listId: ListId }[] = [];
     for (const listId of [1, 2, 3] as ListId[]) {
-      const p = join(config.rawDir, `list-${listId}.xlsx`);
-      try {
-        const s = await stat(p);
-        if (s.isFile() && s.size > 0) preDownloaded.push({ path: p, listId });
-      } catch {
-        // file missing — fall through to fetch
+      const candidates = [
+        join(config.rawDir, `list-${listId}.xlsx`),
+        join(config.rawDir, `list${listId}.xlsx`),
+      ];
+      for (const p of candidates) {
+        try {
+          const s = await stat(p);
+          if (s.isFile() && s.size > 0) {
+            preDownloaded.push({ path: p, listId });
+            break;
+          }
+        } catch {
+          // try next candidate
+        }
       }
     }
 
