@@ -158,12 +158,32 @@ export function ScanScreen({ navigation }: Props) {
   }
 
   if (!device) {
+    const rawDevices = Camera.getAvailableCameraDevices();
     return (
       <View style={styles.fullCenter}>
         <ActivityIndicator />
         <Text style={[styles.permissionBody, styles.loadingText]}>
           Loading camera…
         </Text>
+        <View style={styles.debugPanel}>
+          <Text style={styles.debugText}>
+            hasPermission: {String(hasPermission)}
+          </Text>
+          <Text style={styles.debugText}>
+            hookDevice: {hookDevice ? hookDevice.id : "null"}
+          </Text>
+          <Text style={styles.debugText}>
+            fallbackDevice: {fallbackDevice ? fallbackDevice.id : "null"}
+          </Text>
+          <Text style={styles.debugText}>
+            enumerated: {rawDevices.length}
+          </Text>
+          {rawDevices.slice(0, 4).map((d) => (
+            <Text key={d.id} style={styles.debugText} numberOfLines={1}>
+              · {d.position} / {d.id} / {d.hardwareLevel ?? "?"}
+            </Text>
+          ))}
+        </View>
       </View>
     );
   }
@@ -239,6 +259,20 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: spacing(3),
     marginBottom: 0,
+  },
+  debugPanel: {
+    marginTop: spacing(6),
+    padding: spacing(3),
+    borderRadius: radii.md,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    alignSelf: "stretch",
+  },
+  debugText: {
+    fontSize: 11,
+    fontFamily: "monospace",
+    color: colors.text,
   },
   permissionBtn: {
     backgroundColor: colors.accent,
