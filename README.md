@@ -37,36 +37,75 @@ enriches with INCI names from CosIng and synonyms from PubChem, and writes:
 The PubChem responses are cached under `data-pipeline/data/cache/` so re-runs
 are fast and respectful of the API.
 
-### 2. Run the app
+### 2. Run the app on your phone
 
-Prerequisites: Xcode (iOS) or Android Studio (Android), CocoaPods on macOS,
-an Expo account for `eas build`, a Firebase project.
+The app uses native modules (Vision Camera, ML Kit, Firebase) so it cannot
+run in Expo Go. You need a custom dev client. There are two ways to get one
+onto your phone — pick whichever matches your setup.
+
+#### Option A: EAS cloud build (no SDKs required)
+
+Easiest if you don't have Xcode / Android Studio installed. Builds happen on
+Expo's servers; you install the resulting APK / TestFlight build on your
+phone and connect it to a metro bundler running on your laptop.
+
+Prereqs: an Expo account (`npx expo login`) and a Firebase project (see §3).
 
 ```bash
 cd app
 npm install
-cp .env.example .env            # then fill in your Firebase config
+npx eas-cli login
+npx eas-cli init                          # one-time, sets the project ID in app.json
+npx eas-cli build --profile development --platform android
+# → wait ~10-20 min, then scan the QR / download the APK and sideload it
+npx expo start --dev-client               # then open the dev client on your phone
+```
+
+For iOS, swap `--platform android` for `--platform ios`. iOS requires an
+Apple Developer account ($99/yr) and your device's UDID registered with EAS.
+
+#### Option B: Local build (faster iterations, requires SDKs)
+
+Prereqs: Xcode (iOS, macOS only) or Android Studio (Android), CocoaPods on
+macOS, your phone connected over USB with developer mode on.
+
+```bash
+cd app
+npm install
 npx expo prebuild
-npx expo run:ios                # or run:android
+npx expo run:android --device           # or run:ios --device
 ```
 
 ML Kit on iOS requires CocoaPods to install native dependencies after
 `expo prebuild`. Run `cd ios && pod install` if `expo run:ios` does not do
 it for you.
 
-### 3. Firebase setup
+### 3. Firebase setup (required before first build)
 
-Create a Firebase project, enable:
+Create a Firebase project at https://console.firebase.google.com, enable:
 
 - Firestore (production mode, region `europe-west3`)
 - Anonymous Authentication
 - Cloud Storage
 
-Drop `google-services.json` into `app/` and `GoogleService-Info.plist` into
-`app/ios/`. Both files are gitignored.
+Then add an Android app with package name `com.edscanner.app` and download
+`google-services.json` into `app/`. Add an iOS app with bundle id
+`com.edscanner.app` and put `GoogleService-Info.plist` into `app/ios/` (or
+`app/` — Expo's prebuild moves it). Both files are gitignored.
+
+Deploy the security rules:
+
+```bash
+npx firebase-tools deploy --only firestore:rules,storage:rules
+```
 
 For local development, install the Firebase CLI and run
-`firebase emulators:start` from the project root.
+`npx firebase-tools emulators:start` from the project root, then set
+`EXPO_PUBLIC_USE_FIRESTORE_EMULATOR=1` in `app/.env`.
+
+> Without these config files the Android build fails at the
+> `google-services` Gradle plugin step. iOS will build but crash on first
+> Firebase API call.
 
 ## Tests
 
