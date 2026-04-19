@@ -1,7 +1,7 @@
 {
   "version": "2026-04-19",
   "source": "edlists.org",
-  "sourceLastUpdated": "2025-12",
+  "sourceLastUpdated": "2026-04",
   "substanceCount": 29,
   "substances": [
     {
@@ -44,7 +44,26 @@
       "aliases": [
         "BBP",
         "Benzyl butyl phthalate",
-        "Benzyl butyl phthalate (BBP)"
+        "Benzyl butyl phthalate (BBP)",
+        "BUTYL BENZYL PHTHALATE",
+        "Sicol",
+        "Palatinol BB",
+        "Unimoll BB",
+        "Santicizer 160",
+        "Butylbenzyl phthalate",
+        "n-Butyl benzyl phthalate",
+        "Sicol 160",
+        "Benzyl n-butyl phthalate",
+        "1,2-Benzenedicarboxylic acid, butyl phenylmethyl ester",
+        "Phthalic acid, benzyl butyl ester",
+        "Benzyl butylphthalate",
+        "NCI-C54375",
+        "DTXSID3020205",
+        "Ketjenflex 160",
+        "2-O-benzyl 1-O-butyl benzene-1,2-dicarboxylate",
+        "Diacizer D 160",
+        "Butyl phenylmethyl 1,2-benzenedicarboxylate",
+        "YPC4PJX59M"
       ],
       "inciName": null
     },
@@ -67,7 +86,26 @@
       "aliases": [
         "DEHP",
         "Bis(2-ethylhexyl) phthalate",
-        "Bis(2-ethylhexyl) phthalate (DEHP)"
+        "Bis(2-ethylhexyl) phthalate (DEHP)",
+        "Di(2-ethylhexyl) phthalate",
+        "Di(2-ethylhexyl)phthalate",
+        "Etalon",
+        "Ethylhexyl phthalate",
+        "Vinicizer 80",
+        "Dioctylphthalate",
+        "Hercoflex 260",
+        "Nuoplaz dop",
+        "RC plasticizer DOP",
+        "Hatcol dop",
+        "Reomol dop",
+        "Sansocizer DOP",
+        "Ergoplast FDO",
+        "Monocizer DOP",
+        "Plasthall DOP",
+        "Mollan O",
+        "Pittsburgh PX-138",
+        "Ergoplast FDO-S",
+        "Bis(2-ethylhexyl) benzene-1,2-dicarboxylate"
       ],
       "inciName": null
     },
@@ -90,7 +128,26 @@
       "aliases": [
         "BPA",
         "Bisphenol A",
-        "Bisphenol A (BPA)"
+        "Bisphenol A (BPA)",
+        "2,2-Bis(4-hydroxyphenyl)propane",
+        "Bisphenol",
+        "Diano",
+        "4,4'-Isopropylidenediphenol",
+        "4,4'-(propane-2,2-diyl)diphenol",
+        "Diphenylolpropane",
+        "4,4'-Bisphenol A",
+        "2,2-Bis(p-hydroxyphenyl)propane",
+        "Parabis A",
+        "DIAN",
+        "Rikabanol",
+        "Bisphenol-A",
+        "Biphenol A",
+        "Ipognox 88",
+        "p,p'-Bisphenol A",
+        "Pluracol 245",
+        "Bisferol A",
+        "p,p'-Isopropylidenebisphenol",
+        "2,2-Di(4-phenylol)propane"
       ],
       "inciName": null
     },
@@ -134,7 +191,26 @@
       "aliases": [
         "D5",
         "Decamethylcyclopentasiloxane",
-        "Decamethylcyclopentasiloxane (D5)"
+        "Decamethylcyclopentasiloxane (D5)",
+        "Cyclomethicone 5",
+        "Dimethylsiloxane pentamer",
+        "Dow corning 345",
+        "Cyclic dimethylsiloxane pentamer",
+        "NUC silicone VS 7158",
+        "Silicon SF 1202",
+        "Ciclopentasiloxane",
+        "Cyclomethicone D5",
+        "Dekamethylcyklopentasiloxan",
+        "D5-sil",
+        "KF 995",
+        "VS 7158",
+        "0THT5PCI0R",
+        "SF 1202",
+        "Cyclopentasiloxane, 2,2,4,4,6,6,8,8,10,10-decamethyl-",
+        "DTXSID1027184",
+        "JEESILC CPS-211",
+        "XIAMETER PMX-0245",
+        "DTXCID907184"
       ],
       "inciName": null
     },
@@ -157,7 +233,26 @@
       "aliases": [
         "DBP",
         "Dibutyl phthalate",
-        "Dibutyl phthalate (DBP)"
+        "Dibutyl phthalate (DBP)",
+        "Di-n-butyl phthalate",
+        "n-Butyl phthalate",
+        "Butyl phthalate",
+        "Genoplast B",
+        "Palatinol C",
+        "Celluflex DPB",
+        "Unimoll DB",
+        "DIBUTYLPHTHALATE",
+        "Staflex DBP",
+        "Elaol",
+        "Ergoplast FDB",
+        "Hexaplas M/B",
+        "Witcizer 300",
+        "Kodaflex DBP",
+        "dibutyl benzene-1,2-dicarboxylate",
+        "Dibutyl 1,2-benzenedicarboxylate",
+        "Dibutyl-o-phthalate",
+        "DBP (ester)",
+        "N-Butylphthalate"
       ],
       "inciName": null
     },
@@ -180,7 +275,25 @@
       "aliases": [
         "DIBP",
         "Diisobutyl phthalate",
-        "Diisobutyl phthalate (DIBP)"
+        "Diisobutyl phthalate (DIBP)",
+        "Isobutyl phthalate",
+        "Palatinol IC",
+        "Hexaplas M/1B",
+        "Phthalic acid, diisobutyl ester",
+        "Kodaflex DIBP",
+        "Di-iso-butyl phthalate",
+        "Di(i-butyl)phthalate",
+        "Hatcol DIBP",
+        "1,2-Benzenedicarboxylic acid, bis(2-methylpropyl) ester",
+        "Diisobutylester kyseliny ftalove",
+        "DTXSID9022522",
+        "1,2-Benzenedicarboxylic acid, 1,2-bis(2-methylpropyl) ester",
+        "isobutyl-o-phthalate",
+        "di-isobutyl phthalate",
+        "bis(2-methylpropyl) phthalate",
+        "di-2-methylpropyl phthalate",
+        "AI3-04278 (USDA)",
+        "IZ67FTN290"
       ],
       "inciName": null
     },
@@ -203,7 +316,26 @@
       "aliases": [
         "D6",
         "Dodecamethylcyclohexasiloxane",
-        "Dodecamethylcyclohexasiloxane (D6)"
+        "Dodecamethylcyclohexasiloxane (D6)",
+        "Cyclohexasiloxane, dodecamethyl-",
+        "Cyclomethicone 6",
+        "XHK3U310BA",
+        "XIAMETER PMX-0246",
+        "DTXSID6027183",
+        "RefChem:590100",
+        "DTXCID507183",
+        "Cyclohexasiloxane",
+        "MFCD00144215",
+        "2,2,4,4,6,6,8,8,10,10,12,12-Dodecamethylcyclohexasiloxane",
+        "S08515",
+        "EINECS 208-762-8",
+        "UNII-XHK3U310BA",
+        "C12H36O6Si6",
+        "HSDB 7723",
+        "DC 246 fluid",
+        "Simethicone Impurity 5",
+        "Dodecamethylhexacyclosiloxane",
+        "EC 208-762-8"
       ],
       "inciName": null
     },
@@ -233,7 +365,26 @@
         "D4",
         "Octamethylcyclotetrasiloxane",
         "Octamethylcyclotetrasiloxane (D4)",
-        "Cyclotetrasiloxane"
+        "Cyclotetrasiloxane",
+        "Cyclotetrasiloxane, octamethyl-",
+        "2,2,4,4,6,6,8,8-Octamethyl-1,3,5,7,2,4,6,8-tetraoxatetrasilocane",
+        "Oktamethylcyklotetrasiloxan",
+        "OMCTS",
+        "Cyclic dimethylsiloxane tetramer",
+        "Cyclomethicone 4",
+        "NUC silicone VS 7207",
+        "Union carbide 7207",
+        "Silicone SF 1173",
+        "DTXSID7027205",
+        "KF 994",
+        "SF 1173",
+        "UC 7207",
+        "VS 7207",
+        "CZ227117JE",
+        "NSC-345674",
+        "DTXCID107205",
+        "CHEBI:25640",
+        "RefChem:167770"
       ],
       "inciName": null
     },
@@ -340,7 +491,26 @@
         }
       ],
       "aliases": [
-        "Triclosan"
+        "Triclosan",
+        "5-CHLORO-2-(2,4-DICHLOROPHENOXY)PHENOL",
+        "Cloxifenolum",
+        "2,4,4'-Trichloro-2'-hydroxydiphenyl ether",
+        "Triclosanum",
+        "Irgasan DP300",
+        "Stri-Dex Cleansing Bar",
+        "Stri-Dex Face Wash",
+        "CH 3565",
+        "Phenol, 5-chloro-2-(2,4-dichlorophenoxy)-",
+        "Lexol 300",
+        "5-Chloro-2-(2,4-dichloro-phenoxy)-phenol",
+        "CH-3565",
+        "Phenyl ether, 2'-hydroxy-2,4,4'-trichloro-",
+        "NSC-759151",
+        "DTXSID5032498",
+        "CHEBI:164200",
+        "4NM5039Y5X",
+        "DNDI1246774",
+        "DTXCID3012498"
       ],
       "inciName": null
     },
@@ -363,7 +533,19 @@
       "aliases": [
         "4-MBC",
         "4-Methylbenzylidene camphor",
-        "4-Methylbenzylidene camphor (4-MBC)"
+        "4-Methylbenzylidene camphor (4-MBC)",
+        "3-(4'-Methylbenzylidene)camphor",
+        "RefChem:1066747",
+        "Bicyclo(2.2.1)heptan-2-one, 1,7,7-trimethyl-3-((4-methylphenyl)methylene)-",
+        "4-Methylbenzylidenecamphor",
+        "1,7,7-trimethyl-3-[(4-methylphenyl)methylidene]bicyclo[2.2.1]heptan-2-one",
+        "Methyl Benzylidene Camphor; 3-(4'-Methyl)benzylidene-bornan-2-one",
+        "3-(4'-methyl)benzylidene-bornan-2-one",
+        "SCHEMBL83091",
+        "UYB80641",
+        "DA-30146",
+        "NS00009412",
+        "1,7,7-trimethyl-3-(p-tolylmethylene)norbornan-2-one"
       ],
       "inciName": null
     },
@@ -386,7 +568,26 @@
       "aliases": [
         "BPF",
         "Bisphenol F",
-        "Bisphenol F (BPF)"
+        "Bisphenol F (BPF)",
+        "4,4'-Methylenediphenol",
+        "4,4'-Dihydroxydiphenylmethane",
+        "Bis(4-hydroxyphenyl)methane",
+        "Phenol, 4,4'-methylenebis-",
+        "p-(p-Hydroxybenzyl)phenol",
+        "4,4'-Methylenebisphenol",
+        "Phenol, 4,4'-methylenedi-",
+        "BIS(P-HYDROXYPHENYL)METHANE",
+        "p,p'-Bis(hydroxyphenyl)methane",
+        "4,4'-bisphenol F",
+        "4,4'-Methylene diphenol",
+        "4,4'-Methylenebis(phenol)",
+        "p,p'-BPF",
+        "PP-BIP-F",
+        "DTXSID9022445",
+        "QD2C19044Z",
+        "NSC-401136",
+        "4,4'-Methylenebis[Phenol]",
+        "DTXCID202445"
       ],
       "inciName": null
     },
@@ -409,7 +610,26 @@
       "aliases": [
         "BPS",
         "Bisphenol S",
-        "Bisphenol S (BPS)"
+        "Bisphenol S (BPS)",
+        "4,4'-Sulfonyldiphenol",
+        "Bis(4-hydroxyphenyl) sulfone",
+        "Phenol, 4,4'-sulfonylbis-",
+        "4-(4-hydroxyphenyl)sulfonylphenol",
+        "4,4'-Dihydroxydiphenyl sulfone",
+        "Bis(p-hydroxyphenyl) sulfone",
+        "Diphone C",
+        "Bis(4-hydroxyphenyl)sulfone",
+        "1,1'-Sulfonylbis(4-hydroxybenzene)",
+        "BPS 1",
+        "4,4'-Sulphonyldiphenol",
+        "3OX4RR782R",
+        "DTXSID3022409",
+        "NSC-8712",
+        "NSC-683541",
+        "DTXCID602409",
+        "CHEBI:34372",
+        "1,1'-Sulfonylbis[4-hydroxybenzene]",
+        "RefChem:569577"
       ],
       "inciName": null
     },
@@ -432,7 +652,25 @@
       "aliases": [
         "DINP",
         "Diisononyl phthalate",
-        "Diisononyl phthalate (DINP)"
+        "Diisononyl phthalate (DINP)",
+        "Diisononylphthalate",
+        "bis(7-methyloctyl) benzene-1,2-dicarboxylate",
+        "Enj 2065",
+        "Sansocizer DINP",
+        "Vestinol NN",
+        "Jayflex DINP",
+        "Vestinol 9",
+        "Phthalisocizer DINP",
+        "Baylectrol 4200",
+        "di-isononyl phthalate",
+        "Witamol 150",
+        "Phthalic acid, diisononyl ester",
+        "Di-''isononyl'' phthalate",
+        "1,2-Benzenedicarboxylic acid, diisononyl ester",
+        "DIACIZER DINP",
+        "MONOCIZER DINP",
+        "PALATINOL DINP",
+        "PLASTOMOLL DINP"
       ],
       "inciName": null
     },
@@ -476,7 +714,26 @@
         }
       ],
       "aliases": [
-        "Homosalate"
+        "Homosalate",
+        "Homomenthyl salicylate",
+        "Heliophan",
+        "3,3,5-Trimethylcyclohexyl 2-hydroxybenzoate",
+        "Homosalato",
+        "Homosalatum",
+        "(3,3,5-trimethylcyclohexyl) 2-hydroxybenzoate",
+        "Benzoic acid, 2-hydroxy-, 3,3,5-trimethylcyclohexyl ester",
+        "Salicylic Acid 3,3,5-Trimethylcyclohexyl Ester",
+        "NSC-164918",
+        "V06SV4M95S",
+        "Sunscreen SKINCARE",
+        "BULUBIU ADVANCED",
+        "RefChem:55307",
+        "dAlba Vegan Fresh Sun Stick",
+        "dAlba Vegan Essence Sunscreen",
+        "Illuminating Daily Moisturizer",
+        "dAlba Vegan Tone-Up Sunscreen",
+        "Sun Protection Facial SPF 50",
+        "Facial Primer Protector SPF 50"
       ],
       "inciName": null
     },
@@ -497,7 +754,26 @@
         }
       ],
       "aliases": [
-        "Isobutylparaben"
+        "Isobutylparaben",
+        "Isobutyl 4-hydroxybenzoate",
+        "isobutyl paraben",
+        "Isobutyl p-hydroxybenzoate",
+        "Isobutyl-4-hydroxybenzoate",
+        "Isobutyl parahydroxybenzoate",
+        "Benzoic acid, 4-hydroxy-, 2-methylpropyl ester",
+        "DTXSID4020749",
+        "isobutyl-p-hydroxybenzoate",
+        "BENZOIC ACID, p-HYDROXY-, ISOBUTYL ESTER",
+        "0QQJ25X58G",
+        "DTXCID20749",
+        "i-BHB",
+        "RefChem:923642",
+        "2-Methylpropyl 4-hydroxybenzoate",
+        "4-Hydroxybenzoic Acid Isobutyl Ester",
+        "MFCD00020167",
+        "p-Hydroxybenzoic acid isobutyl ester",
+        "p-Oxybenzoesaureisobutylester",
+        "4-Hydroxybenzoic acid-isobutyl ester"
       ],
       "inciName": null
     },
@@ -518,7 +794,26 @@
         }
       ],
       "aliases": [
-        "Isopropylparaben"
+        "Isopropylparaben",
+        "Isopropyl 4-hydroxybenzoate",
+        "Isopropyl p-hydroxybenzoate",
+        "p-Hydroxybenzoic acid isopropyl ester",
+        "Benzoic acid, 4-hydroxy-, 1-methylethyl ester",
+        "1-Methylethyl-4-hydroxybenzoate",
+        "A6EOX47QK0",
+        "DTXSID3052858",
+        "4-Hydroxybenzoic acid, 1-methylethyl ester",
+        "i-Pr 4-OH-benzoate",
+        "RefChem:565998",
+        "DTXCID0031269",
+        "isopropyl paraben",
+        "propan-2-yl 4-hydroxybenzoate",
+        "MFCD00016468",
+        "4-Hydroxybenzoic Acid Isopropyl Ester",
+        "p-Oxybenzoesaureisopropylester",
+        "Isopropyl-4-hydroxybenzoate",
+        "CHEMBL2333962",
+        "BENZOIC ACID, p-HYDROXY-, ISOPROPYL ESTER"
       ],
       "inciName": null
     },
@@ -539,7 +834,26 @@
         }
       ],
       "aliases": [
-        "Musk ketone"
+        "Musk ketone",
+        "4'-tert-Butyl-2',6'-dimethyl-3',5'-dinitroacetophenone",
+        "2-Acetyl-5-tert-butyl-4,6-dinitroxylene",
+        "DTXSID6025690",
+        "Acetophenone, 4'-tert-butyl-2',6'-dimethyl-3',5'-dinitro-",
+        "3,5-Dinitro-2,6-dimethyl-4-tert-butylacetophenone",
+        "4-tert-Butyl-3,5-dinitro-2,6-dimethylacetophenone",
+        "2,6-Dinitro-3,5-dimethyl-4-acetyl-tert-butylbenzene",
+        "2,6-Dimethyl-3,5-dinitro-4-t-butylacetophenone",
+        "4-tert-Butyl-2,6-dimethyl-3,5-dinitroacetophenone",
+        "483V3E1L6J",
+        "1-(4-tert-butyl-2,6-dimethyl-3,5-dinitrophenyl)ethan-1-one",
+        "NSC-15339",
+        "1-(4-(1,1-Dimethylethyl)-2,6-dimethyl-3,5-dinitrophenyl)ethanone",
+        "Ethanone, 1-(4-(1,1-dimethylethyl)-2,6-dimethyl-3,5-dinitrophenyl)-",
+        "DTXCID405690",
+        "Ethanone, 1-[4-(1,1-dimethylethyl)-2,6-dimethyl-3,5-dinitrophenyl]-",
+        "1-[4-(1,1-Dimethylethyl)-2,6-dimethyl-3,5-dinitrophenyl]ethanone",
+        "RefChem:160193",
+        "Ketone moschus"
       ],
       "inciName": null
     },
@@ -560,7 +874,27 @@
         }
       ],
       "aliases": [
-        "Octyl methoxycinnamate (Ethylhexyl methoxycinnamate)"
+        "Octyl methoxycinnamate (Ethylhexyl methoxycinnamate)",
+        "Octinoxate",
+        "2-Ethylhexyl p-methoxycinnamate",
+        "Parsol MCX",
+        "Parsol MOX",
+        "Parsol",
+        "Octyl methoxycinnamate",
+        "2-Ethylhexyl-p-methoxycinnamate",
+        "Escalol 557",
+        "Sunscreen AV",
+        "Ethylhexyl methoxycinnamate",
+        "Uvinul MC80",
+        "Ethylhexyl p-methoxycinnamate",
+        "2-ethylhexyl (E)-3-(4-methoxyphenyl)prop-2-enoate",
+        "Neo heliopan AV",
+        "Eusolex 2292",
+        "octyl-methoxycinnamate",
+        "2-Ethylhexyl methoxycinnamate",
+        "Uvinul MC 80",
+        "Ocinoxate",
+        "Octyl p-Methoxycinnamate"
       ],
       "inciName": null
     },
@@ -581,7 +915,26 @@
         }
       ],
       "aliases": [
-        "Ethylhexyl salicylate"
+        "Ethylhexyl salicylate",
+        "2-ETHYLHEXYL SALICYLATE",
+        "Octisalate",
+        "2-Ethylhexyl 2-hydroxybenzoate",
+        "Benzoic acid, 2-hydroxy-, 2-ethylhexyl ester",
+        "Escalol",
+        "Salicylic Acid 2-Ethylhexyl Ester",
+        "Octisalato",
+        "NSC-46151",
+        "DTXSID7040734",
+        "4X49Y0596W",
+        "DTXCID5020734",
+        "OCTYLSALICYLATE",
+        "octisalatum",
+        "Tanning Oil",
+        "RefChem:856053",
+        "Arizona Sun Tanning Oil SPF 3",
+        "Sunarome WMO",
+        "Ethyl hexyl salicylate",
+        "Sunarome O"
       ],
       "inciName": null
     },
@@ -604,7 +957,26 @@
       "aliases": [
         "MIT",
         "Methylisothiazolinone",
-        "Methylisothiazolinone (MIT)"
+        "Methylisothiazolinone (MIT)",
+        "2-Methyl-4-isothiazolin-3-one",
+        "2-Methyl-3(2H)-isothiazolone",
+        "2-Methyl-4-isothiazoline-3-one",
+        "N-methylisothiazolone",
+        "3(2H)-Isothiazolone, 2-methyl-",
+        "2-methyl-3-isothiazolone",
+        "n-methylisothiazolin-3-one",
+        "Neolone 950",
+        "2-methyl-1,2-thiazol-3(2H)-one",
+        "229D0E1QFA",
+        "DTXSID2034259",
+        "2-Methyl-4-isothiazoline-3-ketone",
+        "DTXCID0014259",
+        "CHEBI:53620",
+        "methyl-isothiazolinone",
+        "methylisothiazolidinone",
+        "RefChem:158243",
+        "methylisothiazolone",
+        "2-methylisothiazol-3(2h)-one"
       ],
       "inciName": null
     },
@@ -646,7 +1018,26 @@
         }
       ],
       "aliases": [
-        "Triclocarban"
+        "Triclocarban",
+        "1-(4-Chlorophenyl)-3-(3,4-dichlorophenyl)urea",
+        "3,4,4'-TRICHLOROCARBANILIDE",
+        "Cutisan",
+        "Procutene",
+        "Solubacter",
+        "Cusiter",
+        "Genoface",
+        "Trilocarban",
+        "Urea, N-(4-chlorophenyl)-N'-(3,4-dichlorophenyl)-",
+        "3,4,4'-Trichlorodiphenylurea",
+        "Trichlocarban",
+        "Triclocarbanum",
+        "N-(4-Chlorophenyl)-N'-(3,4-dichlorophenyl)urea",
+        "NSC-72005",
+        "TCC Soap",
+        "3,4,4'-trichloro carbanilide",
+        "1-(3',4'-Dichlorophenyl)-3-(4'-chlorophenyl)urea",
+        "ENT 26925",
+        "TCC (soap bacteriostat)"
       ],
       "inciName": null
     }
