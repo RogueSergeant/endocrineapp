@@ -20,6 +20,7 @@ import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "@/navigation/types";
 import { recogniseText } from "@/lib/ocr/textRecognition";
 import { parseIngredients } from "@/lib/matching/ingredientParser";
+import { correctIngredients } from "@/lib/matching/ocrCorrector";
 import { matchIngredients } from "@/lib/matching/matcher";
 import { currentUid } from "@/lib/firebase/auth";
 import { saveScan } from "@/lib/firebase/scans";
@@ -258,7 +259,7 @@ export function CropScreen({ navigation, route }: Props) {
           "Image crop",
         );
         const { rawText, text } = await recogniseText(result.uri);
-        const parsed = parseIngredients(text);
+        const parsed = correctIngredients(parseIngredients(text));
         if (parsed.length < 3) {
           Alert.alert(
             "Couldn't read that",

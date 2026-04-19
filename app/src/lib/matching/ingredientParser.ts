@@ -150,10 +150,22 @@ function cleanToken(raw: string): string {
   // or end-of-string after the pipe.
   s = s.replace(/([A-Za-z])[|¦](?=[A-Za-z]|\s|$)/g, "$1l");
 
+  // "I" / "l" / "|" adjacent to a digit inside a mixed alphanumeric word
+  // is almost always a misread "1" on glossy labels. Applies to both
+  // sides so "PPG-I5" → "PPG-15" and "2l00" → "2100".
+  s = s.replace(/([Il|])(?=\d)/g, "1").replace(/(?<=\d)([Il|])/g, "1");
+
   // Per-word fixes. Split on whitespace, process each word, re-join.
   s = s
     .split(/\s+/)
     .map((word) => {
+      // Strip a stray leading "(" that never gets closed — classic
+      // OCR misread of "C" ("(hlorohydrate" → "hlorohydrate"). Only
+      // fires when the paren has no closer in the same word so we
+      // don't corrupt legitimate parentheticals.
+      if (word.startsWith("(") && !word.includes(")")) {
+        word = word.slice(1);
+      }
       if (word.length < 3) return word;
       const c0 = word.charAt(0);
       const c1 = word.charAt(1);
