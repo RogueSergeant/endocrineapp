@@ -129,7 +129,7 @@ export function ScanScreen({ navigation }: Props) {
         ref={camera}
         style={StyleSheet.absoluteFill}
         device={device}
-        isActive={!busy}
+        isActive
         photo
       />
       <View style={styles.topBar}>
