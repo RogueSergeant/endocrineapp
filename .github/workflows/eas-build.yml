@@ -6,6 +6,17 @@ name: EAS Build
 # the Expo account owner.
 
 on:
+  # Auto-build every push to main that touches app code, Firebase config,
+  # or the bundled substance DB. Docs-only / workflow-only changes are
+  # ignored so we don't burn EAS free-tier quota on non-shipping edits.
+  push:
+    branches: [main]
+    paths:
+      - app/**
+      - firebase.json
+      - firestore.rules
+      - firestore.indexes.json
+      - storage.rules
   workflow_dispatch:
     inputs:
       platform:
@@ -26,6 +37,11 @@ on:
           - preview
           - development
           - production
+
+# Cancel any in-flight build when a newer push to main arrives.
+concurrency:
+  group: eas-build-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -75,10 +91,13 @@ jobs:
       - name: Start EAS build
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          # Push events don't populate inputs.* — fall back to sane defaults.
+          PLATFORM: ${{ inputs.platform || 'android' }}
+          PROFILE: ${{ inputs.profile || 'preview' }}
         run: |
           eas build \
-            --platform "${{ inputs.platform }}" \
-            --profile "${{ inputs.profile }}" \
+            --platform "$PLATFORM" \
+            --profile "$PROFILE" \
             --non-interactive \
             --no-wait
 
