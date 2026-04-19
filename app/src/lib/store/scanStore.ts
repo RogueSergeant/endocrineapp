@@ -19,6 +19,7 @@ const index = substancesIndex as unknown as SubstancesIndex;
 export interface CurrentScan {
   id: string | null;
   createdAt: number;
+  productName: string | null;
   ocrText: string;
   parsedIngredients: string[];
   matches: Match[];
@@ -27,12 +28,15 @@ export interface CurrentScan {
 interface ScanState {
   current: CurrentScan | null;
   setCurrentScan: (scan: CurrentScan) => void;
+  setCurrentProductName: (productName: string | null) => void;
   clearCurrentScan: () => void;
 }
 
 export const useScanStore = create<ScanState>((set) => ({
   current: null,
   setCurrentScan: (scan) => set({ current: scan }),
+  setCurrentProductName: (productName) =>
+    set((s) => (s.current ? { current: { ...s.current, productName } } : s)),
   clearCurrentScan: () => set({ current: null }),
 }));
 

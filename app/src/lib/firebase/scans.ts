@@ -27,6 +27,7 @@ export interface CreateScanInput {
   matches: Match[];
   imageStoragePath: string | null;
   substancesDbVersion: string;
+  productName?: string | null;
 }
 
 export async function saveScan(input: CreateScanInput): Promise<ScanDoc> {
@@ -37,6 +38,7 @@ export async function saveScan(input: CreateScanInput): Promise<ScanDoc> {
   const doc: ScanDoc = {
     id: docRef.id,
     createdAt,
+    productName: normaliseName(input.productName),
     ocrText: input.ocrText,
     parsedIngredients: input.parsedIngredients,
     matches: input.matches.map(denormaliseMatch),
@@ -64,6 +66,23 @@ export async function listScans(limit = 50): Promise<ScanDoc[]> {
     .limit(limit)
     .get();
   return snap.docs.map((d) => fromSnapshot(d.data()));
+}
+
+export async function updateScanProductName(
+  id: string,
+  productName: string | null,
+): Promise<void> {
+  const uid = currentUid();
+  if (!uid) throw new Error("Not signed in");
+  await scansCollection(uid).doc(id).update({
+    productName: normaliseName(productName),
+  });
+}
+
+function normaliseName(value: string | null | undefined): string | null {
+  if (typeof value !== "string") return null;
+  const trimmed = value.trim();
+  return trimmed.length === 0 ? null : trimmed.slice(0, 120);
 }
 
 export async function deleteScan(id: string): Promise<void> {
@@ -94,9 +113,15 @@ function fromSnapshot(data: Record<string, unknown>): ScanDoc {
   } else if (typeof createdAt === "number") {
     ts = createdAt;
   }
+  const rawName = data["productName"];
+  const productName =
+    typeof rawName === "string" && rawName.trim().length > 0
+      ? rawName.trim()
+      : null;
   return {
     id: String(data["id"] ?? ""),
     createdAt: ts,
+    productName,
     ocrText: String(data["ocrText"] ?? ""),
     parsedIngredients: (data["parsedIngredients"] as string[] | undefined) ?? [],
     matches: (data["matches"] as StoredMatch[] | undefined) ?? [],

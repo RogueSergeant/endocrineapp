@@ -293,6 +293,7 @@ export function CropScreen({ navigation, route }: Props) {
         setCurrentScan({
           id: scanId,
           createdAt,
+          productName: null,
           ocrText: rawText,
           parsedIngredients: parsed,
           matches,

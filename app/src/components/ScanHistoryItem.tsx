@@ -17,6 +17,13 @@ export function ScanHistoryItem({ scan, onPress }: Props) {
       style={({ pressed }) => [styles.item, pressed && styles.pressed]}
     >
       <Text style={styles.date}>{date.toLocaleString()}</Text>
+      {scan.productName ? (
+        <Text style={styles.title} numberOfLines={2}>
+          {scan.productName}
+        </Text>
+      ) : (
+        <Text style={styles.titleMuted}>Untitled scan</Text>
+      )}
       <Text style={styles.summary}>
         {matchCount === 0
           ? "No flagged substances"
@@ -46,9 +53,21 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     marginBottom: spacing(1),
   },
+  title: {
+    fontSize: 17,
+    fontWeight: "700",
+    color: colors.text,
+    marginBottom: spacing(1),
+  },
+  titleMuted: {
+    fontSize: 15,
+    fontStyle: "italic",
+    color: colors.textMuted,
+    marginBottom: spacing(1),
+  },
   summary: {
-    fontSize: 16,
-    fontWeight: "600",
+    fontSize: 14,
+    fontWeight: "500",
     color: colors.text,
   },
   meta: { marginTop: spacing(1) },

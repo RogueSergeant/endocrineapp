@@ -1,24 +1,37 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
+  ActivityIndicator,
+  Alert,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   View,
 } from "react-native";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "@/navigation/types";
 import type { Match } from "@/types";
 import { SubstanceMatchCard } from "@/components/SubstanceMatchCard";
 import { substanceDb, useScanStore, getSubstanceById } from "@/lib/store/scanStore";
+import { updateScanProductName } from "@/lib/firebase/scans";
 import { colors, radii, spacing } from "@/theme/colors";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Results">;
 
 export function ResultsScreen({ navigation, route }: Props) {
   const current = useScanStore((s) => s.current);
+  const setCurrentProductName = useScanStore((s) => s.setCurrentProductName);
   const readOnlyScan = route.params?.readOnlyScan;
   const [showIngredients, setShowIngredients] = useState(false);
+
+  const scanId = readOnlyScan?.id ?? current?.id ?? null;
+  const initialName = readOnlyScan?.productName ?? current?.productName ?? null;
+  const [nameDraft, setNameDraft] = useState<string>(initialName ?? "");
+  useEffect(() => {
+    setNameDraft(initialName ?? "");
+  }, [initialName, scanId]);
 
   const view = useMemo(() => {
     if (readOnlyScan) {
@@ -52,6 +65,25 @@ export function ResultsScreen({ navigation, route }: Props) {
     return null;
   }, [current, readOnlyScan]);
 
+  const queryClient = useQueryClient();
+  const saveName = useMutation({
+    mutationFn: async (name: string | null) => {
+      if (!scanId) throw new Error("This scan hasn't been saved yet");
+      await updateScanProductName(scanId, name);
+      return name;
+    },
+    onSuccess: (name) => {
+      if (!readOnlyScan) setCurrentProductName(name);
+      void queryClient.invalidateQueries({ queryKey: ["scans"] });
+    },
+    onError: (err) =>
+      Alert.alert("Couldn't save name", (err as Error).message ?? "Unknown error"),
+  });
+
+  const trimmedDraft = nameDraft.trim();
+  const normalisedDraft = trimmedDraft.length === 0 ? null : trimmedDraft;
+  const dirty = normalisedDraft !== (initialName ?? null);
+
   if (!view) {
     return (
       <View style={styles.empty}>
@@ -76,7 +108,45 @@ export function ResultsScreen({ navigation, route }: Props) {
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.content}
+      keyboardShouldPersistTaps="handled"
     >
+      <View style={styles.nameBox}>
+        <Text style={styles.nameLabel}>Product name</Text>
+        <View style={styles.nameRow}>
+          <TextInput
+            value={nameDraft}
+            onChangeText={setNameDraft}
+            placeholder="e.g. Brand X moisturiser"
+            placeholderTextColor={colors.textMuted}
+            style={styles.nameInput}
+            maxLength={120}
+            returnKeyType="done"
+            onSubmitEditing={() => {
+              if (dirty && scanId) saveName.mutate(normalisedDraft);
+            }}
+            editable={!saveName.isPending}
+          />
+          <Pressable
+            onPress={() => saveName.mutate(normalisedDraft)}
+            disabled={!dirty || !scanId || saveName.isPending}
+            style={[
+              styles.saveBtn,
+              (!dirty || !scanId || saveName.isPending) && styles.saveBtnDisabled,
+            ]}
+          >
+            {saveName.isPending ? (
+              <ActivityIndicator color={colors.accentText} />
+            ) : (
+              <Text style={styles.saveBtnText}>Save</Text>
+            )}
+          </Pressable>
+        </View>
+        {!scanId && (
+          <Text style={styles.nameHint}>
+            Sign in or wait for the scan to finish saving to name it.
+          </Text>
+        )}
+      </View>
       <Text style={styles.summary}>{summary}</Text>
       {flagged === 0 ? (
         <Text style={styles.disclaimer}>
@@ -139,6 +209,55 @@ const styles = StyleSheet.create({
     borderRadius: radii.md,
   },
   ctaText: { color: colors.accentText, fontWeight: "600" },
+  nameBox: {
+    backgroundColor: colors.surface,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing(3),
+    marginBottom: spacing(4),
+  },
+  nameLabel: {
+    fontSize: 12,
+    color: colors.textMuted,
+    marginBottom: spacing(1),
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+  nameRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing(2),
+  },
+  nameInput: {
+    flex: 1,
+    fontSize: 16,
+    color: colors.text,
+    paddingVertical: spacing(2),
+    paddingHorizontal: spacing(3),
+    borderRadius: radii.sm,
+    backgroundColor: colors.background,
+    borderWidth: 1,
+    borderColor: colors.border,
+    minHeight: 44,
+  },
+  saveBtn: {
+    backgroundColor: colors.accent,
+    paddingHorizontal: spacing(4),
+    paddingVertical: spacing(2),
+    borderRadius: radii.sm,
+    minHeight: 44,
+    minWidth: 72,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  saveBtnDisabled: { opacity: 0.5 },
+  saveBtnText: { color: colors.accentText, fontWeight: "700" },
+  nameHint: {
+    fontSize: 12,
+    color: colors.textMuted,
+    marginTop: spacing(2),
+  },
   summary: {
     fontSize: 22,
     fontWeight: "700",

@@ -55,6 +55,7 @@ export interface StoredMatch {
 export interface ScanDoc {
   id: string;
   createdAt: number;
+  productName: string | null;
   ocrText: string;
   parsedIngredients: string[];
   matches: StoredMatch[];
