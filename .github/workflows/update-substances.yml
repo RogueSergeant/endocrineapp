@@ -1,0 +1,64 @@
+name: Update substance database
+
+# Runs the data-pipeline ETL against the live edlists.org source and
+# commits the updated app/src/data/substances.json + substances-index.json
+# back to main. Trigger manually when edlists.org publishes a new release
+# (typically every 6 months). The next EAS Build picks up the new data
+# automatically.
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_label:
+        description: Label for the source snapshot (e.g. "2026-04")
+        required: true
+        default: "2026-04"
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  etl:
+    name: Fetch + enrich + commit
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: data-pipeline
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: data-pipeline/package-lock.json
+
+      - run: npm ci
+
+      - name: Run pipeline
+        env:
+          ED_SOURCE_LAST_UPDATED: ${{ inputs.source_label }}
+        run: npm start
+
+      - name: Show summary
+        run: |
+          count=$(node -e "process.stdout.write(String(require('../app/src/data/substances.json').substanceCount))")
+          echo "::notice::Built substances.json with $count substances"
+          echo "Substance count: $count" >> $GITHUB_STEP_SUMMARY
+
+      - name: Commit updated JSON
+        working-directory: .
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- app/src/data/substances.json app/src/data/substances-index.json; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git add app/src/data/substances.json app/src/data/substances-index.json
+          git commit -m "Update substances.json from edlists.org (${{ inputs.source_label }})"
+          git push origin main
