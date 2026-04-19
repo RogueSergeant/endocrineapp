@@ -1,0 +1,63 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Expo
+.expo/
+.expo-shared/
+web-build/
+ios/
+android/
+*.orig.*
+
+# Native
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Firebase
+.firebaserc
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+**/google-services.json
+**/GoogleService-Info.plist
+**/firebase-service-account*.json
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor
+.vscode/
+.idea/
+.DS_Store
+*.swp
+
+# Test coverage
+coverage/
+
+# Data pipeline runtime artefacts
+data-pipeline/data/raw/
+data-pipeline/data/cache/
+data-pipeline/data/cosing/
+!data-pipeline/data/raw/.gitkeep
+!data-pipeline/data/cache/.gitkeep

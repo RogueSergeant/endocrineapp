@@ -1,0 +1,28 @@
+{
+  "name": "ed-scanner-data-pipeline",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ETL that builds the bundled substance database for the ED scanner app from edlists.org, CosIng, and PubChem.",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "fetch": "tsx src/fetchEdLists.ts",
+    "build": "tsx src/buildSubstancesJson.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0",
+    "p-limit": "^6.1.0",
+    "undici": "^6.21.0",
+    "uuid": "^11.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/uuid": "^10.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,654 @@
+{
+  "version": "2026-04-19",
+  "source": "edlists.org",
+  "sourceLastUpdated": "2025-12",
+  "substanceCount": 29,
+  "substances": [
+    {
+      "id": "dd7d893e-06cd-5b96-b468-858067762076",
+      "casNumber": "131-57-7",
+      "ecNumber": "205-031-5",
+      "canonicalName": "Benzophenone-3 (Oxybenzone)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified",
+          "regulatoryField": "REACH CoRAP",
+          "year": 2019
+        }
+      ],
+      "aliases": [
+        "Benzophenone-3 (Oxybenzone)"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "cc734300-ac03-5a2d-8122-1fbfb67e2676",
+      "casNumber": "85-68-7",
+      "ecNumber": "201-622-7",
+      "canonicalName": "Benzyl butyl phthalate (BBP)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified",
+          "regulatoryField": "REACH SVHC",
+          "year": 2015
+        }
+      ],
+      "aliases": [
+        "BBP",
+        "Benzyl butyl phthalate",
+        "Benzyl butyl phthalate (BBP)"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "257b52b6-a01f-5752-b2e2-d4622f4d2d25",
+      "casNumber": "117-81-7",
+      "ecNumber": "204-211-0",
+      "canonicalName": "Bis(2-ethylhexyl) phthalate (DEHP)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified",
+          "regulatoryField": "REACH SVHC",
+          "year": 2014
+        }
+      ],
+      "aliases": [
+        "DEHP",
+        "Bis(2-ethylhexyl) phthalate",
+        "Bis(2-ethylhexyl) phthalate (DEHP)"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "3f4e66ce-5a50-5598-8a75-36c6925b031a",
+      "casNumber": "80-05-7",
+      "ecNumber": "201-245-8",
+      "canonicalName": "Bisphenol A (BPA)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified",
+          "regulatoryField": "REACH SVHC",
+          "year": 2017
+        }
+      ],
+      "aliases": [
+        "BPA",
+        "Bisphenol A",
+        "Bisphenol A (BPA)"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "cf64500b-f5b3-5980-840d-429b4fd6376d",
+      "casNumber": "94-26-8",
+      "ecNumber": "202-318-7",
+      "canonicalName": "Butylparaben",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified",
+          "regulatoryField": "Cosmetics Regulation",
+          "year": 2020
+        }
+      ],
+      "aliases": [
+        "Butylparaben"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "5912a78d-abb5-5f26-858d-e0ec3041f194",
+      "casNumber": "541-02-6",
+      "ecNumber": "208-764-9",
+      "canonicalName": "Decamethylcyclopentasiloxane (D5)",
+      "evidenceTier": 1,
+      "healthEffects": false,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified",
+          "regulatoryField": "REACH SVHC",
+          "year": 2018
+        }
+      ],
+      "aliases": [
+        "D5",
+        "Decamethylcyclopentasiloxane",
+        "Decamethylcyclopentasiloxane (D5)"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "087626c1-a995-5518-85d7-91b25576d710",
+      "casNumber": "84-74-2",
+      "ecNumber": "201-557-4",
+      "canonicalName": "Dibutyl phthalate (DBP)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified",
+          "regulatoryField": "REACH SVHC",
+          "year": 2015
+        }
+      ],
+      "aliases": [
+        "DBP",
+        "Dibutyl phthalate",
+        "Dibutyl phthalate (DBP)"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "cd3b0796-8918-5412-b7ef-ac8ac556bceb",
+      "casNumber": "84-69-5",
+      "ecNumber": "201-553-2",
+      "canonicalName": "Diisobutyl phthalate (DIBP)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified",
+          "regulatoryField": "REACH SVHC",
+          "year": 2017
+        }
+      ],
+      "aliases": [
+        "DIBP",
+        "Diisobutyl phthalate",
+        "Diisobutyl phthalate (DIBP)"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "949fdd9c-d7c2-575e-816b-b9682193d405",
+      "casNumber": "540-97-6",
+      "ecNumber": "208-762-8",
+      "canonicalName": "Dodecamethylcyclohexasiloxane (D6)",
+      "evidenceTier": 1,
+      "healthEffects": false,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified",
+          "regulatoryField": "REACH SVHC",
+          "year": 2018
+        }
+      ],
+      "aliases": [
+        "D6",
+        "Dodecamethylcyclohexasiloxane",
+        "Dodecamethylcyclohexasiloxane (D6)"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "4f2eff53-86d0-5caa-aaa6-1d219034d9b0",
+      "casNumber": "556-67-2",
+      "ecNumber": "209-136-7",
+      "canonicalName": "Octamethylcyclotetrasiloxane (D4)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified",
+          "regulatoryField": "REACH SVHC",
+          "year": 2018
+        },
+        {
+          "listId": 3,
+          "status": "National evaluation",
+          "regulatoryField": "National",
+          "year": 2016
+        }
+      ],
+      "aliases": [
+        "D4",
+        "Octamethylcyclotetrasiloxane",
+        "Octamethylcyclotetrasiloxane (D4)",
+        "Cyclotetrasiloxane"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "2a9733d6-c503-54c5-98a7-0a481bf6a260",
+      "casNumber": "355-46-4",
+      "ecNumber": "206-587-1",
+      "canonicalName": "Perfluorohexanesulfonic acid (PFHxS)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified",
+          "regulatoryField": "REACH SVHC",
+          "year": 2017
+        }
+      ],
+      "aliases": [
+        "Perfluorohexanesulfonic acid (PFHxS)"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "4c8c329c-9f7f-564a-9238-bc63847ef3d0",
+      "casNumber": "335-67-1",
+      "ecNumber": "206-397-9",
+      "canonicalName": "Perfluorooctanoic acid (PFOA)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified",
+          "regulatoryField": "REACH SVHC",
+          "year": 2013
+        }
+      ],
+      "aliases": [
+        "PFOA",
+        "Perfluorooctanoic acid",
+        "Perfluorooctanoic acid (PFOA)"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "c8a39269-47ec-597e-b23d-ed20d95ad7ed",
+      "casNumber": "94-13-3",
+      "ecNumber": "202-307-7",
+      "canonicalName": "Propylparaben",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified",
+          "regulatoryField": "Cosmetics Regulation",
+          "year": 2020
+        }
+      ],
+      "aliases": [
+        "Propylparaben"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "756c114b-4a9c-5b04-85f3-ae4f9b48ed1a",
+      "casNumber": "108-46-3",
+      "ecNumber": "203-585-2",
+      "canonicalName": "Resorcinol",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified",
+          "regulatoryField": "REACH SVHC",
+          "year": 2023
+        }
+      ],
+      "aliases": [
+        "Resorcinol"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "af401a3e-160c-5977-b249-ad74c02f8cba",
+      "casNumber": "3380-34-5",
+      "ecNumber": "222-182-2",
+      "canonicalName": "Triclosan",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Identified",
+          "regulatoryField": "Biocides BPR",
+          "year": 2015
+        }
+      ],
+      "aliases": [
+        "Triclosan"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "e3ffcddf-a454-5b83-b623-76ad5e5cffd9",
+      "casNumber": "36861-47-9",
+      "ecNumber": "253-242-6",
+      "canonicalName": "4-Methylbenzylidene camphor (4-MBC)",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Under investigation",
+          "regulatoryField": "REACH CoRAP",
+          "year": 2018
+        }
+      ],
+      "aliases": [
+        "4-MBC",
+        "4-Methylbenzylidene camphor",
+        "4-Methylbenzylidene camphor (4-MBC)"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "6c07792f-b6da-584d-a7c2-ea24489440d8",
+      "casNumber": "620-92-8",
+      "ecNumber": "210-658-2",
+      "canonicalName": "Bisphenol F (BPF)",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Under investigation",
+          "regulatoryField": "REACH CoRAP",
+          "year": 2021
+        }
+      ],
+      "aliases": [
+        "BPF",
+        "Bisphenol F",
+        "Bisphenol F (BPF)"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "7e5554f3-5397-5be7-be23-478f895e2a2a",
+      "casNumber": "80-09-1",
+      "ecNumber": "201-250-5",
+      "canonicalName": "Bisphenol S (BPS)",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Under investigation",
+          "regulatoryField": "REACH CoRAP",
+          "year": 2020
+        }
+      ],
+      "aliases": [
+        "BPS",
+        "Bisphenol S",
+        "Bisphenol S (BPS)"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "064fc8ce-123d-5b10-821d-fc0ad2473999",
+      "casNumber": "28553-12-0",
+      "ecNumber": "249-079-5",
+      "canonicalName": "Diisononyl phthalate (DINP)",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Under investigation",
+          "regulatoryField": "REACH",
+          "year": 2019
+        }
+      ],
+      "aliases": [
+        "DINP",
+        "Diisononyl phthalate",
+        "Diisononyl phthalate (DINP)"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "93a2c042-2080-5999-8029-452e56af1b21",
+      "casNumber": "1222-05-5",
+      "ecNumber": "214-946-9",
+      "canonicalName": "Galaxolide (HHCB)",
+      "evidenceTier": 2,
+      "healthEffects": false,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Under investigation",
+          "regulatoryField": "REACH CoRAP",
+          "year": 2018
+        }
+      ],
+      "aliases": [
+        "HHCB",
+        "Galaxolide",
+        "Galaxolide (HHCB)"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "4fcf5737-47b4-5ba2-8ff2-69a222cb91c5",
+      "casNumber": "118-56-9",
+      "ecNumber": "204-260-8",
+      "canonicalName": "Homosalate",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Under investigation",
+          "regulatoryField": "Cosmetics Regulation",
+          "year": 2020
+        }
+      ],
+      "aliases": [
+        "Homosalate"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "de804183-9996-5202-8257-e859ad1f44c3",
+      "casNumber": "4247-02-3",
+      "ecNumber": "224-208-8",
+      "canonicalName": "Isobutylparaben",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Under investigation",
+          "regulatoryField": "Cosmetics Regulation",
+          "year": 2021
+        }
+      ],
+      "aliases": [
+        "Isobutylparaben"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "c5aa5254-2a7d-56c5-a99c-c31445aaef19",
+      "casNumber": "4191-73-5",
+      "ecNumber": "224-069-3",
+      "canonicalName": "Isopropylparaben",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Under investigation",
+          "regulatoryField": "Cosmetics Regulation",
+          "year": 2021
+        }
+      ],
+      "aliases": [
+        "Isopropylparaben"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "1fb372d5-ef31-597e-afd3-d1369c28af1a",
+      "casNumber": "81-14-1",
+      "ecNumber": "201-328-9",
+      "canonicalName": "Musk ketone",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Under investigation",
+          "regulatoryField": "REACH CoRAP",
+          "year": 2017
+        }
+      ],
+      "aliases": [
+        "Musk ketone"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "e7fadcbd-4e89-5738-a13b-d6e31f80976d",
+      "casNumber": "5466-77-3",
+      "ecNumber": "226-775-7",
+      "canonicalName": "Octyl methoxycinnamate (Ethylhexyl methoxycinnamate)",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Under investigation",
+          "regulatoryField": "REACH CoRAP",
+          "year": 2020
+        }
+      ],
+      "aliases": [
+        "Octyl methoxycinnamate (Ethylhexyl methoxycinnamate)"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "41f41c32-1b1b-5175-9d2a-b83c1077ae3b",
+      "casNumber": "118-60-5",
+      "ecNumber": "204-263-4",
+      "canonicalName": "Ethylhexyl salicylate",
+      "evidenceTier": 3,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 3,
+          "status": "National evaluation",
+          "regulatoryField": "National",
+          "year": 2022
+        }
+      ],
+      "aliases": [
+        "Ethylhexyl salicylate"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "ff1e7373-ff8f-5f09-abb4-5681a30877d3",
+      "casNumber": "2682-20-4",
+      "ecNumber": "220-239-6",
+      "canonicalName": "Methylisothiazolinone (MIT)",
+      "evidenceTier": 3,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 3,
+          "status": "National evaluation",
+          "regulatoryField": "National",
+          "year": 2019
+        }
+      ],
+      "aliases": [
+        "MIT",
+        "Methylisothiazolinone",
+        "Methylisothiazolinone (MIT)"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "44ddd223-8695-5e7a-bb9e-bb88f41dfea4",
+      "casNumber": "6197-30-4",
+      "ecNumber": "228-250-8",
+      "canonicalName": "Octocrylene",
+      "evidenceTier": 3,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 3,
+          "status": "National evaluation",
+          "regulatoryField": "National",
+          "year": 2021
+        }
+      ],
+      "aliases": [
+        "Octocrylene"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "f2f48fba-5842-5131-95e6-10f625bda9b5",
+      "casNumber": "101-20-2",
+      "ecNumber": "202-924-1",
+      "canonicalName": "Triclocarban",
+      "evidenceTier": 3,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 3,
+          "status": "National evaluation",
+          "regulatoryField": "National",
+          "year": 2017
+        }
+      ],
+      "aliases": [
+        "Triclocarban"
+      ],
+      "inciName": null
+    }
+  ]
+}
