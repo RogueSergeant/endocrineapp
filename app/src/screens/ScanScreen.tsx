@@ -8,7 +8,11 @@ import {
   Text,
   View,
 } from "react-native";
-import { Camera, useCameraDevice } from "react-native-vision-camera";
+import {
+  Camera,
+  useCameraDevice,
+  useCameraPermission,
+} from "react-native-vision-camera";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "@/navigation/types";
 import { recogniseText } from "@/lib/ocr/textRecognition";
@@ -22,25 +26,24 @@ type Props = NativeStackScreenProps<RootStackParamList, "Scan">;
 
 export function ScanScreen({ navigation }: Props) {
   const camera = useRef<Camera>(null);
+  const { hasPermission, requestPermission } = useCameraPermission();
   const device = useCameraDevice("back");
-  const [permission, setPermission] = useState<"checking" | "granted" | "denied">(
-    "checking",
-  );
+  const [denied, setDenied] = useState(false);
   const [busy, setBusy] = useState(false);
   const setCurrentScan = useScanStore((s) => s.setCurrentScan);
 
   useEffect(() => {
     let cancelled = false;
+    if (hasPermission) return;
     (async () => {
-      let status = Camera.getCameraPermissionStatus();
-      if (status !== "granted") status = await Camera.requestCameraPermission();
+      const granted = await requestPermission();
       if (cancelled) return;
-      setPermission(status === "granted" ? "granted" : "denied");
+      if (!granted) setDenied(true);
     })();
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [hasPermission, requestPermission]);
 
   const handleCapture = useCallback(async () => {
     if (!camera.current || busy) return;
@@ -83,7 +86,7 @@ export function ScanScreen({ navigation }: Props) {
     }
   }, [busy, navigation, setCurrentScan]);
 
-  if (permission === "checking") {
+  if (!hasPermission && !denied) {
     return (
       <View style={styles.fullCenter}>
         <ActivityIndicator />
@@ -91,7 +94,7 @@ export function ScanScreen({ navigation }: Props) {
     );
   }
 
-  if (permission === "denied") {
+  if (denied) {
     return (
       <View style={styles.fullCenter}>
         <Text style={styles.permissionTitle}>Camera permission needed</Text>
@@ -112,7 +115,10 @@ export function ScanScreen({ navigation }: Props) {
   if (!device) {
     return (
       <View style={styles.fullCenter}>
-        <Text style={styles.permissionBody}>No camera available on this device.</Text>
+        <ActivityIndicator />
+        <Text style={[styles.permissionBody, styles.loadingText]}>
+          Loading camera…
+        </Text>
       </View>
     );
   }
@@ -184,6 +190,10 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     textAlign: "center",
     marginBottom: spacing(4),
+  },
+  loadingText: {
+    marginTop: spacing(3),
+    marginBottom: 0,
   },
   permissionBtn: {
     backgroundColor: colors.accent,
