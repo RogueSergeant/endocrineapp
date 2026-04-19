@@ -33,9 +33,10 @@ export async function saveScan(input: CreateScanInput): Promise<ScanDoc> {
   const uid = currentUid();
   if (!uid) throw new Error("Not signed in");
   const docRef = scansCollection(uid).doc();
+  const createdAt = Date.now();
   const doc: ScanDoc = {
     id: docRef.id,
-    createdAt: Date.now(),
+    createdAt,
     ocrText: input.ocrText,
     parsedIngredients: input.parsedIngredients,
     matches: input.matches.map(denormaliseMatch),
@@ -43,9 +44,14 @@ export async function saveScan(input: CreateScanInput): Promise<ScanDoc> {
     appVersion: APP_VERSION,
     substancesDbVersion: input.substancesDbVersion,
   };
+  // Use the client's millis for both the stored and returned doc so
+  // the local view (Results right after capture) and the server view
+  // (History after refresh) agree. A secondary serverCreatedAt gives
+  // us the server-side clock for future analytics without affecting
+  // the UI.
   await docRef.set({
     ...doc,
-    createdAt: firestore.FieldValue.serverTimestamp(),
+    serverCreatedAt: firestore.FieldValue.serverTimestamp(),
   });
   return doc;
 }

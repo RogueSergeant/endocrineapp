@@ -93,6 +93,11 @@ describe("normaliser", () => {
     expect(normalise("")).toBe("");
     expect(normalise("   ")).toBe("");
   });
+
+  it("strips zero-width joiners and bidi marks", () => {
+    expect(normalise("buty\u200blparaben")).toBe("butylparaben");
+    expect(normalise("\u202ebutylparaben\u202c")).toBe("butylparaben");
+  });
 });
 
 describe("parseIngredients", () => {
@@ -129,6 +134,15 @@ describe("parseIngredients", () => {
   it("returns empty for empty input", () => {
     expect(parseIngredients("")).toEqual([]);
     expect(parseIngredients("    ")).toEqual([]);
+  });
+
+  it("tolerates OCR confusions in the header (INGREDlENTS, 1NGREDIENTS)", () => {
+    expect(
+      parseIngredients("INGREDlENTS: Aqua, Glycerin, Butylparaben"),
+    ).toEqual(["Aqua", "Glycerin", "Butylparaben"]);
+    expect(
+      parseIngredients("1NGREDIENTS: Aqua, Glycerin, Butylparaben"),
+    ).toEqual(["Aqua", "Glycerin", "Butylparaben"]);
   });
 });
 

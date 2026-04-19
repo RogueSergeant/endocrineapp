@@ -1,5 +1,9 @@
+// Header regex tolerates common OCR letter-confusions so a printed
+// "INGREDIENTS" that OCR reads as "INGREDlENTS" or "1NGREDIENTS" still
+// matches. The tolerant classes are used only on letters that are very
+// likely to be misread by the recogniser on low-contrast labels.
 const HEADER_RE =
-  /\b(ingredients?|ingr[ée]dients|ingredientes|inhaltsstoffe|sammensetning|sast[oa]vine|skladniki|composici[oó]n|composition)\b\s*[:\-—]?/i;
+  /\b([il1]ngred[il1]ents?|[il1]ngr[eé3]d[il1]ents?|ingred[il1]entes?|inhaltsstoffe|sammensetning|sast[oa]v[il1]ne|skladniki|composici[oó]n|compos[il1]tion)\b\s*[:\-—]?/i;
 
 const SPLIT_RE = /[,;•·\u2022\n\r/]+/;
 

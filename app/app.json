@@ -37,12 +37,6 @@
           "cameraPermissionText": "ED Scanner needs camera access to read ingredient lists.",
           "enableCodeScanner": false
         }
-      ],
-      [
-        "expo-camera",
-        {
-          "cameraPermissionText": "ED Scanner needs camera access to read ingredient lists."
-        }
       ]
     ]
   }

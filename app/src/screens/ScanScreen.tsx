@@ -19,6 +19,7 @@ import type { RootStackParamList } from "@/navigation/types";
 import { recogniseText } from "@/lib/ocr/textRecognition";
 import { parseIngredients } from "@/lib/matching/ingredientParser";
 import { matchIngredients } from "@/lib/matching/matcher";
+import { currentUid } from "@/lib/firebase/auth";
 import { saveScan } from "@/lib/firebase/scans";
 import { substanceDb, useScanStore } from "@/lib/store/scanStore";
 import { colors, radii, spacing } from "@/theme/colors";
@@ -27,6 +28,7 @@ type Props = NativeStackScreenProps<RootStackParamList, "Scan">;
 
 export function ScanScreen({ navigation }: Props) {
   const camera = useRef<Camera>(null);
+  const capturing = useRef(false);
   const { hasPermission, requestPermission } = useCameraPermission();
   const hookDevice = useCameraDevice("back");
   const [fallbackDevice, setFallbackDevice] = useState<CameraDevice | null>(null);
@@ -69,8 +71,10 @@ export function ScanScreen({ navigation }: Props) {
   }, [hasPermission, hookDevice]);
 
   const handleCapture = useCallback(async () => {
-    if (!camera.current || busy) return;
+    if (capturing.current || !camera.current) return;
+    capturing.current = true;
     setBusy(true);
+    const createdAt = Date.now();
     try {
       const photo = await camera.current.takePhoto({
         flash: "off",
@@ -87,27 +91,45 @@ export function ScanScreen({ navigation }: Props) {
         return;
       }
       const matches = matchIngredients(parsed, substanceDb.index, substanceDb.lookup);
-      const saved = await saveScan({
-        ocrText: rawText,
-        parsedIngredients: parsed,
-        matches,
-        imageStoragePath: null,
-        substancesDbVersion: substanceDb.version,
-      });
+
+      let scanId: string | null = null;
+      if (currentUid()) {
+        try {
+          const saved = await saveScan({
+            ocrText: rawText,
+            parsedIngredients: parsed,
+            matches,
+            imageStoragePath: null,
+            substancesDbVersion: substanceDb.version,
+          });
+          scanId = saved.id;
+        } catch (err) {
+          // Don't block the scan on a Firestore write error — the user
+          // still gets their results locally. History will miss this
+          // scan, which is better than losing the capture entirely.
+          // eslint-disable-next-line no-console
+          console.warn("saveScan failed, continuing offline:", err);
+        }
+      }
+
       setCurrentScan({
-        id: saved.id,
-        createdAt: saved.createdAt,
+        id: scanId,
+        createdAt,
         ocrText: rawText,
         parsedIngredients: parsed,
         matches,
       });
-      navigation.navigate("Results", { scanId: saved.id });
+      navigation.navigate(
+        "Results",
+        scanId ? { scanId } : undefined,
+      );
     } catch (err) {
       Alert.alert("Scan failed", (err as Error).message);
     } finally {
       setBusy(false);
+      capturing.current = false;
     }
-  }, [busy, navigation, setCurrentScan]);
+  }, [navigation, setCurrentScan]);
 
   if (!hasPermission && !denied) {
     return (

@@ -35,6 +35,8 @@ export function HistoryScreen({ navigation }: Props) {
   const remove = useMutation({
     mutationFn: (id: string) => deleteScan(id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["scans"] }),
+    onError: (err) =>
+      Alert.alert("Couldn't delete", (err as Error).message ?? "Unknown error"),
   });
 
   const onDelete = (scan: ScanDoc) => {
