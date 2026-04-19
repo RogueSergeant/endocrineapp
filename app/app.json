@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "scheme": "edscanner",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "splash": {
       "backgroundColor": "#ffffff",
       "resizeMode": "contain"
@@ -16,7 +16,6 @@
       "supportsTablet": false,
       "bundleIdentifier": "com.edscanner.app",
       "buildNumber": "1",
-      "deploymentTarget": "15.0",
       "infoPlist": {
         "NSCameraUsageDescription": "The camera is used to read the ingredient list printed on your product.",
         "NSPhotoLibraryUsageDescription": "Only needed if you pick a saved image to scan.",
@@ -26,7 +25,6 @@
     "android": {
       "package": "com.edscanner.app",
       "versionCode": 1,
-      "minSdkVersion": 26,
       "permissions": ["android.permission.CAMERA"],
       "googleServicesFile": "./google-services.json"
     },
