@@ -36,7 +36,8 @@ android/
 firebase-debug.log
 firestore-debug.log
 ui-debug.log
-**/google-services.json
+# google-services.json is client config (not a secret) and is committed
+# so the EAS build workflow has everything it needs.
 **/GoogleService-Info.plist
 **/firebase-service-account*.json
 

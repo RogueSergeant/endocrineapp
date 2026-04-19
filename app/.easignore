@@ -1,0 +1,17 @@
+# EAS Build ignore. Mirrors .gitignore but allows google-services.json /
+# GoogleService-Info.plist through so the build has Firebase config.
+node_modules
+.expo
+.expo-shared
+dist
+build
+coverage
+ios
+android
+.env
+.env.local
+.env.*.local
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+.DS_Store

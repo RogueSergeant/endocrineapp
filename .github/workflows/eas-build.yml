@@ -1,0 +1,88 @@
+name: EAS Build
+
+# Triggered manually from the Actions tab. Uses EXPO_TOKEN (repo secret)
+# to authenticate with EAS and kick off an Android preview build. The
+# resulting APK install URL is printed in the job summary and emailed to
+# the Expo account owner.
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: Platform to build
+        required: true
+        default: android
+        type: choice
+        options:
+          - android
+          - ios
+          - all
+      profile:
+        description: EAS build profile
+        required: true
+        default: preview
+        type: choice
+        options:
+          - preview
+          - development
+          - production
+
+jobs:
+  build:
+    name: EAS Build (${{ inputs.platform }} / ${{ inputs.profile }})
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install eas-cli
+        run: npm install --global eas-cli@latest
+
+      - name: Verify Expo auth
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          if [ -z "$EXPO_TOKEN" ]; then
+            echo "::error::EXPO_TOKEN secret is not set. Add it at Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+          eas whoami
+
+      - name: Claim EAS project id
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          # No-op if app.json already has extra.eas.projectId; otherwise
+          # creates a project under the token owner's account.
+          current=$(node -e "const c=require('./app.json'); process.stdout.write((c.expo.extra && c.expo.extra.eas && c.expo.extra.eas.projectId) || '')")
+          if [ -z "$current" ]; then
+            eas init --non-interactive --force
+          else
+            echo "projectId already set: $current"
+          fi
+
+      - name: Start EAS build
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          eas build \
+            --platform "${{ inputs.platform }}" \
+            --profile "${{ inputs.profile }}" \
+            --non-interactive \
+            --no-wait
+
+      - name: Summary
+        run: |
+          echo "Build submitted. Check progress at https://expo.dev/accounts and your email for the install link." >> $GITHUB_STEP_SUMMARY
+          echo "If the build succeeds, open the install URL on your Android phone, allow installs from the browser, and tap the APK." >> $GITHUB_STEP_SUMMARY

@@ -27,10 +27,12 @@
       "package": "com.edscanner.app",
       "versionCode": 1,
       "minSdkVersion": 26,
-      "permissions": ["android.permission.CAMERA"]
+      "permissions": ["android.permission.CAMERA"],
+      "googleServicesFile": "./google-services.json"
     },
     "plugins": [
       "expo-dev-client",
+      "@react-native-firebase/app",
       [
         "react-native-vision-camera",
         {
@@ -44,11 +46,6 @@
           "cameraPermissionText": "ED Scanner needs camera access to read ingredient lists."
         }
       ]
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "REPLACE_ME"
-      }
-    }
+    ]
   }
 }
