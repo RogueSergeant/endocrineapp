@@ -12,6 +12,7 @@ import {
   Camera,
   useCameraDevice,
   useCameraPermission,
+  type CameraDevice,
 } from "react-native-vision-camera";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "@/navigation/types";
@@ -27,10 +28,12 @@ type Props = NativeStackScreenProps<RootStackParamList, "Scan">;
 export function ScanScreen({ navigation }: Props) {
   const camera = useRef<Camera>(null);
   const { hasPermission, requestPermission } = useCameraPermission();
-  const device = useCameraDevice("back");
+  const hookDevice = useCameraDevice("back");
+  const [fallbackDevice, setFallbackDevice] = useState<CameraDevice | null>(null);
   const [denied, setDenied] = useState(false);
   const [busy, setBusy] = useState(false);
   const setCurrentScan = useScanStore((s) => s.setCurrentScan);
+  const device = hookDevice ?? fallbackDevice;
 
   useEffect(() => {
     let cancelled = false;
@@ -44,6 +47,26 @@ export function ScanScreen({ navigation }: Props) {
       cancelled = true;
     };
   }, [hasPermission, requestPermission]);
+
+  // Force-enumerate devices if the hook hasn't returned one within a frame.
+  // Vision Camera's useCameraDevice occasionally stays empty on launches
+  // where permission was already granted (no permission-change event to
+  // trigger re-enumeration). getAvailableCameraDevices() is a direct query.
+  useEffect(() => {
+    if (!hasPermission || hookDevice) return;
+    let cancelled = false;
+    const id = setTimeout(() => {
+      if (cancelled) return;
+      const devices = Camera.getAvailableCameraDevices();
+      const back =
+        devices.find((d) => d.position === "back") ?? devices[0] ?? null;
+      if (back) setFallbackDevice(back);
+    }, 300);
+    return () => {
+      cancelled = true;
+      clearTimeout(id);
+    };
+  }, [hasPermission, hookDevice]);
 
   const handleCapture = useCallback(async () => {
     if (!camera.current || busy) return;
