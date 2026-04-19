@@ -2,7 +2,7 @@
   "name": "ed-scanner-app",
   "version": "0.1.0",
   "private": true,
-  "main": "src/App.tsx",
+  "main": "index.ts",
   "scripts": {
     "start": "expo start --dev-client",
     "android": "expo run:android",
