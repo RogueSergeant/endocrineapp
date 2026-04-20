@@ -18,9 +18,7 @@ import Animated, {
 import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "@/navigation/types";
-import { recogniseText } from "@/lib/ocr/textRecognition";
-import { parseIngredients } from "@/lib/matching/ingredientParser";
-import { correctIngredients } from "@/lib/matching/ocrCorrector";
+import { extractFromLabel } from "@/lib/vlm/extractor";
 import { matchIngredients } from "@/lib/matching/matcher";
 import { currentUid } from "@/lib/firebase/auth";
 import { saveScan } from "@/lib/firebase/scans";
@@ -258,26 +256,30 @@ export function CropScreen({ navigation, route }: Props) {
           CROP_TIMEOUT_MS,
           "Image crop",
         );
-        const { rawText, text } = await recogniseText(result.uri);
-        const parsed = correctIngredients(parseIngredients(text));
-        if (parsed.length < 3) {
+        const extraction = await extractFromLabel(result.uri);
+        if (extraction.ingredients.length < 3) {
           Alert.alert(
             "Couldn't read that",
             "Only a few words came through. Try a tighter crop, better lighting, or a closer photo.",
           );
           return;
         }
-        const matches = matchIngredients(parsed, substanceDb.index, substanceDb.lookup);
+        const matches = matchIngredients(
+          extraction.ingredients,
+          substanceDb.index,
+          substanceDb.lookup,
+        );
         let scanId: string | null = null;
         if (currentUid()) {
           try {
             const saved = await withTimeout(
               saveScan({
-                ocrText: rawText,
-                parsedIngredients: parsed,
+                ocrText: extraction.rawText,
+                parsedIngredients: extraction.ingredients,
                 matches,
                 imageStoragePath: null,
                 substancesDbVersion: substanceDb.version,
+                productName: extraction.productName,
               }),
               SAVE_TIMEOUT_MS,
               "Save",
@@ -294,9 +296,9 @@ export function CropScreen({ navigation, route }: Props) {
         setCurrentScan({
           id: scanId,
           createdAt,
-          productName: null,
-          ocrText: rawText,
-          parsedIngredients: parsed,
+          productName: extraction.productName,
+          ocrText: extraction.rawText,
+          parsedIngredients: extraction.ingredients,
           matches,
         });
         navigation.navigate("Results", scanId ? { scanId } : undefined);

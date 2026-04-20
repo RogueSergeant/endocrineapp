@@ -21,6 +21,18 @@
     },
     "types": ["jest", "node", "react", "react-native"]
   },
-  "include": ["src/**/*", "src/**/*.json"],
-  "exclude": ["node_modules", "ios", "android", "dist", "build"]
+  "include": [
+    "src/**/*",
+    "src/**/*.json",
+    "modules/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "ios",
+    "android",
+    "dist",
+    "build",
+    "modules/**/android",
+    "modules/**/ios"
+  ]
 }

@@ -1,0 +1,7 @@
+{
+  "name": "vlm-extractor",
+  "version": "0.1.0",
+  "description": "On-device multimodal VLM for label extraction",
+  "main": "index.ts",
+  "private": true
+}
