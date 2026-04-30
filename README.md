@@ -90,8 +90,16 @@ Create a Firebase project at https://console.firebase.google.com, enable:
 
 Then add an Android app with package name `com.edscanner.app` and download
 `google-services.json` into `app/`. Add an iOS app with bundle id
-`com.edscanner.app` and put `GoogleService-Info.plist` into `app/ios/` (or
-`app/` — Expo's prebuild moves it). Both files are gitignored.
+`com.edscanner.app` and put `GoogleService-Info.plist` into `app/` —
+Expo's prebuild copies it into the iOS project at the path declared in
+`app.json` (`expo.ios.googleServicesFile`). Both files are gitignored.
+
+> Note for iOS: `@react-native-firebase/app` requires CocoaPods static
+> frameworks. This is wired up via the `expo-build-properties` plugin
+> (`ios.useFrameworks: "static"`) in `app.json`, so `pod install` works
+> on a fresh `expo prebuild --platform ios` without manual intervention.
+> If `GoogleService-Info.plist` is missing, prebuild fails fast with a
+> clear error rather than the app crashing at first Firebase call.
 
 Deploy the security rules:
 

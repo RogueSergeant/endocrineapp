@@ -102,6 +102,18 @@ jobs:
             --no-wait
 
       - name: Summary
+        env:
+          PLATFORM: ${{ inputs.platform || 'android' }}
         run: |
           echo "Build submitted. Check progress at https://expo.dev/accounts and your email for the install link." >> $GITHUB_STEP_SUMMARY
-          echo "If the build succeeds, open the install URL on your Android phone, allow installs from the browser, and tap the APK." >> $GITHUB_STEP_SUMMARY
+          case "$PLATFORM" in
+            android)
+              echo "Android: open the install URL on your phone, allow installs from the browser, and tap the APK." >> $GITHUB_STEP_SUMMARY
+              ;;
+            ios)
+              echo "iOS: requires an Apple Developer account and the target device's UDID registered with EAS. Install via TestFlight or the ad-hoc URL emailed by EAS." >> $GITHUB_STEP_SUMMARY
+              ;;
+            all)
+              echo "Android + iOS submitted. iOS additionally requires an Apple Developer account and registered UDIDs." >> $GITHUB_STEP_SUMMARY
+              ;;
+          esac

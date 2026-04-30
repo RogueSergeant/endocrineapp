@@ -16,6 +16,7 @@
       "supportsTablet": false,
       "bundleIdentifier": "com.edscanner.app",
       "buildNumber": "1",
+      "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
         "NSCameraUsageDescription": "The camera is used to read the ingredient list printed on your product.",
         "NSPhotoLibraryUsageDescription": "Only needed if you pick a saved image to scan.",
@@ -31,6 +32,14 @@
     "plugins": [
       "expo-dev-client",
       "@react-native-firebase/app",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ],
       [
         "expo-camera",
         {
