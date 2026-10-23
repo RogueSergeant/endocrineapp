@@ -1,0 +1,47 @@
+{
+  "name": "ed-scanner-web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "models": "node scripts/fetch-models.mjs",
+    "predev": "npm run models",
+    "dev": "vite --host",
+    "prebuild": "npm run models",
+    "build": "vite build",
+    "preview": "vite preview --host",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx --max-warnings=0",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "idb": "^8.0.4",
+    "onnxruntime-web": "1.30.0",
+    "ppu-paddle-ocr": "6.6.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-router-dom": "^6.30.6",
+    "zustand": "^5.0.16"
+  },
+  "devDependencies": {
+    "@napi-rs/canvas": "^1.0.13",
+    "@types/node": "^22.20.5",
+    "@types/react": "~18.3.12",
+    "@types/react-dom": "~18.3.1",
+    "@typescript-eslint/eslint-plugin": "^8.72.0",
+    "@typescript-eslint/parser": "^8.72.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "prettier": "^3.4.2",
+    "typescript": "~5.9.3",
+    "vite": "^6.4.5",
+    "vite-plugin-pwa": "^1.0.0",
+    "vitest": "^3.2.7",
+    "wrangler": "^4.40.0"
+  }
+}

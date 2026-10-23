@@ -63,3 +63,8 @@ data-pipeline/data/cosing/
 !data-pipeline/data/raw/.gitkeep
 !data-pipeline/data/raw/list*.xlsx
 !data-pipeline/data/cache/.gitkeep
+
+# Web build artefacts (models are fetched by web/scripts/fetch-models.mjs)
+web/public/models/
+.wrangler/
+dev-dist/
