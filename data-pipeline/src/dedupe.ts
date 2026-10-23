@@ -6,6 +6,13 @@ import type {
   Substance,
 } from "./types.ts";
 import { normalise } from "./normalise.ts";
+import {
+  CURATED_ALIASES,
+  dedupeAliases,
+  expandName,
+  isCompoundName,
+  splitNames,
+} from "./aliases.ts";
 
 // Deterministic UUID namespace so substance IDs are stable across builds.
 const UUID_NAMESPACE = "9d8a45a4-2c4c-4d40-9f3a-3b0a5e2b8a7e";
@@ -24,7 +31,7 @@ function normaliseCas(cas: string | null): string | null {
 
 const ABBREV_RE = /\(([A-Z0-9][A-Z0-9\-]{1,})\)\s*$/;
 
-function pickCanonical(names: string[]): { canonical: string; abbrev: string | null } {
+export function pickCanonical(names: string[]): { canonical: string; abbrev: string | null } {
   // Prefer the shortest name that ends in a parenthesised abbreviation.
   let best: string | null = null;
   let bestAbbrev: string | null = null;
@@ -65,7 +72,13 @@ export function dedupe(rows: RawAssessmentRow[]): Substance[] {
     const cas = normaliseCas(first.casNumber);
     const ec = group.find((r) => r.ecNumber)?.ecNumber ?? null;
     const allNames = Array.from(new Set(group.map((r) => r.name).filter(Boolean)));
-    const { canonical, abbrev } = pickCanonical(allNames);
+    // Pick the display name from the individual synonyms, so
+    // "Butyl 4-hydroxybenzoate; Butylparaben" displays as "Butylparaben".
+    const parts = allNames.flatMap((n) => {
+      const split = splitNames(n);
+      return split.length > 0 ? split : [n];
+    });
+    const { canonical, abbrev } = pickCanonical(parts);
     let tier: ListId = first.listId;
     let health = false;
     let env = false;
@@ -83,12 +96,14 @@ export function dedupe(rows: RawAssessmentRow[]): Substance[] {
     }
     const aliases: string[] = [];
     if (abbrev) aliases.push(abbrev);
-    for (const n of allNames) {
+    for (const n of [...allNames, ...parts]) {
+      aliases.push(...expandName(n));
       // Strip trailing "(ABBR)" from aliases too.
+      if (isCompoundName(n)) continue;
       const stripped = n.replace(ABBREV_RE, "").trim();
       if (stripped) aliases.push(stripped);
-      aliases.push(n);
     }
+    if (cas) aliases.push(...(CURATED_ALIASES[cas] ?? []));
     substances.push({
       id: substanceId(key),
       casNumber: cas,
@@ -103,16 +118,4 @@ export function dedupe(rows: RawAssessmentRow[]): Substance[] {
     });
   }
   return substances;
-}
-
-function dedupeAliases(aliases: string[]): string[] {
-  const seen = new Set<string>();
-  const out: string[] = [];
-  for (const a of aliases) {
-    const k = a.trim().toLowerCase();
-    if (!k || seen.has(k)) continue;
-    seen.add(k);
-    out.push(a.trim());
-  }
-  return out;
 }

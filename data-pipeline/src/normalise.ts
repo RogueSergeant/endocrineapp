@@ -1,7 +1,7 @@
 /**
  * Pure normaliser used by both the pipeline (to bake aliases into the index)
- * and the app (at match time). Keep these two in sync — see
- * `app/src/lib/matching/normaliser.ts`.
+ * and the website (at match time). Keep these two in sync — see
+ * `web/src/lib/matching/normaliser.ts`.
  */
 export function normalise(input: string): string {
   if (!input) return "";
