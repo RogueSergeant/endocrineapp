@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "endoscan",
+  // Static-assets-only Worker: no script, Cloudflare serves dist/ directly.
+  "compatibility_date": "2026-10-19",
+  "assets": {
+    "directory": "./dist",
+    // Client-side routes (/results/..., /history) fall back to index.html.
+    "not_found_handling": "single-page-application"
+  },
+  // Requires the alfieroberts.co.uk zone to be on this Cloudflare account.
+  // Wrangler creates the DNS record and certificate on first deploy.
+  "routes": [{ "pattern": "endoscan.alfieroberts.co.uk", "custom_domain": true }],
+  "observability": {
+    "enabled": true,
+    "traces": { "enabled": true }
+  }
+}
