@@ -52,6 +52,18 @@ const SUBSTANCES: Substance[] = [
     aliases: ["BPA", "Bisphenol A"],
     inciName: null,
   },
+  {
+    id: "s-bp1",
+    casNumber: "131-56-6",
+    ecNumber: null,
+    canonicalName: "Benzophenone-1 (BP-1)",
+    evidenceTier: 2,
+    healthEffects: true,
+    envEffects: false,
+    assessments: [],
+    aliases: ["BP-1", "Benzophenone-1"],
+    inciName: null,
+  },
 ];
 
 function buildIndex(substances: Substance[]): SubstancesIndex {
@@ -305,5 +317,16 @@ describe("matchIngredients", () => {
     expect(matches).toHaveLength(1);
     expect(matches[0]!.substance.id).toBe("s-butylparaben");
     expect(matches[0]!.ingredientPosition).toBe(2);
+  });
+
+  it("does not fuzzy-match a different number in the same chemical family", () => {
+    // "benzophenone 3" is one edit from "benzophenone 1" but a different substance.
+    expect(matchIngredients(["Benzophenone-3"], INDEX, LOOKUP)).toEqual([]);
+  });
+
+  it("still fuzzy-matches an OCR digit slip in a name without digits", () => {
+    const matches = matchIngredients(["Buty1paraben"], INDEX, LOOKUP);
+    expect(matches.map((m) => m.substance.id)).toEqual(["s-butylparaben"]);
+    expect(matches[0]!.matchType).toBe("fuzzy");
   });
 });

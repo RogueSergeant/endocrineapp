@@ -1,4 +1,4 @@
-import { mkdir, stat } from "node:fs/promises";
+import { mkdir, readFile, stat } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { fetchEdLists } from "./fetchEdLists.ts";
@@ -8,7 +8,14 @@ import { enrichCosing } from "./enrichCosing.ts";
 import { enrichPubchem } from "./enrichPubchem.ts";
 import { writeSubstancesJson } from "./buildSubstancesJson.ts";
 import { SEED_ROWS } from "./seed.ts";
-import type { ListId, PipelineConfig, RawAssessmentRow } from "./types.ts";
+import { dedupeAliases, isCompoundName, splitNames } from "./aliases.ts";
+import type {
+  ListId,
+  PipelineConfig,
+  RawAssessmentRow,
+  Substance,
+  SubstancesFile,
+} from "./types.ts";
 
 const USE_SEED = process.env.ED_USE_SEED === "1";
 const NETWORK_ENABLED = process.env.ED_NETWORK !== "0";
@@ -20,7 +27,7 @@ const config: PipelineConfig = {
   rawDir: join(repoRoot, "data-pipeline", "data", "raw"),
   cacheDir: join(repoRoot, "data-pipeline", "data", "cache"),
   cosingDir: join(repoRoot, "data-pipeline", "data", "cosing"),
-  outDir: join(repoRoot, "app", "src", "data"),
+  outDir: process.env.ED_OUT_DIR ?? join(repoRoot, "web", "src", "data"),
   pubchemRateLimitPerSec: 5,
   fuzzyEnrichmentEnabled: false,
   sourceLastUpdated: process.env.ED_SOURCE_LAST_UPDATED ?? "2025-12",
@@ -28,6 +35,32 @@ const config: PipelineConfig = {
 
 function log(step: string, msg: string): void {
   process.stdout.write(`[${step}] ${msg}\n`);
+}
+
+/**
+ * Without PubChem (offline, or the API blocked), keep the synonyms and INCI
+ * names from the previously published substances.json rather than dropping
+ * them. Substance ids are deterministic, so they line up across builds.
+ */
+async function carryForwardEnrichment(substances: Substance[], previousPath: string) {
+  let previous: SubstancesFile;
+  try {
+    previous = JSON.parse(await readFile(previousPath, "utf8")) as SubstancesFile;
+  } catch {
+    return { matched: 0 };
+  }
+  const byId = new Map(previous.substances.map((s) => [s.id, s]));
+  let matched = 0;
+  for (const s of substances) {
+    const old = byId.get(s.id);
+    if (!old) continue;
+    matched++;
+    // Older builds stored compound names ("A; B") whole; keep their parts.
+    const carried = old.aliases.flatMap((a) => (isCompoundName(a) ? splitNames(a) : [a]));
+    s.aliases = dedupeAliases([...s.aliases, ...carried]);
+    s.inciName ??= old.inciName;
+  }
+  return { matched };
 }
 
 async function main(): Promise<void> {
@@ -108,6 +141,7 @@ async function main(): Promise<void> {
     log("cosing", "no CosIng CSV found in data-pipeline/data/cosing — skipping INCI enrichment");
   }
 
+  let pubchemOk = false;
   if (NETWORK_ENABLED) {
     log("pubchem", "fetching synonyms (cached on disk)");
     try {
@@ -120,11 +154,18 @@ async function main(): Promise<void> {
         "pubchem",
         `cached: ${stats.fromCache}, fetched: ${stats.fetched}, not-found: ${stats.notFound}, errors: ${stats.errors}, +${stats.synonymsAdded} aliases`,
       );
+      // Any failed lookup would silently drop that substance's synonyms.
+      pubchemOk = stats.errors === 0;
     } catch (err) {
       log("pubchem", `skipped: ${(err as Error).message}`);
     }
   } else {
     log("pubchem", "skipped (ED_NETWORK=0)");
+  }
+  if (!pubchemOk) {
+    const previousPath = join(config.outDir, "substances.json");
+    const { matched } = await carryForwardEnrichment(substances, previousPath);
+    log("pubchem", `carried forward synonyms for ${matched} substances from ${previousPath}`);
   }
 
   log("build", "writing substances.json");

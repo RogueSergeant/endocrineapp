@@ -102,6 +102,19 @@ function getBuckets(index: SubstancesIndex): Record<string, string[]> {
   return buckets;
 }
 
+/**
+ * Numbered members of a chemical family ("benzophenone 1" and
+ * "benzophenone 3") sit one edit apart but are different substances, so
+ * when both strings carry digits, the digits must agree.
+ * Names without digits are unaffected, so an OCR slip such as
+ * "buty1paraben" still fuzzy-matches "butylparaben".
+ */
+function digitsConflict(a: string, b: string): boolean {
+  const da = a.replace(/\D/g, "");
+  const db = b.replace(/\D/g, "");
+  return da !== "" && db !== "" && da !== db;
+}
+
 function fuzzyMatch(
   needle: string,
   index: SubstancesIndex,
@@ -113,6 +126,7 @@ function fuzzyMatch(
   let best: { alias: string; substanceId: string; distance: number } | null = null;
   for (const alias of candidates) {
     if (Math.abs(alias.length - needle.length) > FUZZY_MAX_DISTANCE) continue;
+    if (digitsConflict(needle, alias)) continue;
     const d = boundedDistance(needle, alias, FUZZY_MAX_DISTANCE);
     if (d <= FUZZY_MAX_DISTANCE && (!best || d < best.distance)) {
       const id = index[alias];
