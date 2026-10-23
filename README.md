@@ -1,26 +1,98 @@
-# Endocrine Disruptor Scanner (MVP)
+# ED Scanner
 
-Cross-platform mobile app that scans cosmetic ingredient lists, identifies endocrine
-disruptors using the [edlists.org](https://edlists.org) knowledge base, and keeps a
-history of scans.
+A website that checks cosmetic ingredient lists for endocrine disruptors,
+using the [edlists.org](https://edlists.org) lists. Take a photo of a label
+on your phone and the site reads it **on the device**: the photo is never
+uploaded. It will live at **https://endoscan.alfieroberts.co.uk**.
 
 ## Repository layout
 
 ```
 endocrineapp/
-├── app/             React Native (Expo dev-client) app
-├── data-pipeline/   Node.js ETL that builds app/src/data/substances.json
-├── functions/       Firebase Cloud Functions (placeholder, post-MVP)
-└── .github/         CI workflows
+├── web/             The website (Vite + React + TypeScript)
+├── data-pipeline/   Node ETL that builds web/src/data/substances*.json
+└── .github/         CI and the substance-update workflow
 ```
 
-`app` and `data-pipeline` are independent Node projects with their own
-`package.json`. They are wired together by the JSON file the pipeline writes
-into `app/src/data/`.
+## How it works
 
-## Quick start
+1. **Photo**: a normal file input (`capture="environment"`), so it uses the
+   phone's own camera app. A paste box is the fallback: on iPhone, tap it
+   and choose *Scan Text* (Live Text); on Android, paste from Google Lens.
+2. **Crop**: the user drags a box over the ingredient list.
+3. **Straighten**: the crop is deskewed automatically
+   (`web/src/lib/ocr/deskew.ts`). Even a 1.5 degree tilt wrecks OCR on long
+   lines, and phone photos are never perfectly level.
+4. **Read**: [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) PP-OCRv5
+   mobile models (English) run in a Web Worker on
+   [onnxruntime-web](https://onnxruntime.ai/) via
+   [ppu-paddle-ocr](https://github.com/PT-Perkasa-Pilar-Utama/ppu-paddle-ocr).
+   It takes about 1.5 s on a laptop; expect a few seconds on a phone.
+5. **Match**: the ingredient parser and matcher in
+   `web/src/lib/matching/` compare each ingredient against ~200 listed
+   substances (exact, CAS number, or OCR-tolerant fuzzy match).
+6. **History**: scans are kept in the browser's IndexedDB. There are no
+   accounts and no backend.
 
-### 1. Build the substance database
+The first visit downloads ~13 MB of models and a ~14 MB WASM runtime
+(~3.7 MB compressed). After that they are cached, and the site works
+offline.
+
+## Run it locally
+
+Requires Node 20+ (22 recommended).
+
+```bash
+cd web
+npm install
+npm run dev          # http://localhost:5173, also on your LAN for phone testing
+```
+
+`npm run dev` and `npm run build` first run `scripts/fetch-models.mjs`, which
+downloads the OCR models into `web/public/models/` (gitignored) and checks
+their SHA-256 hashes. Later runs skip files that are already present.
+
+To try it on your phone, open the LAN address Vite prints. Over plain HTTP
+the browser disables the service worker and multi-threaded WASM, so OCR
+runs on one thread (slower, but it works). The deployed HTTPS site has
+both.
+
+## Deploy (Cloudflare Workers, from your Mac)
+
+The site is a static-assets-only Worker; `web/wrangler.jsonc` holds the
+config, including the custom domain `endoscan.alfieroberts.co.uk`.
+
+Prerequisite: the `alfieroberts.co.uk` zone must be on the same Cloudflare
+account. Wrangler creates the DNS record and certificate on the first deploy.
+
+```bash
+cd web
+npm install
+npx wrangler login   # once; opens a browser
+npm run build
+npm run deploy       # wrangler deploy
+```
+
+`web/public/_headers` sets the cross-origin isolation headers
+(`Cross-Origin-Opener-Policy` / `Cross-Origin-Embedder-Policy`) that let
+the OCR use several threads, plus long cache lifetimes for the models and
+hashed assets. To check the config without deploying, run
+`npx wrangler deploy --dry-run` (CI does this too).
+
+## Tests
+
+```bash
+cd web
+npm test             # Vitest: matcher, parser, deskew, real-data regressions
+npm run typecheck
+npm run lint
+```
+
+`src/lib/matching/substanceData.test.ts` checks that common label spellings
+(BUTYLPARABEN, Methylparaben, Benzophenone-3, Cyclopentasiloxane, ...)
+match the right entries in the real bundled database.
+
+## Updating the substance data
 
 ```bash
 cd data-pipeline
@@ -28,109 +100,21 @@ npm install
 npm start
 ```
 
-This downloads the three edlists.org spreadsheets, deduplicates by CAS,
-enriches with INCI names from CosIng and synonyms from PubChem, and writes:
-
-- `app/src/data/substances.json`
-- `app/src/data/substances-index.json`
-
-The PubChem responses are cached under `data-pipeline/data/cache/` so re-runs
-are fast and respectful of the API.
-
-### 2. Run the app on your phone
-
-The app uses native modules (Vision Camera, ML Kit, Firebase) so it cannot
-run in Expo Go. You need a custom dev client. There are two ways to get one
-onto your phone — pick whichever matches your setup.
-
-#### Option A: EAS cloud build (no SDKs required)
-
-Easiest if you don't have Xcode / Android Studio installed. Builds happen on
-Expo's servers; you install the resulting APK / TestFlight build on your
-phone and connect it to a metro bundler running on your laptop.
-
-Prereqs: an Expo account (`npx expo login`) and a Firebase project (see §3).
-
-```bash
-cd app
-npm install
-npx eas-cli login
-npx eas-cli init                          # one-time, sets the project ID in app.json
-npx eas-cli build --profile development --platform android
-# → wait ~10-20 min, then scan the QR / download the APK and sideload it
-npx expo start --dev-client               # then open the dev client on your phone
-```
-
-For iOS, swap `--platform android` for `--platform ios`. iOS requires an
-Apple Developer account ($99/yr) and your device's UDID registered with EAS.
-
-#### Option B: Local build (faster iterations, requires SDKs)
-
-Prereqs: Xcode (iOS, macOS only) or Android Studio (Android), CocoaPods on
-macOS, your phone connected over USB with developer mode on.
-
-```bash
-cd app
-npm install
-npx expo prebuild
-npx expo run:android --device           # or run:ios --device
-```
-
-ML Kit on iOS requires CocoaPods to install native dependencies after
-`expo prebuild`. Run `cd ios && pod install` if `expo run:ios` does not do
-it for you.
-
-### 3. Firebase setup (required before first build)
-
-Create a Firebase project at https://console.firebase.google.com, enable:
-
-- Firestore (production mode, region `europe-west3`)
-- Anonymous Authentication
-- Cloud Storage
-
-Then add an Android app with package name `com.edscanner.app` and download
-`google-services.json` into `app/`. Add an iOS app with bundle id
-`com.edscanner.app` and put `GoogleService-Info.plist` into `app/ios/` (or
-`app/` — Expo's prebuild moves it). Both files are gitignored.
-
-Deploy the security rules:
-
-```bash
-npx firebase-tools deploy --only firestore:rules,storage:rules
-```
-
-For local development, install the Firebase CLI and run
-`npx firebase-tools emulators:start` from the project root, then set
-`EXPO_PUBLIC_USE_FIRESTORE_EMULATOR=1` in `app/.env`.
-
-> Without these config files the Android build fails at the
-> `google-services` Gradle plugin step. iOS will build but crash on first
-> Firebase API call.
-
-## Tests
-
-```bash
-cd app
-npm test                # Jest unit tests including matcher.test.ts
-npm run typecheck
-npm run lint
-```
-
-The matching engine in `app/src/lib/matching/` is fully unit-tested and
-framework-free.
+This reads the three edlists.org spreadsheets committed in
+`data-pipeline/data/raw/`, merges them by CAS number, splits multi-name
+cells into separate aliases, adds PubChem synonyms, and writes
+`web/src/data/substances.json` and `substances-index.json`. See
+`data-pipeline/README.md` for details. The *Update substance database*
+GitHub workflow does the same and commits the result; redeploy afterwards.
 
 ## Data sources and attribution
 
 - Substance lists: [edlists.org](https://edlists.org) (Lists I, II, III)
-- INCI mapping: [EU CosIng](https://ec.europa.eu/growth/tools-databases/cosing/)
 - Synonym enrichment: [PubChem](https://pubchem.ncbi.nlm.nih.gov/)
+- INCI mapping (optional): [EU CosIng](https://ec.europa.eu/growth/tools-databases/cosing/)
+- Text recognition: PaddleOCR models (Apache-2.0), ONNX conversions from
+  [ppu-paddle-ocr-models](https://github.com/PT-Perkasa-Pilar-Utama/ppu-paddle-ocr-models)
 
-This app is **not medical advice**. It surfaces substances that the listed
+This site is **not medical advice**. It surfaces substances that the listed
 authorities have flagged or are evaluating; the absence of a flag does not
 mean a product is safe.
-
-## Out of scope (v1.1+)
-
-Barcode scanning, alternatives suggestions, accounts/login, food and
-non-cosmetic categories, scoring systems, push notifications, scheduled ETL,
-multi-language UI.
