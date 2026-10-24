@@ -5,11 +5,10 @@ import { createWordRepair, type WordRepair } from "./wordRepair";
 let repair: WordRepair | null = null;
 
 /**
- * Word repair over the ingredient vocabulary: the hand-kept word list
- * plus every word of every substance name and synonym we match against.
- * Built on first use.
+ * The ingredient vocabulary: the hand-kept word list plus every word of
+ * every substance name and synonym we match against. Built on first use.
  */
-export function repairOcrWords(text: string): string {
+function vocabulary(): WordRepair {
   if (!repair) {
     const words = ingredientWords
       .split("\n")
@@ -20,5 +19,15 @@ export function repairOcrWords(text: string): string {
     }
     repair = createWordRepair(words);
   }
-  return repair(text);
+  return repair;
+}
+
+/** Word repair of OCR output over the vocabulary. */
+export function repairOcrWords(text: string): string {
+  return vocabulary()(text);
+}
+
+/** Whether a word is in the vocabulary, i.e. a correctly spelled word. */
+export function isKnownWord(word: string): boolean {
+  return vocabulary().has(word);
 }

@@ -13,7 +13,7 @@ const FUZZY_MAX_DISTANCE = 2;
  *
  * Values are already normalised (lowercase, no punctuation).
  */
-const GENERIC_ALIAS_DENYLIST: ReadonlySet<string> = new Set([
+export const GENERIC_ALIAS_DENYLIST: ReadonlySet<string> = new Set([
   "acid",
   "alcohol",
   "aluminium",
@@ -119,17 +119,36 @@ function digitsConflict(a: string, b: string): boolean {
   return na !== "" && nb !== "" && na !== nb;
 }
 
+/** Whether a (normalised, lower-case) word is a known, correctly spelled word. */
+export type KnownWord = (word: string) => boolean;
+
+/**
+ * Fuzzy matching exists to undo misreads, so text made entirely of known
+ * words isn't a candidate: "sodium chloride" (salt) is not a misread
+ * "sodium chlorate", nor "triphosphates" (a food additive) a misread name
+ * of something else. A word with a digit in it is never "known".
+ */
+function allKnown(normalised: string, isKnownWord: KnownWord | undefined): boolean {
+  if (!isKnownWord) return false;
+  return normalised.split(" ").every((w) => /^[a-z]+$/.test(w) && isKnownWord(w));
+}
+
 function fuzzyMatch(
   needle: string,
   index: SubstancesIndex,
+  isKnownWord?: KnownWord,
 ): { alias: string; substanceId: string; distance: number } | null {
   if (needle.length < FUZZY_MIN_LENGTH) return null;
+  if (allKnown(needle, isKnownWord)) return null;
   const buckets = getBuckets(index);
   const first = needle.charAt(0);
   const candidates = buckets[first] ?? [];
   let best: { alias: string; substanceId: string; distance: number } | null = null;
   for (const alias of candidates) {
     if (Math.abs(alias.length - needle.length) > FUZZY_MAX_DISTANCE) continue;
+    // Never land on a generic alias either ("pytassium" is not a reason
+    // to flag potassium chlorate).
+    if (GENERIC_ALIAS_DENYLIST.has(alias)) continue;
     if (digitsConflict(needle, alias)) continue;
     const d = boundedDistance(needle, alias, FUZZY_MAX_DISTANCE);
     if (d <= FUZZY_MAX_DISTANCE && (!best || d < best.distance)) {
@@ -141,7 +160,24 @@ function fuzzyMatch(
   return best;
 }
 
-function fuzzyConfidence(distance: number): number {
+/**
+ * The index entry a name refers to: exactly, or within the fuzzy rules
+ * used for whole ingredients (8+ characters, up to 2 edits, numbers
+ * agreeing). Generic one-word aliases are never matched.
+ */
+export function lookupAlias(
+  name: string,
+  index: SubstancesIndex,
+  isKnownWord?: KnownWord,
+): { alias: string; substanceId: string; distance: number } | null {
+  const normalised = normalise(name);
+  if (!normalised || GENERIC_ALIAS_DENYLIST.has(normalised)) return null;
+  const exact = index[normalised];
+  if (exact) return { alias: normalised, substanceId: exact, distance: 0 };
+  return fuzzyMatch(normalised, index, isKnownWord);
+}
+
+export function fuzzyConfidence(distance: number): number {
   if (distance === 0) return 1;
   if (distance === 1) return 0.9;
   if (distance === 2) return 0.7;
@@ -162,6 +198,7 @@ export function matchIngredients(
   ingredients: string[],
   index: SubstancesIndex,
   lookup: SubstanceLookup,
+  isKnownWord?: KnownWord,
 ): Match[] {
   const matches = new Map<string, Match>();
 
@@ -206,7 +243,7 @@ export function matchIngredients(
       }
     }
 
-    const fuzzy = fuzzyMatch(normalised, index);
+    const fuzzy = fuzzyMatch(normalised, index, isKnownWord);
     if (fuzzy) {
       const substance = lookup.byId[fuzzy.substanceId];
       if (substance) {

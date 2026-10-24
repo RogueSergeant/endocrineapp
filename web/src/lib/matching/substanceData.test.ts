@@ -2,6 +2,7 @@
 // the substances people most often look for must match the right entry.
 import { parseIngredients } from "./ingredientParser";
 import { matchIngredients } from "./matcher";
+import { isKnownWord } from "@/lib/ocr/ocrVocabulary";
 import { substanceDb } from "@/lib/store/scanStore";
 
 function matchOne(word: string) {
@@ -45,6 +46,30 @@ describe("bundled substance data", () => {
       expect(matchOne(word).map((m) => m.name)).toEqual(["2-tert-butyl-4-methoxyphenol (BHA)"]);
     },
   );
+
+  it.each(["Sodium Chloride", "Triphosphates", "Diphosphates", "Potassium Phosphates"])(
+    "does not fuzzy-match the correctly spelled ingredient %s to something else",
+    (word) => {
+      const m = matchIngredients([word], substanceDb.index, substanceDb.lookup, isKnownWord);
+      expect(m.map((x) => x.substance.canonicalName)).toEqual([]);
+    },
+  );
+
+  it.each([
+    ["Propytparaben", "94-13-3"],
+    ["Butylparaben", "94-26-8"],
+    ["Buty1paraben", "94-26-8"],
+    ["Triclosam", "3380-34-5"],
+  ])("still fuzzy-matches the misread %s with the vocabulary in use", (word, cas) => {
+    const m = matchIngredients([word], substanceDb.index, substanceDb.lookup, isKnownWord);
+    expect(m.map((x) => x.substance.casNumber)).toEqual([cas]);
+  });
+
+  it("matches a chemical name whose brackets are part of it", () => {
+    expect(matchOne("Bis(2-ethylhexyl) phthalate").map((m) => m.name)).toEqual([
+      "Bis(2-ethylhexyl) phthalate (DEHP)",
+    ]);
+  });
 
   it("has no aliases that still pack several names into one", () => {
     const joined = Object.keys(substanceDb.index).filter((k) => k.includes(";"));
