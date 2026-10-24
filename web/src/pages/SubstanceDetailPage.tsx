@@ -18,7 +18,10 @@ export function SubstanceDetailPage() {
   if (!substance) {
     return (
       <Layout title="Substance">
-        <p className="muted">Substance not found.</p>
+        <p className="muted">
+          This substance isn&apos;t in the current database. It may have been removed or renamed
+          in a data update.
+        </p>
       </Layout>
     );
   }

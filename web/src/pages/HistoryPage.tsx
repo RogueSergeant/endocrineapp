@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Layout } from "@/components/Layout";
 import { ScanHistoryItem } from "@/components/ScanHistoryItem";
-import { deleteScan, listScans } from "@/lib/history";
+import { listScans } from "@/lib/history";
+import { forgetScan } from "@/lib/scan";
 import type { ScanDoc } from "@/types";
 
 export function HistoryPage() {
@@ -16,7 +17,7 @@ export function HistoryPage() {
   const onDelete = async (scan: ScanDoc) => {
     if (!window.confirm("Delete this scan?")) return;
     try {
-      await deleteScan(scan.id);
+      await forgetScan(scan.id);
       refresh();
     } catch (err) {
       window.alert(`Couldn't delete: ${(err as Error).message}`);

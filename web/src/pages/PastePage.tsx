@@ -16,12 +16,12 @@ export function PastePage() {
     setBusy(true);
     setError(null);
     try {
-      const id = await completeScan(text, cleanOcrOutput(text));
+      const id = await completeScan(text, cleanOcrOutput(text), { minIngredients: 1 });
       navigate(id ? `/results/${id}` : "/results", { replace: true });
     } catch (err) {
       setError(
         err instanceof TooFewIngredientsError
-          ? "That doesn't look like a full ingredient list. Paste everything after “Ingredients:”."
+          ? "We couldn't find any ingredients in that. Type or paste at least one ingredient."
           : (err as Error).message,
       );
     } finally {

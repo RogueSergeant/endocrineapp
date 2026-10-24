@@ -2,8 +2,8 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import { Navigate, useNavigate } from "react-router-dom";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { Layout } from "@/components/Layout";
-import { recogniseText, useOcrStatus } from "@/lib/ocr/textRecognition";
-import { completeScan, TooFewIngredientsError } from "@/lib/scan";
+import { useOcrStatus } from "@/lib/ocr/textRecognition";
+import { scanImage, TooFewIngredientsError } from "@/lib/scan";
 import { useScanStore } from "@/lib/store/scanStore";
 
 // Phone photos are 12-48 MP. Anything past this adds memory pressure (iOS
@@ -75,6 +75,15 @@ export function CropPage() {
   const [error, setError] = useState<{ title: string; body: string } | null>(null);
   const drag = useRef<Drag | null>(null);
   const running = useRef(false);
+  // Aborted when the page unmounts, so a scan the user walked away from
+  // can't save, replace the current scan or navigate them back.
+  const unmounted = useRef(new AbortController());
+
+  useEffect(() => {
+    const controller = new AbortController();
+    unmounted.current = controller;
+    return () => controller.abort();
+  }, []);
 
   useEffect(() => {
     if (!pendingImage) return;
@@ -197,6 +206,7 @@ export function CropPage() {
     // Ref guard (not just `busy`): a quick double tap can get past the
     // state check before React re-renders.
     if (running.current || !source) return;
+    const { signal } = unmounted.current;
     running.current = true;
     setBusy(true);
     setError(null);
@@ -208,19 +218,19 @@ export function CropPage() {
       const sw = Math.max(MIN_CROP_PX, Math.min(W - sx, Math.round(rect.w * W)));
       const sh = Math.max(MIN_CROP_PX, Math.min(H - sy, Math.round(rect.h * H)));
       const crop = await createImageBitmap(source, sx, sy, sw, sh);
-      const { rawText, text, ms } = await recogniseText(crop);
-      console.info(`OCR took ${ms} ms`);
-      const id = await completeScan(rawText, text);
+      const id = await scanImage(crop, signal);
+      if (signal.aborted) return;
       navigate(id ? `/results/${id}` : "/results", { replace: true });
     } catch (err) {
+      if (signal.aborted) return;
       if (err instanceof TooFewIngredientsError) {
         setError({ title: "Couldn't read that", body: err.message });
       } else {
         setError({ title: "Scan failed", body: (err as Error).message });
       }
     } finally {
-      setBusy(false);
       running.current = false;
+      if (!signal.aborted) setBusy(false);
     }
   }, [navigate, rect, source]);
 
@@ -250,6 +260,8 @@ export function CropPage() {
             </div>
           </div>
         )}
+        {/* Move/up/cancel live only here: captured pointer events from the
+            selection and its handles bubble up to the stage. */}
         <div
           className="crop-stage"
           ref={stageRef}
@@ -284,9 +296,6 @@ export function CropPage() {
                 className="crop-rect"
                 style={px}
                 onPointerDown={onPointerDown("move")}
-                onPointerMove={onPointerMove}
-                onPointerUp={onPointerUp}
-                onPointerCancel={onPointerUp}
                 data-testid="crop-rect"
               />
               {(
@@ -302,9 +311,6 @@ export function CropPage() {
                   className="crop-handle"
                   style={{ left, top }}
                   onPointerDown={onPointerDown(mode)}
-                  onPointerMove={onPointerMove}
-                  onPointerUp={onPointerUp}
-                  onPointerCancel={onPointerUp}
                   aria-hidden="true"
                 />
               ))}

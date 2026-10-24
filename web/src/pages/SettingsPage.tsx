@@ -1,6 +1,6 @@
 import { Layout } from "@/components/Layout";
 import { Section } from "@/components/Section";
-import { deleteAllScans } from "@/lib/history";
+import { forgetAllScans } from "@/lib/scan";
 import { substanceDb } from "@/lib/store/scanStore";
 
 export function SettingsPage() {
@@ -13,7 +13,7 @@ export function SettingsPage() {
       return;
     }
     try {
-      await deleteAllScans();
+      await forgetAllScans();
       window.alert("All scans deleted.");
     } catch (err) {
       window.alert(`Failed: ${(err as Error).message}`);

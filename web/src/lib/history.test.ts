@@ -2,7 +2,9 @@ import "fake-indexeddb/auto";
 import { IDBFactory, IDBRequest as FakeRequest, forceCloseDatabase } from "fake-indexeddb";
 import type { Match, Substance } from "@/types";
 
-type History = typeof import("./history");
+import type * as HistoryModule from "./history";
+
+type History = typeof HistoryModule;
 
 const substance: Substance = {
   id: "s-1",
