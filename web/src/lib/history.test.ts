@@ -1,5 +1,11 @@
 import "fake-indexeddb/auto";
-import { IDBFactory, IDBRequest as FakeRequest, forceCloseDatabase } from "fake-indexeddb";
+import {
+  IDBFactory,
+  IDBRequest as FakeRequest,
+  // Exported subclass of fake-indexeddb's internal event, usable for any event type.
+  IDBVersionChangeEvent as FakeEvent,
+  forceCloseDatabase,
+} from "fake-indexeddb";
 import type { Match, Substance } from "@/types";
 
 import type * as HistoryModule from "./history";
@@ -248,6 +254,26 @@ describe("history unavailable", () => {
     await expect(h.deleteAllScans()).rejects.toMatchObject({ name: "VersionError" });
   });
 
+  it("treats an old Firefox private window (async InvalidStateError) as nothing stored", async () => {
+    const h = await freshHistory();
+    vi.stubGlobal("indexedDB", {
+      open: () => {
+        // A real fake request that fails the way Firefox's did, asynchronously.
+        const req = new (FakeRequest as unknown as new () => IDBRequest)() as IDBRequest & {
+          _error: DOMException;
+          readyState: string;
+        };
+        setTimeout(() => {
+          req._error = new DOMException("A mutation operation was attempted", "InvalidStateError");
+          req.readyState = "done";
+          req.dispatchEvent(new FakeEvent("error") as unknown as Event);
+        });
+        return req;
+      },
+    });
+    await expect(h.deleteAllScans()).resolves.toBeUndefined();
+  });
+
   it("treats blocked storage (SecurityError) as nothing stored", async () => {
     const h = await freshHistory();
     vi.stubGlobal("indexedDB", {
@@ -296,7 +322,7 @@ describe("discardScan", () => {
     expect(await h.getScan("late")).toBeUndefined();
     expect(await h.listScans()).toEqual([]);
     // The read purged it, so the entry is really gone.
-    expect(await getRaw("late")).toBeUndefined();
+    await vi.waitFor(async () => expect(await getRaw("late")).toBeUndefined());
   });
 
   it("stays hidden after a reload and is purged when the late save lands", async () => {
@@ -310,7 +336,42 @@ describe("discardScan", () => {
     const after = (await import("./history")) as History;
     expect(await after.getScan("late")).toBeUndefined();
     expect(await after.listScans()).toEqual([]);
-    expect(await getRaw("late")).toBeUndefined();
+    await vi.waitFor(async () => expect(await getRaw("late")).toBeUndefined());
+    // An earlier session's id is forgotten once purged: its save can't still be pending.
+    await vi.waitFor(() => expect(localStorage.getItem("ed-scanner:discarded")).toBe("[]"));
+  });
+
+  it("keeps this session's ids after a purge, in case a hung save lands later", async () => {
+    const h = await freshHistory();
+    await h.discardScan("mine");
+    await h.listScans();
+    await vi.waitFor(async () => expect(await getRaw("mine")).toBeUndefined());
+    expect(JSON.parse(localStorage.getItem("ed-scanner:discarded")!)).toEqual(["mine"]);
+    await h.saveScan(input(9, "mine")); // the hung save finally commits
+    expect(await h.listScans()).toEqual([]);
+  });
+
+  it("hides scans another tab discarded", async () => {
+    const h = await freshHistory();
+    await h.saveScan(input(1, "theirs"));
+    expect(await h.listScans()).toHaveLength(1);
+    localStorage.setItem("ed-scanner:discarded", JSON.stringify(["theirs"]));
+    expect(await h.listScans()).toEqual([]);
+    expect(await h.getScan("theirs")).toBeUndefined();
+  });
+
+  it("doesn't make reads wait for a purge", async () => {
+    const h = await freshHistory();
+    await h.saveScan(input(1, "keep"));
+    await h.discardScan("stuck");
+    // Deletes hang (a save stuck on the connection would do this).
+    vi.spyOn(IDBObjectStore.prototype, "delete").mockImplementation(
+      () => new (FakeRequest as unknown as new () => IDBRequest)() as never,
+    );
+    vi.useFakeTimers();
+    const list = h.listScans();
+    await vi.advanceTimersByTimeAsync(10);
+    expect((await list).map((s) => s.id)).toEqual(["keep"]);
   });
 
   it("is purged before a single-scan read too", async () => {
@@ -319,7 +380,7 @@ describe("discardScan", () => {
     await h.discardScan("gone");
     await h.saveScan(input(2, "gone"));
     expect(await h.getScan("keep")).toBeDefined();
-    expect(await getRaw("gone")).toBeUndefined();
+    await vi.waitFor(async () => expect(await getRaw("gone")).toBeUndefined());
   });
 
   it("still works when localStorage is unavailable", async () => {

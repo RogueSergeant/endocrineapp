@@ -92,20 +92,20 @@ export interface EnrichmentResult {
  * `pubchem` is null when PubChem wasn't reachable at all (a CAS missing
  * from it means that lookup failed); `cosing` is null when there is no
  * CosIng dump (a CAS missing from it means CosIng has no entry).
- * Returns the snapshot to commit, holding this run's substances. With
- * `partial` (the run used the seed fallback because edlists.org was
- * unreachable) entries for every other CAS are kept too, so a bad day
- * can't erase them; a run over the full lists drops entries for CAS
- * numbers that have left the lists.
+ * Returns the snapshot to commit: entries for this run's substances are
+ * replaced, and entries for any other CAS are kept. A run can see fewer
+ * substances than it should without failing (the seed fallback, a renamed
+ * spreadsheet column, a list that parsed empty), and must not erase the
+ * rest. Entries only ever apply to a CAS that is listed, so one left over
+ * from a substance that has left the lists is harmless; delete it by hand.
  */
 export function applyEnrichment(
   substances: Substance[],
   snapshot: Snapshot,
   pubchem: ReadonlyMap<string, string[]> | null,
   cosing: ReadonlyMap<string, CosingHit> | null = null,
-  { partial = false }: { partial?: boolean } = {},
 ): EnrichmentResult {
-  const next: Snapshot = partial ? { ...snapshot } : {};
+  const next: Snapshot = { ...snapshot };
   let fromSnapshot = 0;
   let synonymsAdded = 0;
   for (const s of substances) {

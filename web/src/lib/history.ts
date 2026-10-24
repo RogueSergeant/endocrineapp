@@ -23,13 +23,16 @@ type Connection = Promise<IDBPDatabase<HistoryDb>>;
 
 /**
  * IndexedDB can't be used here at all: there is no API, open() throws
- * straight away, or storage is blocked (SecurityError). Nothing can have
+ * straight away, storage is blocked (SecurityError), or a private window
+ * refuses it (InvalidStateError, Firefox before 115). Nothing can have
  * been stored, so deleting counts as done. Any other open failure (e.g.
  * Safari's "connection lost") may sit on top of real data and is reported.
  */
 class HistoryUnavailableError extends Error {
   override name = "HistoryUnavailableError";
 }
+
+const UNAVAILABLE_ON_OPEN = new Set(["SecurityError", "InvalidStateError"]);
 
 let dbPromise: Connection | null = null;
 
@@ -61,7 +64,7 @@ function db(): Connection {
       blocking: () => forget(connection, { close: true }),
       terminated: () => forget(connection, { close: true }),
     }).catch((err: unknown) => {
-      throw err instanceof DOMException && err.name === "SecurityError"
+      throw err instanceof DOMException && UNAVAILABLE_ON_OPEN.has(err.name)
         ? new HistoryUnavailableError(err.message)
         : err;
     });
@@ -113,9 +116,10 @@ export function newId(): string {
 }
 
 // Scans abandoned mid-save. A hung save can commit after the delete meant
-// to undo it, even after a reload, so their ids are remembered (in
-// localStorage, when available), filtered out of every read and purged
-// again before each one.
+// to undo it, so their ids are remembered in localStorage (when available,
+// shared with other tabs), filtered out of every read, and purged in the
+// background on each read. A pending save can't outlive its page, so ids
+// left by earlier sessions are forgotten once a purge has removed them.
 const DISCARDED_KEY = "ed-scanner:discarded";
 const MAX_DISCARDED = 50;
 
@@ -128,25 +132,43 @@ function loadDiscarded(): Set<string> {
   }
 }
 
-const discarded = loadDiscarded();
+/** Ids from earlier sessions: safe to forget once purged. */
+const earlierDiscards = loadDiscarded();
+const discarded = new Set(earlierDiscards);
 
-function saveDiscarded() {
+/** Pick up ids discarded in other tabs. */
+function syncDiscarded() {
+  for (const id of loadDiscarded()) discarded.add(id);
+}
+
+function saveDiscarded(forgotten: ReadonlySet<string> = new Set()) {
   try {
-    localStorage.setItem(DISCARDED_KEY, JSON.stringify([...discarded].slice(-MAX_DISCARDED)));
+    const ids = [...new Set([...loadDiscarded(), ...discarded])].filter((id) => !forgotten.has(id));
+    localStorage.setItem(DISCARDED_KEY, JSON.stringify(ids.slice(-MAX_DISCARDED)));
   } catch {
     // Still filtered for this session.
   }
 }
 
-/** Delete every discarded id in one transaction; best effort, reads filter them anyway. */
-async function purgeDiscarded(d: IDBPDatabase<HistoryDb>): Promise<void> {
+/** Delete every discarded id in one transaction, in the background: reads only filter. */
+function purgeDiscarded() {
   if (discarded.size === 0) return;
-  try {
+  const ids = [...discarded];
+  run(async (d) => {
     const tx = d.transaction("scans", "readwrite");
-    await Promise.all([...[...discarded].map((id) => tx.store.delete(id)), tx.done]);
-  } catch {
-    // Retried before the next read.
-  }
+    await Promise.all([...ids.map((id) => tx.store.delete(id)), tx.done]);
+  }).then(
+    () => {
+      const forgotten = new Set(ids.filter((id) => earlierDiscards.has(id)));
+      if (forgotten.size === 0) return;
+      for (const id of forgotten) {
+        earlierDiscards.delete(id);
+        discarded.delete(id);
+      }
+      saveDiscarded(forgotten);
+    },
+    () => {},
+  );
 }
 
 export function denormaliseMatch(match: Match): StoredMatch {
@@ -197,9 +219,10 @@ export async function saveScan(input: CreateScanInput): Promise<boolean> {
 
 /** The newest `limit` scans, newest first. */
 export async function listScans(limit = 50): Promise<ScanDoc[]> {
+  syncDiscarded();
+  purgeDiscarded();
   try {
     return await run(async (d) => {
-      await purgeDiscarded(d);
       const out: ScanDoc[] = [];
       let cursor = await d.transaction("scans").store.index("createdAt").openCursor(null, "prev");
       while (cursor && out.length < limit) {
@@ -214,12 +237,11 @@ export async function listScans(limit = 50): Promise<ScanDoc[]> {
 }
 
 export async function getScan(id: string): Promise<ScanDoc | undefined> {
+  syncDiscarded();
   if (discarded.has(id)) return undefined;
+  purgeDiscarded();
   try {
-    return await run(async (d) => {
-      await purgeDiscarded(d);
-      return d.get("scans", id);
-    });
+    return await run((d) => d.get("scans", id));
   } catch {
     return undefined;
   }
@@ -249,6 +271,6 @@ export async function discardScan(id: string): Promise<void> {
   try {
     await deleteScan(id);
   } catch {
-    // Still hidden; purged again before later reads.
+    // Still hidden; purged again on later reads.
   }
 }

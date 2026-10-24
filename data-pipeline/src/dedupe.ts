@@ -10,7 +10,7 @@ import {
   CURATED_ALIASES,
   dedupeAliases,
   expandName,
-  isBareAbbreviation,
+  readabilityRank,
   isCompoundName,
   splitNames,
 } from "./aliases.ts";
@@ -52,14 +52,25 @@ export function pickCanonical(
     }
   }
   if (best) return { canonical: best, abbrev: bestAbbrev };
-  // Fallback: the shortest readable source name, or the curated label name
-  // when it is no longer (it replaces systematic names and source typos).
-  // A bare abbreviation ("3-BC") is used only when there is nothing else.
-  const byLength = (list: readonly string[]) => [...list].sort((a, b) => a.length - b.length);
-  const source = byLength(names.filter((n) => !isBareAbbreviation(n)))[0];
-  const label = curated.find((n) => !isBareAbbreviation(n));
-  if (label && (!source || label.length <= source.length)) return { canonical: label, abbrev: null };
-  return { canonical: source ?? byLength(names)[0] ?? "", abbrev: null };
+  // Fallback: the most readable source name (mixed case, then all caps,
+  // then abbreviations; shortest within a rank), or the curated label name
+  // when it ranks at least as well and is no longer (it replaces systematic
+  // names and source typos).
+  const mostReadable = (list: readonly string[]) =>
+    [...list].sort((a, b) => readabilityRank(a) - readabilityRank(b) || a.length - b.length)[0];
+  const source = mostReadable(names);
+  // Curated lists put the label (INCI) name first: keep that order within a rank.
+  const topRank = Math.min(...curated.map(readabilityRank));
+  const label = curated.find((n) => readabilityRank(n) === topRank);
+  if (
+    label &&
+    (!source ||
+      readabilityRank(label) < readabilityRank(source) ||
+      (readabilityRank(label) === readabilityRank(source) && label.length <= source.length))
+  ) {
+    return { canonical: label, abbrev: null };
+  }
+  return { canonical: source ?? "", abbrev: null };
 }
 
 function maxTier(a: ListId, b: ListId): ListId {

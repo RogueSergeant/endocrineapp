@@ -61,13 +61,22 @@ describe("pickCanonical", () => {
     ).toBe("Tris(1,3-dichloro-2-propyl) phosphate");
   });
 
-  it("treats a pronounceable all-caps name as readable", () => {
-    expect(
-      pickCanonical(["ATRAZINE", "2-chloro-4-ethylamino-6-isopropylamino-1,3,5-triazine"])
-        .canonical,
-    ).toBe("ATRAZINE");
-    expect(pickCanonical(["PARABENS", "alkyl 4-hydroxybenzoates"]).canonical).toBe("PARABENS");
-    expect(pickCanonical(["long systematic name here"], ["LINDANE"]).canonical).toBe("LINDANE");
+  it("ranks mixed-case names above all-caps ones, whatever their length", () => {
+    expect(pickCanonical(["PFOSA", "Perfluorooctanesulfonamide"]).canonical).toBe(
+      "Perfluorooctanesulfonamide",
+    );
+    expect(pickCanonical(["BADGE", "Bisphenol A diglycidyl ether"]).canonical).toBe(
+      "Bisphenol A diglycidyl ether",
+    );
+    // Shape can't tell a word from an abbreviation, so this trade-off is deliberate.
+    expect(pickCanonical(["ATRAZINE", "2-chloro-4-ethylamino-6-isopropylamino-1,3,5-triazine"]).canonical).toBe(
+      "2-chloro-4-ethylamino-6-isopropylamino-1,3,5-triazine",
+    );
+  });
+
+  it("uses an all-caps name when it is the only kind there is", () => {
+    expect(pickCanonical(["PARABENS"]).canonical).toBe("PARABENS");
+    expect(pickCanonical(["TRICLOSAN", "BHT"]).canonical).toBe("TRICLOSAN");
   });
 
   it("uses an abbreviation only when nothing else is left", () => {

@@ -24,19 +24,15 @@ export function splitNames(name: string): string[] {
 // "BHT", "BP-3", "D5", "4-MBC": short, upper case, at least two letters.
 export const ABBREVIATION_RE = /^(?=(?:[^A-Z]*[A-Z]){2}|[A-Z]\d)[A-Z0-9][A-Z0-9-]{1,7}$/;
 /**
- * An abbreviation too cryptic to display as a substance's name: "BHT",
- * "TDCIPP", "TBBPAE", "3-BC", "BP-3". ABBREVIATION_RE also matches all-caps
- * words ("ATRAZINE", "PARABENS"), so a pronounceable one counts as a word:
- * five or more letters, no digits or hyphens, at least two vowels and no
- * run of four consonants.
+ * How readable a name is as a display name, best first: 0 for a name with
+ * lower-case letters ("Butylparaben", "3-Benzylidene Camphor"), 1 for a
+ * longer all-caps name, 2 for a short all-caps token ("BHT", "TDCIPP",
+ * "PFOSA", "3-BC"). Shape can't tell "ATRAZINE" from "BADGE", so all short
+ * all-caps tokens rank last; they are still used when nothing else exists.
  */
-export function isBareAbbreviation(name: string): boolean {
-  if (!ABBREVIATION_RE.test(name)) return false;
-  const pronounceable =
-    /^[A-Z]{5,}$/.test(name) &&
-    (name.match(/[AEIOU]/g) ?? []).length >= 2 &&
-    !/[^AEIOU]{4}/.test(name);
-  return !pronounceable;
+export function readabilityRank(name: string): 0 | 1 | 2 {
+  if (/[a-z]/.test(name)) return 0;
+  return ABBREVIATION_RE.test(name) ? 2 : 1;
 }
 
 // "Methylparaben", "Cypermethrin": a capitalised common name.

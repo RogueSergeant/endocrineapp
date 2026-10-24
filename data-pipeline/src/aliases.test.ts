@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   ABBREVIATION_RE,
-  isBareAbbreviation,
+  readabilityRank,
   bracketedNames,
   dedupeAliases,
   expandName,
@@ -117,18 +117,18 @@ describe("dedupeAliases", () => {
   });
 });
 
-describe("isBareAbbreviation", () => {
-  it.each(["BHT", "DEHP", "PFOA", "TDCIPP", "TBBPAE", "DBDPEO", "3-BC", "BP-3", "4-MBC", "D5"])(
-    "%s is bare",
-    (s) => {
-      expect(isBareAbbreviation(s)).toBe(true);
-    },
+describe("readabilityRank", () => {
+  it.each(["Butylparaben", "3-Benzylidene Camphor", "alkyl 4-hydroxybenzoates"])(
+    "%s is mixed case (0)",
+    (s) => expect(readabilityRank(s)).toBe(0),
   );
 
-  it.each(["ATRAZINE", "LINDANE", "DIURON", "PARABENS", "TRICLOSAN", "Butylparaben", "Bisphenol A"])(
-    "%s is readable",
-    (s) => {
-      expect(isBareAbbreviation(s)).toBe(false);
-    },
+  it.each(["TRICLOSAN", "PHENOL, 4-NONYL-"])("%s is long all caps (1)", (s) =>
+    expect(readabilityRank(s)).toBe(1),
+  );
+
+  it.each(["BHT", "TDCIPP", "TBBPAE", "PFOSA", "BADGE", "ATRAZINE", "3-BC", "BP-3", "D5"])(
+    "%s is a short all-caps token (2)",
+    (s) => expect(readabilityRank(s)).toBe(2),
   );
 });
