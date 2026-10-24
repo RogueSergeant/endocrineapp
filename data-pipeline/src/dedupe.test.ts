@@ -55,6 +55,10 @@ describe("pickCanonical", () => {
     expect(pickCanonical(["Bisphenol A"], ["BPA"]).canonical).toBe("Bisphenol A");
   });
 
+  it("treats a long all-caps word as readable, not as an abbreviation", () => {
+    expect(pickCanonical(["PARABENS", "alkyl 4-hydroxybenzoates"]).canonical).toBe("PARABENS");
+  });
+
   it("uses an abbreviation only when nothing else is left", () => {
     expect(pickCanonical(["BHT"]).canonical).toBe("BHT");
   });

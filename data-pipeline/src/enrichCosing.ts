@@ -91,14 +91,21 @@ async function loadCosingDump(cosingDir: string): Promise<CosingEntry[]> {
   return entries;
 }
 
-export async function enrichCosing(
+export interface CosingHit {
+  inciName: string;
+  synonyms: string[];
+}
+
+/**
+ * INCI name and synonyms per CAS for the given substances, or null when no
+ * CosIng dump is present (it isn't committed, so CI runs never have one).
+ */
+export async function lookupCosing(
   substances: Substance[],
   cosingDir: string,
-): Promise<{ matched: number; entriesLoaded: number }> {
+): Promise<{ hits: Map<string, CosingHit>; entriesLoaded: number } | null> {
   const entries = await loadCosingDump(cosingDir);
-  if (entries.length === 0) {
-    return { matched: 0, entriesLoaded: 0 };
-  }
+  if (entries.length === 0) return null;
   const byCas = new Map<string, CosingEntry>();
   for (const e of entries) {
     if (e.cas && /^\d{2,7}-\d{2}-\d$/.test(e.cas)) {
@@ -107,21 +114,11 @@ export async function enrichCosing(
       if (!byCas.has(e.cas)) byCas.set(e.cas, e);
     }
   }
-  let matched = 0;
+  const hits = new Map<string, CosingHit>();
   for (const s of substances) {
     if (!s.casNumber) continue;
     const hit = byCas.get(s.casNumber);
-    if (!hit) continue;
-    matched++;
-    s.inciName = hit.inciName;
-    const merged = new Set<string>(s.aliases.map((a) => a.toLowerCase()));
-    for (const candidate of [hit.inciName, ...hit.synonyms]) {
-      const k = candidate.toLowerCase();
-      if (k && !merged.has(k)) {
-        merged.add(k);
-        s.aliases.push(candidate);
-      }
-    }
+    if (hit) hits.set(s.casNumber, { inciName: hit.inciName, synonyms: hit.synonyms });
   }
-  return { matched, entriesLoaded: entries.length };
+  return { hits, entriesLoaded: entries.length };
 }

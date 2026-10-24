@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   ABBREVIATION_RE,
+  isBareAbbreviation,
   bracketedNames,
   dedupeAliases,
   expandName,
@@ -113,5 +114,15 @@ describe("dedupeAliases", () => {
       "BHT",
       "Butylparaben",
     ]);
+  });
+});
+
+describe("isBareAbbreviation", () => {
+  it.each(["BHT", "DEHP", "PFOA", "3-BC", "BP-3", "4-MBC", "D5"])("%s is bare", (s) => {
+    expect(isBareAbbreviation(s)).toBe(true);
+  });
+
+  it.each(["PARABENS", "TRICLOSAN", "Butylparaben"])("%s is readable", (s) => {
+    expect(isBareAbbreviation(s)).toBe(false);
   });
 });

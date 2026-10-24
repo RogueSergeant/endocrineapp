@@ -7,10 +7,10 @@ import type {
 } from "./types.ts";
 import { normalise } from "./normalise.ts";
 import {
-  ABBREVIATION_RE,
   CURATED_ALIASES,
   dedupeAliases,
   expandName,
+  isBareAbbreviation,
   isCompoundName,
   splitNames,
 } from "./aliases.ts";
@@ -56,8 +56,8 @@ export function pickCanonical(
   // when it is no longer (it replaces systematic names and source typos).
   // A bare abbreviation ("3-BC") is used only when there is nothing else.
   const byLength = (list: readonly string[]) => [...list].sort((a, b) => a.length - b.length);
-  const source = byLength(names.filter((n) => !ABBREVIATION_RE.test(n)))[0];
-  const label = curated.find((n) => !ABBREVIATION_RE.test(n));
+  const source = byLength(names.filter((n) => !isBareAbbreviation(n)))[0];
+  const label = curated.find((n) => !isBareAbbreviation(n));
   if (label && (!source || label.length <= source.length)) return { canonical: label, abbrev: null };
   return { canonical: source ?? byLength(names)[0] ?? "", abbrev: null };
 }

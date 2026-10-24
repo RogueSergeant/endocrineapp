@@ -57,7 +57,7 @@ describe("pipeline", () => {
         row("1,7,7-trimethyl-3-(phenylmethylene)bicyclo[2.2.1]heptan-2-one; 3-BC", "15087-24-8"),
         row("Oxybenzone", "131-57-7"),
       ],
-      { "94-26-8": { synonyms: ["Butyl paraben"], inciName: null } },
+      { "94-26-8": { synonyms: ["Butyl paraben"], inciName: null, cosingSynonyms: [] } },
     );
     const keys = Object.keys(index);
     expect(keys.filter((k) => k.includes(";"))).toEqual([]);

@@ -1,31 +1,57 @@
 /**
  * Committed record of the enrichment that needs the network or files that
- * aren't committed: PubChem synonyms and CosIng INCI names, keyed by CAS.
+ * aren't committed: PubChem synonyms, and CosIng INCI names and synonyms,
+ * keyed by CAS.
  *
- * When a PubChem lookup fails, or the whole run is offline, the substance
- * gets its synonyms from here instead of losing them. The pipeline never
- * reads its own previous output back, so an alias removed from the curated
- * list or the source data really disappears, and synonyms taken from here
- * are cleaned again so filter changes apply to them too.
+ * Each source's latest answer wins. When a PubChem lookup fails, or the run
+ * is offline, the substance gets its PubChem synonyms from here; when there
+ * is no CosIng dump (always, on CI), its CosIng data comes from here. When a
+ * source does answer, its answer replaces the snapshot's, so an INCI name or
+ * synonym the source dropped disappears. The pipeline never reads its own
+ * previous output back, so an alias removed from the curated list or the
+ * source data really disappears, and PubChem synonyms taken from here are
+ * cleaned again so filter changes apply to them too.
  */
 import { readFile, writeFile } from "node:fs/promises";
 import { dedupeAliases } from "./aliases.ts";
+import type { CosingHit } from "./enrichCosing.ts";
 import { cleanSynonyms } from "./enrichPubchem.ts";
 import type { Substance } from "./types.ts";
 
 export interface SnapshotEntry {
+  /** PubChem synonyms. */
   synonyms: string[];
+  /** CosIng INCI name. */
   inciName: string | null;
+  /** CosIng synonyms. */
+  cosingSynonyms: string[];
 }
 
 export type Snapshot = Record<string, SnapshotEntry>;
 
+/**
+ * A missing file is an empty snapshot (first run). Anything else, such as a
+ * merge-conflicted or truncated file, fails the run: carrying on would
+ * strip every substance's synonyms and then overwrite the snapshot.
+ */
 export async function readSnapshot(path: string): Promise<Snapshot> {
+  let text: string;
   try {
-    return JSON.parse(await readFile(path, "utf8")) as Snapshot;
-  } catch {
-    return {};
+    text = await readFile(path, "utf8");
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code === "ENOENT") return {};
+    throw err;
   }
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(text);
+  } catch (err) {
+    throw new Error(`${path} is not valid JSON (${(err as Error).message}); fix or restore it`);
+  }
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+    throw new Error(`${path} must be an object keyed by CAS number`);
+  }
+  return parsed as Snapshot;
 }
 
 /** Sorted by CAS, so re-running without changes rewrites identical bytes. */
@@ -37,22 +63,24 @@ export async function writeSnapshot(path: string, snapshot: Snapshot): Promise<v
 
 export interface EnrichmentResult {
   snapshot: Snapshot;
-  /** Substances whose synonyms came from the snapshot rather than a live lookup. */
+  /** Substances whose PubChem synonyms came from the snapshot rather than a live lookup. */
   fromSnapshot: number;
   synonymsAdded: number;
 }
 
 /**
- * Add synonyms to each substance with a CAS: the live PubChem result when
- * there is one (`live`, null when PubChem wasn't reachable at all),
- * otherwise the snapshot's. Fills a missing INCI name from the snapshot.
- * Returns the snapshot to commit: live results replace old entries, and
- * failed lookups keep theirs.
+ * Enrich each substance with a CAS from CosIng then PubChem, using each
+ * source's live answer when there is one and the snapshot's otherwise.
+ * `pubchem` is null when PubChem wasn't reachable at all (a CAS missing
+ * from it means that lookup failed); `cosing` is null when there is no
+ * CosIng dump (a CAS missing from it means CosIng has no entry).
+ * Returns the snapshot to commit.
  */
 export function applyEnrichment(
   substances: Substance[],
   snapshot: Snapshot,
-  live: ReadonlyMap<string, string[]> | null,
+  pubchem: ReadonlyMap<string, string[]> | null,
+  cosing: ReadonlyMap<string, CosingHit> | null = null,
 ): EnrichmentResult {
   const next: Snapshot = {};
   let fromSnapshot = 0;
@@ -60,20 +88,29 @@ export function applyEnrichment(
   for (const s of substances) {
     if (!s.casNumber) continue;
     const saved = snapshot[s.casNumber];
-    const fetched = live?.get(s.casNumber);
-    let synonyms: string[];
-    if (fetched) {
-      synonyms = fetched;
-    } else {
+
+    const cos = cosing
+      ? (cosing.get(s.casNumber) ?? { inciName: null, synonyms: [] })
+      : { inciName: saved?.inciName ?? null, synonyms: saved?.cosingSynonyms ?? [] };
+
+    let synonyms = pubchem?.get(s.casNumber);
+    if (!synonyms) {
       synonyms = cleanSynonyms(saved?.synonyms ?? []);
       if (saved) fromSnapshot++;
     }
+
     const before = s.aliases.length;
-    s.aliases = dedupeAliases([...s.aliases, ...synonyms]);
+    const extra = [...(cos.inciName ? [cos.inciName] : []), ...cos.synonyms, ...synonyms];
+    s.aliases = dedupeAliases([...s.aliases, ...extra]);
     synonymsAdded += s.aliases.length - before;
-    s.inciName ??= saved?.inciName ?? null;
-    if (synonyms.length > 0 || s.inciName) {
-      next[s.casNumber] = { synonyms, inciName: s.inciName };
+    s.inciName = cos.inciName;
+
+    if (synonyms.length > 0 || cos.inciName || cos.synonyms.length > 0) {
+      next[s.casNumber] = {
+        synonyms,
+        inciName: cos.inciName,
+        cosingSynonyms: cos.synonyms,
+      };
     }
   }
   return { snapshot: next, fromSnapshot, synonymsAdded };

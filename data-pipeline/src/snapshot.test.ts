@@ -1,4 +1,4 @@
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
@@ -21,8 +21,8 @@ function substance(cas: string | null, aliases: string[], inciName: string | nul
 }
 
 const SNAPSHOT: Snapshot = {
-  "94-26-8": { synonyms: ["Butyl paraben", "n-Butyl 4-hydroxybenzoate"], inciName: "Butylparaben" },
-  "80-05-7": { synonyms: ["BPA", "Bisphenol A"], inciName: null },
+  "94-26-8": { synonyms: ["Butyl paraben", "n-Butyl 4-hydroxybenzoate"], inciName: "Butylparaben", cosingSynonyms: [] },
+  "80-05-7": { synonyms: ["BPA", "Bisphenol A"], inciName: null, cosingSynonyms: [] },
 };
 
 describe("applyEnrichment", () => {
@@ -34,6 +34,7 @@ describe("applyEnrichment", () => {
     expect(r.snapshot["94-26-8"]).toEqual({
       synonyms: ["Butyl p-hydroxybenzoate"],
       inciName: "Butylparaben",
+      cosingSynonyms: [],
     });
     expect(r.fromSnapshot).toBe(0);
   });
@@ -69,6 +70,7 @@ describe("applyEnrichment", () => {
       "94-26-8": {
         synonyms: ["94-26-8", "12345", "Butyl paraben", "x".repeat(200), "butyl PARABEN"],
         inciName: null,
+        cosingSynonyms: [],
       },
     };
     const subs = [substance("94-26-8", ["Butylparaben"])];
@@ -79,22 +81,54 @@ describe("applyEnrichment", () => {
 
   it("caps snapshot synonyms at 20", () => {
     const many: Snapshot = {
-      "94-26-8": { synonyms: Array.from({ length: 30 }, (_, i) => `Synonym ${i}`), inciName: null },
+      "94-26-8": { synonyms: Array.from({ length: 30 }, (_, i) => `Synonym ${i}`), inciName: null, cosingSynonyms: [] },
     };
     const subs = [substance("94-26-8", ["Butylparaben"])];
     applyEnrichment(subs, many, null);
     expect(subs[0]!.aliases).toHaveLength(21);
   });
 
-  it("fills a missing INCI name from the snapshot but keeps a fresh CosIng one", () => {
-    const missing = [substance("94-26-8", ["Butylparaben"])];
-    applyEnrichment(missing, SNAPSHOT, null);
-    expect(missing[0]!.inciName).toBe("Butylparaben");
+  it("takes INCI data from the snapshot when there is no CosIng dump", () => {
+    const subs = [substance("94-26-8", ["Butylparaben"])];
+    const snap: Snapshot = {
+      "94-26-8": { synonyms: [], inciName: "BUTYLPARABEN", cosingSynonyms: ["Butyl parahydroxybenzoate"] },
+    };
+    const r = applyEnrichment(subs, snap, new Map([["94-26-8", []]]), null);
+    expect(subs[0]!.inciName).toBe("BUTYLPARABEN");
+    expect(subs[0]!.aliases).toEqual(["Butylparaben", "Butyl parahydroxybenzoate"]);
+    expect(r.snapshot["94-26-8"]).toEqual(snap["94-26-8"]);
+  });
 
-    const fresh = [substance("94-26-8", ["Butylparaben"], "BUTYLPARABEN")];
-    const r = applyEnrichment(fresh, SNAPSHOT, null);
-    expect(fresh[0]!.inciName).toBe("BUTYLPARABEN");
-    expect(r.snapshot["94-26-8"]!.inciName).toBe("BUTYLPARABEN");
+  it("records CosIng synonyms, so a later run without the dump keeps them", () => {
+    const withDump = [substance("94-26-8", ["Butylparaben"])];
+    const cosing = new Map([
+      ["94-26-8", { inciName: "BUTYLPARABEN", synonyms: ["Butyl parahydroxybenzoate"] }],
+    ]);
+    const first = applyEnrichment(withDump, {}, new Map(), cosing);
+
+    const withoutDump = [substance("94-26-8", ["Butylparaben"])];
+    applyEnrichment(withoutDump, first.snapshot, new Map(), null);
+    expect(withoutDump[0]!.aliases).toEqual(withDump[0]!.aliases);
+    expect(withoutDump[0]!.inciName).toBe("BUTYLPARABEN");
+  });
+
+  it("lets a CosIng dump remove an INCI name the snapshot still has", () => {
+    const subs = [substance("94-26-8", ["Butylparaben"])];
+    const snap: Snapshot = {
+      "94-26-8": { synonyms: [], inciName: "OLD NAME", cosingSynonyms: ["Old synonym"] },
+    };
+    const r = applyEnrichment(subs, snap, new Map([["94-26-8", []]]), new Map());
+    expect(subs[0]!.inciName).toBeNull();
+    expect(subs[0]!.aliases).toEqual(["Butylparaben"]);
+    expect(r.snapshot).toEqual({});
+  });
+
+  it("reads older snapshot entries that have no cosingSynonyms", () => {
+    const subs = [substance("94-26-8", ["Butylparaben"])];
+    const legacy = { "94-26-8": { synonyms: ["Butyl paraben"], inciName: null } } as unknown as Snapshot;
+    const r = applyEnrichment(subs, legacy, null);
+    expect(subs[0]!.aliases).toEqual(["Butylparaben", "Butyl paraben"]);
+    expect(r.snapshot["94-26-8"]!.cosingSynonyms).toEqual([]);
   });
 
   it("skips substances without a CAS and omits empty entries", () => {
@@ -121,6 +155,14 @@ describe("readSnapshot / writeSnapshot", () => {
 
   it("returns an empty snapshot when the file is missing", async () => {
     expect(await readSnapshot(join(dir, "missing.json"))).toEqual({});
+  });
+
+  it("fails on a corrupt snapshot instead of treating it as empty", async () => {
+    const path = join(dir, "bad.json");
+    await writeFile(path, '{\n<<<<<<< HEAD\n  "94-26-8": {}\n');
+    await expect(readSnapshot(path)).rejects.toThrow(/not valid JSON/);
+    await writeFile(path, "[]");
+    await expect(readSnapshot(path)).rejects.toThrow(/keyed by CAS/);
   });
 
   it("round-trips, sorted by CAS, with identical bytes on rewrite", async () => {

@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { fetchEdLists } from "./fetchEdLists.ts";
 import { parseListFile } from "./parseLists.ts";
 import { dedupe } from "./dedupe.ts";
-import { enrichCosing } from "./enrichCosing.ts";
+import { lookupCosing } from "./enrichCosing.ts";
 import { lookupPubchem } from "./enrichPubchem.ts";
 import { writeSubstancesJson } from "./buildSubstancesJson.ts";
 import { SEED_ROWS } from "./seed.ts";
@@ -104,11 +104,15 @@ async function main(): Promise<void> {
   const substances = dedupe(allRows);
   log("dedupe", `→ ${substances.length} unique substances`);
 
+  // Read first: a corrupt snapshot should stop the run before any lookups.
+  const snapshot = await readSnapshot(config.snapshotPath);
+
   log("cosing", "matching CAS → INCI from CosIng dump");
-  const cos = await enrichCosing(substances, config.cosingDir);
-  log("cosing", `loaded ${cos.entriesLoaded} CosIng rows, matched ${cos.matched} substances`);
-  if (cos.entriesLoaded === 0) {
-    log("cosing", "no CosIng CSV found in data-pipeline/data/cosing — skipping INCI enrichment");
+  const cos = await lookupCosing(substances, config.cosingDir);
+  if (cos) {
+    log("cosing", `loaded ${cos.entriesLoaded} CosIng rows, matched ${cos.hits.size} substances`);
+  } else {
+    log("cosing", "no CosIng CSV in data-pipeline/data/cosing — using the snapshot's INCI data");
   }
 
   let live: Map<string, string[]> | null = null;
@@ -131,10 +135,9 @@ async function main(): Promise<void> {
   } else {
     log("pubchem", "skipped (ED_NETWORK=0)");
   }
-  // Failed lookups (or the whole run, when offline) fall back to the
-  // committed snapshot, so a bad network day can't drop synonyms.
-  const snapshot = await readSnapshot(config.snapshotPath);
-  const enriched = applyEnrichment(substances, snapshot, live);
+  // Failed lookups (or the whole run, when offline) and a missing CosIng
+  // dump fall back to the committed snapshot, so neither drops synonyms.
+  const enriched = applyEnrichment(substances, snapshot, live, cos?.hits ?? null);
   log(
     "pubchem",
     `+${enriched.synonymsAdded} aliases, ${enriched.fromSnapshot} substances from ${config.snapshotPath}`,

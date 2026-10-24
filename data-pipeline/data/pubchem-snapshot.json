@@ -7,7 +7,8 @@
       "SCHEMBL980192",
       "NS00134365"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "104-35-8": {
     "synonyms": [
@@ -31,7 +32,8 @@
       "NPEO1",
       "Nonylphenol-1-ethoxylate"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "106599-06-8": {
     "synonyms": [
@@ -41,7 +43,8 @@
       "DTXCID801514692",
       "NS00134381"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "108-90-7": {
     "synonyms": [
@@ -65,7 +68,8 @@
       "PhCl",
       "NCI-C54886"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "110488-70-5": {
     "synonyms": [
@@ -89,7 +93,8 @@
       "4-(3-(4-Chlorophenyl)-3-(3,4-dimethoxyphenyl)acryloyl)morpholine",
       "Dimethomorph isomer 2"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "1119449-37-4": {
     "synonyms": [
@@ -108,7 +113,8 @@
       "4-(3,6-Dimethyl-3-heptyl)phenol-3,5-d2 monoethoxylate",
       "4-(3,6-Dimethyl-3-heptyl)phenol monoethoxylate Solution in Acetone, 1000ug/mL"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "1119449-38-5": {
     "synonyms": [
@@ -125,7 +131,8 @@
       "NS00134734",
       "2-{2-[4-(3,6-Dimethylheptan-3-yl)phenoxy]ethoxy}ethan-1-ol"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "118-82-1": {
     "synonyms": [
@@ -150,7 +157,8 @@
       "AGIDOL 23",
       "ETHANOX 702"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "121158-58-5": {
     "synonyms": [
@@ -162,7 +170,8 @@
       "AOOKHLGAVNECET-UHFFFAOYSA-N",
       "NS00011470"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "1222-05-5": {
     "synonyms": [
@@ -186,7 +195,8 @@
       "4,6,6,7,8,8-Hexamethyl-1,3,4,6,7,8-hexahydrocyclopenta[g]isochromene",
       "1,3,4,6,7,8-Hexahydro-4,6,6,7,8,8-hexamethylcyclopenta[g]-2-benzopyran"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "128-37-0": {
     "synonyms": [
@@ -210,7 +220,8 @@
       "Topanol O",
       "Topanol OC"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "140-66-9": {
     "synonyms": [
@@ -234,7 +245,8 @@
       "4-tertiary-octylphenol",
       "RefChem:6769"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "142459-58-3": {
     "synonyms": [
@@ -258,7 +270,8 @@
       "UNII-OL44PP5145",
       "EINECS Annex I Index 613-164-00-9"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "1453-58-3": {
     "synonyms": [
@@ -282,7 +295,8 @@
       "EINECS 215-925-7",
       "UNII-W7KU1RRO6U"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "148-79-8": {
     "synonyms": [
@@ -306,7 +320,8 @@
       "Thibenzol",
       "Triasox"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "156609-10-8": {
     "synonyms": [
@@ -319,7 +334,8 @@
       "NS00134426",
       "2-(2-(4-(2-Methyloctan-2-yl)phenoxy)ethoxy)ethan-1-ol"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "17527-29-6": {
     "synonyms": [
@@ -343,7 +359,8 @@
       "1H,1H,2H,2H-Tridecafluoro-n-octyl Acrylate (stabilized with HQ + MEHQ)",
       "Acrylic Acid 1H,1H,2H,2H-Tridecafluoro-n-octyl Ester"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "1782069-81-1": {
     "synonyms": [
@@ -368,7 +385,8 @@
       "3-(4-METHYLBENZYLIDENE)-CAMPHOR",
       "(E)-1,7,7-Trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "181587-01-9": {
     "synonyms": [
@@ -392,7 +410,8 @@
       "5-amino-3-cyano-1-(2,6-dichloro-4-trifluoromethylphenyl)-4-ethylsulfinylpyrazole",
       "AS-14739"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "1824346-00-0": {
     "synonyms": [
@@ -403,7 +422,8 @@
       "SCHEMBL2048576",
       "NS00134433"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "186825-39-8": {
     "synonyms": [
@@ -418,7 +438,8 @@
       "G69244",
       "4-(2-Ethyl-1-methylhexyl)phenol, analytical standard"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "1987-50-4": {
     "synonyms": [
@@ -442,7 +463,8 @@
       "4-Heptylphenol, AldrichCPR",
       "BIDD:ER0405"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "20427-84-3": {
     "synonyms": [
@@ -466,7 +488,8 @@
       "Adekatol NP",
       "EON 2"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "21087-64-9": {
     "synonyms": [
@@ -490,7 +513,8 @@
       "BAY dic 1468",
       "DTXSID6024204"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "2144-53-8": {
     "synonyms": [
@@ -514,7 +538,8 @@
       "MFCD00077580",
       "Perfluorohexyl ethyl methacrylate"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "2315-61-9": {
     "synonyms": [
@@ -538,7 +563,8 @@
       "NP-40",
       "triton-x-100"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "2315-67-5": {
     "synonyms": [
@@ -562,7 +588,8 @@
       "Triton,(-)",
       "NCGC00091012-01"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "2497-59-8": {
     "synonyms": [
@@ -586,7 +613,8 @@
       "SCHEMBL29350411",
       "DTXSID60179685"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "25154-52-3": {
     "synonyms": [
@@ -610,7 +638,8 @@
       "UNII-24R8721A3S",
       "2-n-nonyl-phenol"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "26264-02-8": {
     "synonyms": [
@@ -628,7 +657,8 @@
       "C25H44O6",
       "NS00013901"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "27176-93-8": {
     "synonyms": [
@@ -650,7 +680,8 @@
       "RRLGETDMEIMLQU-UHFFFAOYSA-N",
       "NS00013899"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "27689-12-9": {
     "synonyms": [
@@ -667,7 +698,8 @@
       "H81710",
       "2,2-bis-[4-(methacryloxypropoxy)-phenyl]-propane"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "27986-36-3": {
     "synonyms": [
@@ -691,7 +723,8 @@
       "nonylphenol ethoxyacetic acid",
       "SCHEMBL30863"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "3050-88-2": {
     "synonyms": [
@@ -715,7 +748,8 @@
       "tris(nonylphenyl) phosphite",
       "TRIS(NONYLPHENYL)PHOSPHITE"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "30784-31-7": {
     "synonyms": [
@@ -727,7 +761,8 @@
       "SCHEMBL199439",
       "NS00134446"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "3319-31-1": {
     "synonyms": [
@@ -751,7 +786,8 @@
       "tri(2-Ethylhexyl) trimellitate",
       "MFCD00053799"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "34166-38-6": {
     "synonyms": [
@@ -766,7 +802,8 @@
       "NS00076701",
       "3,6,9,12,15-Pentaoxaheptadecan-1-ol, 17-(4-nonylphenoxy)-"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "36861-47-9": {
     "synonyms": [
@@ -783,7 +820,8 @@
       "NS00009412",
       "1,7,7-trimethyl-3-(p-tolylmethylene)norbornan-2-one"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "3811-04-9": {
     "synonyms": [
@@ -807,7 +845,8 @@
       "Potassio (clorato di)",
       "Potassium (chlorate de)"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "4247-02-3": {
     "synonyms": [
@@ -830,7 +869,8 @@
       "p-Oxybenzoesaureisobutylester",
       "4-Hydroxybenzoic acid-isobutyl ester"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "506-61-6": {
     "synonyms": [
@@ -854,7 +894,8 @@
       "Kyanostribrnan draselny",
       "Potassium dicyanoargentate (KAg(CN)2)"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "521947-27-3": {
     "synonyms": [
@@ -872,7 +913,8 @@
       "H42094",
       "4-(2,6-Dimethyl-2-heptyl)phenol, analytical standard"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "52315-07-8": {
     "synonyms": [
@@ -896,7 +938,8 @@
       "Cyperco",
       "Cyperil"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "556-67-2": {
     "synonyms": [
@@ -921,7 +964,8 @@
       "CHEBI:25640",
       "RefChem:167770"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "5613-46-7": {
     "synonyms": [
@@ -945,7 +989,8 @@
       "Bisxylenol A",
       "NSC73730"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "57427-55-1": {
     "synonyms": [
@@ -955,7 +1000,8 @@
       "DTXSID40891934",
       "OZZIOWVRWRTHQO-UHFFFAOYSA-N"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "6465-71-0": {
     "synonyms": [
@@ -976,7 +1022,8 @@
       "W12544",
       "Z1322793592"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "6465-74-3": {
     "synonyms": [
@@ -989,7 +1036,8 @@
       "VVMIIKFOWHZTCV-UHFFFAOYSA-N",
       "NS00134460"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "65455-72-3": {
     "synonyms": [
@@ -998,7 +1046,8 @@
       "HYZLLJKTXYYLDT-UHFFFAOYSA-N",
       "NS00050390"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "6863-24-7": {
     "synonyms": [
@@ -1010,7 +1059,8 @@
       "OXAMRILEWOFNPN-UHFFFAOYSA-N",
       "NS00134556"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "72861-06-4": {
     "synonyms": [
@@ -1021,7 +1071,8 @@
       "SCHEMBL9844421",
       "NS00134581"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "7311-27-5": {
     "synonyms": [
@@ -1045,14 +1096,16 @@
       "SCHEMBL10705426",
       "UTXPMECBRCEYCI-UHFFFAOYSA-N"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "741687-98-9": {
     "synonyms": [
       "SCHEMBL28738973",
       "DTXSID301360723"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "7775-09-9": {
     "synonyms": [
@@ -1076,7 +1129,8 @@
       "Tumbleaf",
       "Tumbleleaf"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "78-40-0": {
     "synonyms": [
@@ -1099,7 +1153,8 @@
       "NSC 2677",
       "MFCD00009077"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "78-42-2": {
     "synonyms": [
@@ -1122,7 +1177,8 @@
       "CAS-78-42-2",
       "CCRIS 615"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "79-94-7": {
     "synonyms": [
@@ -1147,7 +1203,8 @@
       "BA 59",
       "3,5,3',5'-Tetrabromobisphenol A"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "79-97-0": {
     "synonyms": [
@@ -1171,7 +1228,8 @@
       "NSC 408489",
       "o-Cresol, 4,4'-(2,2-propylene)bis-"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "80-54-6": {
     "synonyms": [
@@ -1194,7 +1252,8 @@
       "3-(4-tert-Butylphenyl)-2-methylpropionaldehyde",
       "MFCD00047655"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "8018-01-7": {
     "synonyms": [
@@ -1218,7 +1277,8 @@
       "Mancozin",
       "Manoseb"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "84-69-5": {
     "synonyms": [
@@ -1241,7 +1301,8 @@
       "AI3-04278 (USDA)",
       "IZ67FTN290"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "85-60-9": {
     "synonyms": [
@@ -1266,7 +1327,8 @@
       "m-Cresol, 4,4'-butylidenebis[6-tert-butyl-",
       "4,4'-Butylidene bis[6-tert-butyl-3-methylphenol]"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "85005-55-6": {
     "synonyms": [
@@ -1278,7 +1340,8 @@
       "2-[2-(7-Methyloctyl)phenoxy]ethan-1-ol",
       "NS00038730"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "852541-21-0": {
     "synonyms": [
@@ -1289,14 +1352,16 @@
       "M3357",
       "(1R,3Z,4S)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "852541-25-4": {
     "synonyms": [
       "DTXSID001360724",
       "3-(4-Methylbenzylidene)camphor, >=98.0% (GC)"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "852541-30-1": {
     "synonyms": [
@@ -1310,7 +1375,8 @@
       "(1S,3E,4R)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one",
       "(1S,4R)-1,7,7-Trimethyl-3-((E)-4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "854904-92-0": {
     "synonyms": [
@@ -1321,7 +1387,8 @@
       "SCHEMBL12201279",
       "NS00134606"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "854904-93-1": {
     "synonyms": [
@@ -1331,7 +1398,8 @@
       "DTXCID001514624",
       "NS00134607"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "861010-65-3": {
     "synonyms": [
@@ -1342,7 +1410,8 @@
       "DTXSID701029369",
       "NS00134614"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "861011-60-1": {
     "synonyms": [
@@ -1353,7 +1422,8 @@
       "NS00134615",
       "EN300-8799062"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "9016-45-9": {
     "synonyms": [
@@ -1378,7 +1448,8 @@
       "Adekatol NP",
       "EON 2"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "95235-30-6": {
     "synonyms": [
@@ -1402,7 +1473,8 @@
       "EC 405-520-5",
       "4-HYDROXYPHENYL 4-ISOPROOXYPHENYLSULFONE"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "953030-84-7": {
     "synonyms": [
@@ -1426,7 +1498,8 @@
       "Buprofezin 100 microg/mL in Cyclohexane",
       "2-(tert-butylimino)-3-isopropyl-5-phenyl-1,3,5-thiadiazinan-4-one"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "95342-41-9": {
     "synonyms": [
@@ -1451,7 +1524,8 @@
       "3-(4-METHYLBENZYLIDENE)-CAMPHOR",
       "EINECS 253-242-6"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "96-76-4": {
     "synonyms": [
@@ -1475,7 +1549,8 @@
       "AGIDOL 10",
       "NSC-174502"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   },
   "98-54-4": {
     "synonyms": [
@@ -1499,6 +1574,7 @@
       "O81VMW36CV",
       "CHEBI:34444"
     ],
-    "inciName": null
+    "inciName": null,
+    "cosingSynonyms": []
   }
 }
