@@ -18,15 +18,15 @@ const outDir = join(root, "public", "chunks");
 const manifestPath = join(root, "public", "chunks.json");
 
 // Small enough that a dropped connection loses little, large enough that
-// the ~15 MB total is about 60 requests.
+// the ~12.5 MB total is about 50 requests.
 const CHUNK_BYTES = 256 * 1024;
 
 // The WASM must be the build the onnxruntime-web bundle expects, which is
 // the one shipped alongside it in the same package.
 const FILES = {
-  det: "public/models/ppocrv5-en/det.ort",
-  rec: "public/models/ppocrv5-en/rec.ort",
-  dict: "public/models/ppocrv5-en/dict.txt",
+  det: "public/models/ppocr/det.ort",
+  rec: "public/models/ppocr/rec.ort",
+  dict: "public/models/ppocr/dict.txt",
   wasm: "node_modules/onnxruntime-web/dist/ort-wasm-simd-threaded.wasm",
 };
 

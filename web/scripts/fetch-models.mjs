@@ -9,31 +9,37 @@ import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
-// PP-OCRv5 mobile detection + English recognition, Apache-2.0, converted
-// to ORT format by ppu-paddle-ocr-models. Pinned to a commit so the hashes
-// below stay valid.
-const MODEL_COMMIT = "384182c7187c12d4ea181ae3b97c8b7e12089d9d";
-const MEDIA = `https://media.githubusercontent.com/media/PT-Perkasa-Pilar-Utama/ppu-paddle-ocr-models/${MODEL_COMMIT}`;
-const RAW = `https://raw.githubusercontent.com/PT-Perkasa-Pilar-Utama/ppu-paddle-ocr-models/${MODEL_COMMIT}`;
+// Text detection from PP-OCRv6 tiny with English recognition from
+// PP-OCRv5 mobile, Apache-2.0, in ORT format from ppu-paddle-ocr-models.
+// On our label test set this pair reads as well as v5 for both (and a
+// little better on low-contrast and light-on-dark print) with a detector
+// a third the size: about 3 MB less to download. v6's own recogniser was
+// clearly worse on ingredient lists, and v6 small, though the strongest
+// before word repair, is twice the download for no gain after it.
+// Each source is pinned to a commit so the hashes below stay valid.
+const V5_COMMIT = "384182c7187c12d4ea181ae3b97c8b7e12089d9d";
+const V5_MEDIA = `https://media.githubusercontent.com/media/PT-Perkasa-Pilar-Utama/ppu-paddle-ocr-models/${V5_COMMIT}`;
+const V5_RAW = `https://raw.githubusercontent.com/PT-Perkasa-Pilar-Utama/ppu-paddle-ocr-models/${V5_COMMIT}`;
+// The v6 files are only on the Hugging Face mirror of the same repo.
+const V6_REVISION = "bf1d5edb0335d3262be7caf13f766ba274b4cadd";
+const V6_HF = `https://huggingface.co/snowfluke/ppu-paddle-ocr-models/resolve/${V6_REVISION}`;
 
-// Versioned directory: the service worker caches models cache-first, so a
-// model change must change the URL. Keep in sync with src/lib/ocr/ocrWorker.ts.
-const MODEL_DIR = "ppocrv5-en";
+const MODEL_DIR = "ppocr";
 
 const MODELS = [
   {
     file: "det.ort",
-    url: `${MEDIA}/detection/PP-OCRv5_mobile_det_infer.ort`,
-    sha256: "30acfc4e21f2a23669d01a75aaeb92190f96874613108a0f7086bed264420abc",
+    url: `${V6_HF}/detection/ort/PP-OCRv6_tiny_det.ort`,
+    sha256: "2816e82d26a09d6af722492f80f3059d458377c084eca88f34d84ddf9b385580",
   },
   {
     file: "rec.ort",
-    url: `${MEDIA}/recognition/multi/en/v5/en_PP-OCRv5_mobile_rec_infer.ort`,
+    url: `${V5_MEDIA}/recognition/multi/en/v5/en_PP-OCRv5_mobile_rec_infer.ort`,
     sha256: "74ff9e508379375b5149a3c7764221fa9ba7680b7e2f2e458f26b7c7993a89b0",
   },
   {
     file: "dict.txt",
-    url: `${RAW}/recognition/multi/en/v5/ppocrv5_en_dict.txt`,
+    url: `${V5_RAW}/recognition/multi/en/v5/ppocrv5_en_dict.txt`,
     sha256: "c60d46e9e01d500ed6388fe8681051eac9cf6692e0d57238315be171927a0a1b",
   },
 ];
