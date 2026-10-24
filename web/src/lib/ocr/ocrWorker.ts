@@ -6,6 +6,7 @@ import * as ort from "onnxruntime-web";
 import wasmUrl from "onnxruntime-web/ort-wasm-simd-threaded.wasm?url";
 import { PaddleOcrService } from "ppu-paddle-ocr/web";
 import { deskew } from "./deskew";
+import { createProgress } from "./progress";
 import type { WorkerRequest, WorkerResponse } from "./protocol";
 
 // Keep in sync with MODEL_DIR in scripts/fetch-models.mjs.
@@ -60,19 +61,11 @@ let servicePromise: Promise<PaddleOcrService> | null = null;
 function getService(): Promise<PaddleOcrService> {
   if (servicePromise) return servicePromise;
   servicePromise = (async () => {
-    const loaded: Record<string, number> = {};
-    const totals: Record<string, number> = {};
-    const report = () => {
-      const l = Object.values(loaded).reduce((a, b) => a + b, 0);
-      const t = Object.values(totals).reduce((a, b) => a + b, 0);
-      post({ type: "progress", loaded: l, total: t });
-    };
+    const progress = createProgress(MODEL_FILES);
     const [det, rec, dictRes] = await Promise.all([
       ...MODEL_FILES.map((f) =>
         fetchWithProgress(f.url, f.approxBytes, (l, t) => {
-          loaded[f.name] = l;
-          totals[f.name] = t;
-          report();
+          post({ type: "progress", ...progress.update(f.name, l, t) });
         }),
       ),
       fetch(`${MODEL_BASE}/dict.txt`),

@@ -8,7 +8,14 @@ export interface RecognitionResult {
   ms: number;
 }
 
-const OCR_TIMEOUT_MS = 20_000;
+export const OCR_TIMEOUT_MS = 20_000;
+/**
+ * Give up on loading the models after this long without any progress. A
+ * mobile connection can drop mid-download without the fetch ever erroring,
+ * and initialisation can hang; either would otherwise spin forever.
+ */
+export const LOAD_STALL_MS = 45_000;
+const STALL_MESSAGE = "The text reader download stalled. Check your connection and try again.";
 
 type OcrStatus = "idle" | "loading" | "ready" | "error";
 
@@ -35,6 +42,23 @@ interface Pending {
 let worker: Worker | null = null;
 let nextId = 1;
 const pending = new Map<number, Pending>();
+let loadWatchdog: ReturnType<typeof setTimeout> | null = null;
+
+function clearLoadWatchdog() {
+  if (loadWatchdog) clearTimeout(loadWatchdog);
+  loadWatchdog = null;
+}
+
+/** (Re)start the stall timer; called when loading starts and on each progress message. */
+function armLoadWatchdog() {
+  clearLoadWatchdog();
+  loadWatchdog = setTimeout(() => {
+    loadWatchdog = null;
+    if (useOcrStatus.getState().status !== "loading") return;
+    useOcrStatus.setState({ status: "error", error: STALL_MESSAGE });
+    resetWorker(new Error(STALL_MESSAGE));
+  }, LOAD_STALL_MS);
+}
 
 function send(w: Worker, msg: WorkerRequest, transfer: Transferable[] = []) {
   w.postMessage(msg, transfer);
@@ -48,11 +72,14 @@ function getWorker(): Worker {
     switch (msg.type) {
       case "progress":
         useOcrStatus.setState({ loaded: msg.loaded, total: msg.total });
+        if (useOcrStatus.getState().status === "loading") armLoadWatchdog();
         break;
       case "ready":
+        clearLoadWatchdog();
         useOcrStatus.setState({ status: "ready", error: null });
         break;
       case "init-error":
+        clearLoadWatchdog();
         useOcrStatus.setState({ status: "error", error: msg.message });
         break;
       case "result":
@@ -75,6 +102,7 @@ function getWorker(): Worker {
 }
 
 function resetWorker(reason: Error) {
+  clearLoadWatchdog();
   worker?.terminate();
   worker = null;
   for (const p of pending.values()) p.reject(reason);
@@ -83,13 +111,14 @@ function resetWorker(reason: Error) {
 
 /**
  * Start downloading and initialising the OCR models in the background.
- * Safe to call repeatedly; also retries after a failed load.
+ * Safe to call repeatedly; also retries after a failed or stalled load.
  */
 export function preloadOcr(): void {
   const { status } = useOcrStatus.getState();
   if (status === "loading" || status === "ready") return;
-  useOcrStatus.setState({ status: "loading", error: null });
+  useOcrStatus.setState({ status: "loading", error: null, loaded: 0, total: 0 });
   send(getWorker(), { type: "init" });
+  armLoadWatchdog();
 }
 
 /**
