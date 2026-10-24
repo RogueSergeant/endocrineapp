@@ -26,6 +26,10 @@ describe("bundled substance data", () => {
     ["Butyl Methoxydibenzoylmethane", "70356-09-1"],
     ["Butylphenyl Methylpropional", "80-54-6"],
     ["Triclosan", "3380-34-5"],
+    // OCR letter/digit slips inside names that also carry a real number.
+    ["4-Methy1benzylidene Camphor", "36861-47-9"],
+    ["Benzophen0ne-3", "131-57-7"],
+    ["Buty1paraben", "94-26-8"],
   ])("matches %s to CAS %s", (word, cas) => {
     expect(matchOne(word).map((m) => m.cas)).toEqual([cas]);
   });

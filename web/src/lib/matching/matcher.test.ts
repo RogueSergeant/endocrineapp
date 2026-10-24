@@ -329,4 +329,14 @@ describe("matchIngredients", () => {
     expect(matches.map((m) => m.substance.id)).toEqual(["s-butylparaben"]);
     expect(matches[0]!.matchType).toBe("fuzzy");
   });
+
+  it("fuzzy-matches an OCR slip inside a word of a numbered name", () => {
+    const matches = matchIngredients(["Benzophen0ne-1"], INDEX, LOOKUP);
+    expect(matches.map((m) => m.substance.id)).toEqual(["s-bp1"]);
+    expect(matches[0]!.matchType).toBe("fuzzy");
+  });
+
+  it("keeps numbered names apart even with an OCR slip inside a word", () => {
+    expect(matchIngredients(["Benzophen0ne-3"], INDEX, LOOKUP)).toEqual([]);
+  });
 });

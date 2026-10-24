@@ -105,14 +105,18 @@ function getBuckets(index: SubstancesIndex): Record<string, string[]> {
 /**
  * Numbered members of a chemical family ("benzophenone 1" and
  * "benzophenone 3") sit one edit apart but are different substances, so
- * when both strings carry digits, the digits must agree.
- * Names without digits are unaffected, so an OCR slip such as
- * "buty1paraben" still fuzzy-matches "butylparaben".
+ * when both strings carry standalone numbers, the numbers must agree.
+ * Digits inside a word are OCR slips, not numbers, so "buty1paraben" and
+ * "4 methy1benzylidene camphor" still fuzzy-match.
  */
+function standaloneNumbers(s: string): string {
+  return (s.match(/\b\d+\b/g) ?? []).join(" ");
+}
+
 function digitsConflict(a: string, b: string): boolean {
-  const da = a.replace(/\D/g, "");
-  const db = b.replace(/\D/g, "");
-  return da !== "" && db !== "" && da !== db;
+  const na = standaloneNumbers(a);
+  const nb = standaloneNumbers(b);
+  return na !== "" && nb !== "" && na !== nb;
 }
 
 function fuzzyMatch(
