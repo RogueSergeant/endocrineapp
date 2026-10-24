@@ -239,6 +239,18 @@ describe("parseIngredients", () => {
     expect(out).toContain("Parfum");
   });
 
+  it("keeps slash-joined INCI names whole, splitting only on a spaced slash", () => {
+    const out = parseIngredients(
+      "Aqua / Water, Caprylic/Capric Triglyceride, Lauric/Myristic/Palmitic/Stearic Glycerides",
+    );
+    expect(out).toEqual([
+      "Aqua",
+      "Water",
+      "Caprylic/Capric Triglyceride",
+      "Lauric/Myristic/Palmitic/Stearic Glycerides",
+    ]);
+  });
+
   it("keeps abbreviations like C.I. together", () => {
     const out = parseIngredients("Aqua, Mica, C.I. 77891, Talc");
     expect(out.some((i) => i.includes("77891"))).toBe(true);

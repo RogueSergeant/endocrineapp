@@ -56,8 +56,11 @@ const END_OF_LIST_RE = new RegExp(
 // off the non-ingredient text. A full stop between two words with no
 // space ("Water.WHOLEGRAIN") is OCR reading a comma as a full stop; it
 // needs two letters either side so abbreviations like "C.I. 77891" stay.
-const COMMA_SPLIT_RE = /[,;•·\u2022/]+|\.\s+|(?<=[A-Za-z]{2})\.(?=[A-Za-z]{2})/;
-const NEWLINE_SPLIT_RE = /[,;•·\u2022\n\r/]+|\.\s+|(?<=[A-Za-z]{2})\.(?=[A-Za-z]{2})/;
+// A slash between words is part of an INCI name ("Caprylic/Capric
+// Triglyceride", "Lauric/Myristic/Palmitic/Stearic Glycerides"); only one
+// with spaces round it separates ("Aqua / Water").
+const COMMA_SPLIT_RE = /[,;•·\u2022]+|\s\/\s|\.\s+|(?<=[A-Za-z]{2})\.(?=[A-Za-z]{2})/;
+const NEWLINE_SPLIT_RE = /[,;•·\u2022\n\r]+|\s\/\s|\.\s+|(?<=[A-Za-z]{2})\.(?=[A-Za-z]{2})/;
 
 function levenshtein(a: string, b: string, cap: number): number {
   if (a === b) return 0;
