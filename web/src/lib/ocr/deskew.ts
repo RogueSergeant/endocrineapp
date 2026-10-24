@@ -6,7 +6,7 @@
 // result is garbage. Phone photos are never perfectly level, so we estimate
 // the skew with a projection profile: rotate a small copy through a range
 // of angles and keep the one where the text edges fall into the sharpest
-// rows (highest sum of squared row totals). Pure 2D-canvas, so it runs in the
+// rows (highest variance of per-row edge energy). Pure 2D-canvas, so it runs in the
 // OCR worker and in Node tests alike.
 
 export interface CanvasLike {
@@ -33,7 +33,8 @@ export type CanvasFactory = (width: number, height: number) => CanvasLike;
 const ANALYSIS_SIDE = 600;
 const MAX_ANGLE = 15;
 const MIN_CORRECTION = 0.3;
-const EDGE_STEP = 40;
+// Pixels; covers the anti-aliased image edge plus the neighbour each step reads.
+const BORDER_MARGIN = 3;
 
 function ctx2d(c: CanvasLike): Context2D {
   const ctx = c.getContext("2d");
@@ -72,24 +73,57 @@ function profileScore(
   ctx.rotate((-angleDeg * Math.PI) / 180);
   ctx.drawImage(small as unknown as CanvasImageSource, -small.width / 2, -small.height / 2);
   const { data } = ctx.getImageData(0, 0, work.width, work.height);
-  // Count edge pixels (sharp luminance steps) per row rather than "dark"
-  // pixels: text strokes are dense in edges whatever the label's colours,
-  // while large flat regions such as the table behind a bottle add none.
+  // Score how strongly the edge energy (luminance steps, so dark-on-light
+  // and light-on-dark both count, and flat regions add nothing) is
+  // concentrated into rows: when the text is level, rows through a line
+  // are full of strokes and rows between lines are empty. Summing step
+  // sizes rather than counting steps over a threshold matters on dim,
+  // low-contrast photos, where a threshold sits right at the text's
+  // contrast and small resampling differences flip pixels across it.
   const w = work.width;
   const h = work.height;
   for (let p = 0, i = 0; p < w * h; p++, i += 4) {
     luma[p] = (data[i]! * 299 + data[i + 1]! * 587 + data[i + 2]! * 114) / 1000;
   }
-  let score = 0;
+  // Only pixels well inside the rotated image count. Where the image meets
+  // the padding there is a step all along its border, and at 0 degrees the
+  // top and bottom borders are level rows of edges that can outscore the
+  // text on a tight crop.
+  const a = (angleDeg * Math.PI) / 180;
+  const cos = Math.cos(a);
+  const sin = Math.sin(a);
+  const halfW = small.width / 2 - BORDER_MARGIN;
+  const halfH = small.height / 2 - BORDER_MARGIN;
+  const cx = w / 2;
+  const cy = h / 2;
+  const minPixels = Math.max(4, small.width * 0.1);
+  let n = 0;
+  let sum = 0;
+  let sumSq = 0;
   for (let y = 1; y < h; y++) {
-    let row = 0;
+    let energy = 0;
+    let pixels = 0;
+    const dy = y - cy;
     for (let x = 1, p = y * w + 1; x < w; x++, p++) {
+      // Inverse of the drawing rotation: this pixel's position in `small`.
+      const dx = x - cx;
+      const u = dx * cos - dy * sin;
+      const v = dx * sin + dy * cos;
+      if (u <= -halfW || u >= halfW || v <= -halfH || v >= halfH) continue;
       const l = luma[p]!;
-      if (Math.abs(l - luma[p - 1]!) > EDGE_STEP || Math.abs(l - luma[p - w]!) > EDGE_STEP) row++;
+      energy += Math.abs(l - luma[p - 1]!) + Math.abs(l - luma[p - w]!);
+      pixels++;
     }
-    score += row * row;
+    // Per-pixel mean, so rows clipped short by the rotated corners compare
+    // fairly with full-width ones.
+    if (pixels < minPixels) continue;
+    const mean = energy / pixels;
+    n++;
+    sum += mean;
+    sumSq += mean * mean;
   }
-  return score;
+  // Variance of the row means.
+  return n > 1 ? sumSq / n - (sum / n) ** 2 : 0;
 }
 
 /**
@@ -106,7 +140,10 @@ function paperLuma(source: CanvasLike, sw: number, sh: number, createCanvas: Can
 }
 
 /** Tilt plus the paper luminance, measured on downscaled copies. */
-function estimate(source: CanvasLike, createCanvas: CanvasFactory): { angle: number; paper: number } {
+function estimate(
+  source: CanvasLike,
+  createCanvas: CanvasFactory,
+): { angle: number; paper: number } {
   const scale = Math.min(1, ANALYSIS_SIDE / Math.max(source.width, source.height));
   const sw = Math.max(1, Math.round(source.width * scale));
   const sh = Math.max(1, Math.round(source.height * scale));

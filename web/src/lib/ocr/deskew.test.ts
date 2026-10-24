@@ -28,7 +28,39 @@ function fakeLabel(angle: number, ink = "#222", paper = "#f4efe6"): CanvasLike {
   return c as unknown as CanvasLike;
 }
 
+/**
+ * A tight crop of a tilted label: a dark heading bar runs off the top
+ * edge and text lines run off the bottom and sides, so the crop's own
+ * border cuts through ink. That border is level whatever the text's tilt.
+ */
+function tightCrop(angle: number): CanvasLike {
+  const c = createCanvas(480, 300);
+  const ctx = c.getContext("2d");
+  ctx.fillStyle = "#e8e4dc";
+  ctx.fillRect(0, 0, 480, 300);
+  ctx.translate(240, 150);
+  ctx.rotate((angle * Math.PI) / 180);
+  ctx.fillStyle = "#2a2d33";
+  ctx.fillRect(-400, -175, 800, 45);
+  let seed = 11;
+  const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  for (let line = 0; line < 8; line++) {
+    let x = -300;
+    const y = -105 + line * 32;
+    while (x < 300) {
+      const w = 15 + rand() * 50;
+      ctx.fillRect(x, y, w, 13);
+      x += w + 8;
+    }
+  }
+  return c as unknown as CanvasLike;
+}
+
 describe("estimateSkew", () => {
+  it.each([-4, 3, 5])("ignores the crop border on a tight %s degree crop", (angle) => {
+    expect(Math.abs(estimateSkew(tightCrop(angle), factory) - angle)).toBeLessThanOrEqual(0.5);
+  });
+
   it.each([-8, -4, -1.5, 0.6, 2, 5, 10])("recovers a %s degree tilt", (angle) => {
     expect(Math.abs(estimateSkew(fakeLabel(angle), factory) - angle)).toBeLessThanOrEqual(0.3);
   });
