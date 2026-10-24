@@ -4,13 +4,16 @@ import type { PointerEvent as ReactPointerEvent } from "react";
 import { Layout } from "@/components/Layout";
 import { flattenedSize, isConvex, warpQuad, type Point, type Quad } from "@/lib/perspective";
 import { useOcrStatus } from "@/lib/ocr/textRecognition";
-import { scanImage, TooFewIngredientsError } from "@/lib/scan";
+import { addPhotoOfList, scanImage, TooFewIngredientsError } from "@/lib/scan";
 import { useScanStore } from "@/lib/store/scanStore";
 
-// Phone photos are 12-48 MP. Anything past this adds memory pressure (iOS
-// Safari kills tabs that use too much) without helping the OCR, which
-// detects at <= 1920px anyway.
+// The on-screen preview. Phone photos are 12-48 MP, and a full-size copy
+// kept for dragging over adds memory pressure (iOS Safari kills tabs that
+// use too much); the selection itself is cut from the full photo.
 const MAX_SIDE = 2000;
+// The most detail kept for the selected region. The recogniser reads line
+// crops at up to 2000px, so more costs memory without helping.
+const MAX_REGION_SIDE = 2400;
 // Shortest side, in screen pixels, a drag may leave the selection with:
 // just enough to keep two corners from landing on top of each other.
 const MIN_RECT_PX = 12;
@@ -81,6 +84,48 @@ const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v
  * onto a rectangle's, which undoes both tilt and the keystone of a photo
  * taken at an angle. Reads only the pixels around the selection.
  */
+/**
+ * The selected region flattened from the full-resolution photo rather than
+ * the preview: a small list in a photo taken from arm's length has letters
+ * only a few pixels high at preview size, half what the OCR gets here.
+ * Only the region is copied out, capped at MAX_REGION_SIDE.
+ */
+async function flattenFromPhoto(photo: Blob, corners: Quad): Promise<ImageData> {
+  const full = await createImageBitmap(photo);
+  try {
+    const W = full.width;
+    const H = full.height;
+    const inPx = corners.map((p) => ({ x: p.x * W, y: p.y * H }));
+    const left = clamp(Math.floor(Math.min(...inPx.map((p) => p.x))), 0, W - 1);
+    const top = clamp(Math.floor(Math.min(...inPx.map((p) => p.y))), 0, H - 1);
+    const right = clamp(Math.ceil(Math.max(...inPx.map((p) => p.x))), left + 1, W);
+    const bottom = clamp(Math.ceil(Math.max(...inPx.map((p) => p.y))), top + 1, H);
+    const scale = Math.min(1, MAX_REGION_SIDE / Math.max(right - left, bottom - top));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round((right - left) * scale));
+    canvas.height = Math.max(1, Math.round((bottom - top) * scale));
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("Canvas unavailable");
+    ctx.drawImage(full, left, top, right - left, bottom - top, 0, 0, canvas.width, canvas.height);
+    const region = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const quad = inPx.map((p) => ({
+      x: (p.x - left) * scale,
+      y: (p.y - top) * scale,
+    })) as unknown as Quad;
+    const size = flattenedSize(quad);
+    const out = warpQuad(
+      region,
+      quad,
+      Math.max(MIN_CROP_PX, size.width),
+      Math.max(MIN_CROP_PX, size.height),
+    );
+    return new ImageData(out.data, out.width, out.height);
+  } finally {
+    full.close();
+  }
+}
+
+/** The same from the preview, if the full photo can't be decoded again. */
 function flatten(source: HTMLCanvasElement, corners: Quad): ImageData {
   const W = source.width;
   const H = source.height;
@@ -120,6 +165,9 @@ export function CropPage() {
   const [error, setError] = useState<{ title: string; body: string } | null>(null);
   const drag = useRef<Drag | null>(null);
   const running = useRef(false);
+  // Set while the current photo is being read as one part of several.
+  const adding = useRef(false);
+  const earlier = useScanStore((s) => s.earlierPhotos.length);
   // Aborted when the page unmounts, so a scan the user walked away from
   // can't save, replace the current scan or navigate them back.
   const unmounted = useRef<AbortController | null>(null);
@@ -260,7 +308,17 @@ export function CropPage() {
     setBusy(true);
     setError(null);
     try {
-      const crop = await createImageBitmap(flatten(source, corners));
+      const region = pendingImage
+        ? await flattenFromPhoto(pendingImage, corners).catch(() => flatten(source, corners))
+        : flatten(source, corners);
+      const crop = await createImageBitmap(region);
+      if (adding.current) {
+        // Part of a list that wraps round the pack: keep this reading and
+        // go back for the next photo.
+        await addPhotoOfList(crop);
+        if (!signal.aborted) navigate(retakeTo, { replace: true });
+        return;
+      }
       const id = await scanImage(crop, signal);
       if (signal.aborted) return;
       navigate(id ? `/results/${id}` : "/results", { replace: true });
@@ -273,9 +331,15 @@ export function CropPage() {
       }
     } finally {
       running.current = false;
+      adding.current = false;
       if (!signal.aborted) setBusy(false);
     }
-  }, [navigate, corners, source]);
+  }, [navigate, corners, source, retakeTo, pendingImage]);
+
+  const addAnotherPhoto = () => {
+    adding.current = true;
+    void runScan();
+  };
 
   if (!pendingImage) return <Navigate to="/" replace />;
 
@@ -289,7 +353,9 @@ export function CropPage() {
     <Layout title="Select the ingredients" bare>
       <div className="crop-page">
         <p className="crop-hint">
-          Drag the corners onto the corners of the ingredient list, then tap Read.
+          {earlier > 0
+            ? `Photo ${earlier + 1}: drag the corners onto the next part of the list.`
+            : "Drag the corners onto the corners of the ingredient list, then tap Read."}
         </p>
         {error && (
           <div style={{ padding: "0 16px" }}>
@@ -358,11 +424,23 @@ export function CropPage() {
                 ? "Opening photo…"
                 : loadingModels
                   ? `Downloading the text reader: ${pct}%`
-                  : "Reading ingredients…"}
+                  : adding.current
+                    ? "Reading this photo…"
+                    : "Reading ingredients…"}
             </div>
           )}
         </div>
         <div className="crop-actions">
+          <button
+            type="button"
+            className="link-btn crop-add"
+            onClick={addAnotherPhoto}
+            disabled={busy || !source}
+          >
+            {earlier > 0
+              ? "Still more of the list? Add another photo"
+              : "List wraps round the pack? Add another photo"}
+          </button>
           <button
             type="button"
             className="btn btn-secondary"
@@ -377,7 +455,7 @@ export function CropPage() {
             onClick={() => void runScan()}
             disabled={busy || !source}
           >
-            Read ingredients
+            {earlier > 0 ? `Read all ${earlier + 1} photos` : "Read ingredients"}
           </button>
         </div>
       </div>

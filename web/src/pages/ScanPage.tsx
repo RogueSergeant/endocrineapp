@@ -1,6 +1,7 @@
 import { useEffect, type ChangeEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { HeaderLink, Layout } from "@/components/Layout";
+import { PhotosWaiting } from "@/components/PhotosWaiting";
 import { reloadIfUpdated } from "@/lib/appUpdate";
 import { preloadOcr, useOcrStatus } from "@/lib/ocr/textRecognition";
 import { useScanStore } from "@/lib/store/scanStore";
@@ -34,6 +35,7 @@ export function ScanPage() {
         </>
       }
     >
+      <PhotosWaiting />
       <div className="hero">
         <h2>Scan ingredients</h2>
         <p>

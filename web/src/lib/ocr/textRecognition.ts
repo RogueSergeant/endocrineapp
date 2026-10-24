@@ -11,6 +11,11 @@ export interface RecognitionResult {
   ms: number;
 }
 
+/** OCR text ready for the parser: light clean-up, then word repair. */
+export function prepareOcrText(raw: string): string {
+  return repairOcrWords(cleanOcrOutput(raw));
+}
+
 /** What the worker sends back for one image. */
 type WorkerResult = Pick<RecognitionResult, "text" | "spots" | "ms">;
 
@@ -177,7 +182,7 @@ export async function recogniseText(bitmap: ImageBitmap): Promise<RecognitionRes
   });
   return {
     rawText: result.text,
-    text: repairOcrWords(cleanOcrOutput(result.text)),
+    text: prepareOcrText(result.text),
     spots: result.spots,
     ms: result.ms,
   };

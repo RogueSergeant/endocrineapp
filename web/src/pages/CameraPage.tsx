@@ -7,6 +7,7 @@ import {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/Layout";
+import { PhotosWaiting } from "@/components/PhotosWaiting";
 import { sharpness } from "@/lib/sharpness";
 import { useScanStore } from "@/lib/store/scanStore";
 
@@ -283,6 +284,7 @@ export function CameraPage() {
     <Layout title="Take photo" bare>
       <div className="camera-page">
         <p className="crop-hint">Fill the frame with the ingredient list, then tap the button.</p>
+        <PhotosWaiting className="on-dark" />
         <div className="camera-stage">
           <video ref={videoRef} playsInline muted autoPlay onPointerDown={onPreviewTap} />
           {!live && <div className="busy-overlay">Opening the camera…</div>}

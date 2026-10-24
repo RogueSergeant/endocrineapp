@@ -412,6 +412,23 @@ button {
   gap: 12px;
   padding: 12px var(--gutter) calc(env(safe-area-inset-bottom) + 12px);
 }
+.crop-add {
+  grid-column: 1 / -1;
+  justify-self: center;
+  padding: 0;
+  font-size: 14px;
+}
+.photos-waiting {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--accent-soft);
+  color: var(--text);
+  font-size: 14px;
+}
+.photos-waiting.on-dark {
+  margin: 0 var(--gutter) 8px;
+}
 .busy-overlay {
   position: absolute;
   inset: 0;

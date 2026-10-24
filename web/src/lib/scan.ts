@@ -5,7 +5,8 @@ import { looseMatches } from "@/lib/matching/possible";
 import type { Spot } from "@/lib/ocr/protocol";
 import { deleteAllScans, deleteScan, discardScan, newId, saveScan } from "@/lib/history";
 import { isKnownWord, repairOcrWords } from "@/lib/ocr/ocrVocabulary";
-import { recogniseText } from "@/lib/ocr/textRecognition";
+import { mergeReadings } from "@/lib/ocr/mergeReadings";
+import { prepareOcrText, recogniseText } from "@/lib/ocr/textRecognition";
 import { getSubstanceById, substanceDb, useScanStore } from "@/lib/store/scanStore";
 
 export class TooFewIngredientsError extends Error {}
@@ -87,7 +88,28 @@ export async function completeScan(
 export async function scanImage(crop: ImageBitmap, signal: AbortSignal): Promise<string | null> {
   const { rawText, text, spots, ms } = await recogniseText(crop);
   console.info(`OCR took ${ms} ms`);
-  return completeScan(rawText, text, { signal, spots });
+  const { earlierPhotos, clearEarlierPhotos } = useScanStore.getState();
+  if (earlierPhotos.length === 0) return completeScan(rawText, text, { signal, spots });
+  // The last of several photos of a wrapped list: join them into one
+  // reading. Earlier photos are kept if this fails, so a retry needs only
+  // this photo again.
+  const merged = mergeReadings([...earlierPhotos.map((p) => p.rawText), rawText]);
+  const id = await completeScan(merged, prepareOcrText(merged), {
+    signal,
+    spots: [...earlierPhotos.flatMap((p) => p.spots), ...spots],
+  });
+  clearEarlierPhotos();
+  return id;
+}
+
+/**
+ * Read a photo of part of a list and keep it, to be joined with the photos
+ * that follow (see mergeReadings.ts). Returns how many are now waiting.
+ */
+export async function addPhotoOfList(crop: ImageBitmap): Promise<number> {
+  const { rawText, spots } = await recogniseText(crop);
+  useScanStore.getState().addEarlierPhoto({ rawText, spots });
+  return useScanStore.getState().earlierPhotos.length;
 }
 
 /**
