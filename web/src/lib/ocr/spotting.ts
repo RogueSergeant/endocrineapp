@@ -9,6 +9,34 @@
 // a lot. Case is ignored, and a space in the name may be read as a space,
 // a hyphen, other punctuation, or nothing at all.
 
+/**
+ * The recogniser's own reading of a line: the most likely class in each
+ * frame, repeats collapsed and blanks dropped (CTC greedy decoding), with
+ * the mean probability of the characters read as its confidence.
+ */
+export function decodeGreedy(
+  probs: Float32Array,
+  frames: number,
+  classes: readonly string[],
+): { text: string; confidence: number } {
+  const n = classes.length;
+  let text = "";
+  let sum = 0;
+  let count = 0;
+  let prev = -1;
+  for (let t = 0; t < frames; t++) {
+    let best = 0;
+    for (let c = 1; c < n; c++) if (probs[t * n + c]! > probs[t * n + best]!) best = c;
+    if (best !== BLANK && best !== prev) {
+      text += classes[best];
+      sum += probs[t * n + best]!;
+      count++;
+    }
+    prev = best;
+  }
+  return { text: text.trim(), confidence: count > 0 ? sum / count : 0 };
+}
+
 export interface SpotHit {
   /** The name (an index key) that was found. */
   key: string;

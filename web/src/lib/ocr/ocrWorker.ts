@@ -14,7 +14,8 @@ import {
 } from "./chunkedDownload";
 import { deskew } from "./deskew";
 import { createProgress } from "./progress";
-import { createSpotter } from "./spotting";
+import { traceCentreline } from "./lineTrace";
+import { createSpotter, decodeGreedy } from "./spotting";
 import { textAngleFromMap } from "./textAngle";
 import substancesIndex from "@/data/substances-index.json";
 import { GENERIC_ALIAS_DENYLIST } from "@/lib/matching/matcher";
@@ -89,14 +90,19 @@ const DET_MEAN = [0.485, 0.456, 0.406] as const;
 const DET_STD = [0.229, 0.224, 0.225] as const;
 const TILT_SIDE = 960;
 
-/**
- * Tilt of the text, measured on the detection model's probability map
- * (see textAngle.ts), or null when it found too little text to say.
- */
-async function measureTilt(
+interface DetectionMap {
+  map: Float32Array;
+  width: number;
+  height: number;
+  /** Map pixels per source pixel. */
+  scale: number;
+}
+
+/** The detection model's text probability map of `source`, at most TILT_SIDE wide. */
+async function detectionMap(
   session: ort.InferenceSession,
   source: OffscreenCanvas,
-): Promise<number | null> {
+): Promise<DetectionMap | null> {
   const scale = Math.min(1, TILT_SIDE / Math.max(source.width, source.height));
   const sw = Math.max(1, Math.round(source.width * scale));
   const sh = Math.max(1, Math.round(source.height * scale));
@@ -120,7 +126,19 @@ async function measureTilt(
   if (!input || !output) return null;
   const results = await session.run({ [input]: new ort.Tensor("float32", tensor, [1, 3, h, w]) });
   const map = results[output]?.data;
-  return map instanceof Float32Array ? textAngleFromMap(map, w, h) : null;
+  return map instanceof Float32Array ? { map, width: w, height: h, scale } : null;
+}
+
+/**
+ * Tilt of the text, measured on the detection model's probability map
+ * (see textAngle.ts), or null when it found too little text to say.
+ */
+async function measureTilt(
+  session: ort.InferenceSession,
+  source: OffscreenCanvas,
+): Promise<number | null> {
+  const det = await detectionMap(session, source);
+  return det ? textAngleFromMap(det.map, det.width, det.height) : null;
 }
 
 // The recogniser's input height, and the score a name needs before it is
@@ -144,6 +162,136 @@ interface Reader {
 }
 
 type Box = { x: number; y: number; width: number; height: number };
+
+/** One read item of a line; `probs` is kept when the worker re-read the line itself. */
+interface LineItem {
+  text: string;
+  box: Box;
+  confidence: number;
+  probs?: { data: Float32Array; frames: number };
+}
+
+// Lines read below this confidence are re-read along their traced path;
+// lines still below the library's own floor are left out of the text.
+const RESCUE_BELOW = 0.9;
+const MIN_LINE_CONFIDENCE = 0.5;
+
+/** The recogniser's per-frame probabilities for `box` of `source`. */
+async function recogniseBox(reader: Reader, source: OffscreenCanvas, box: Box) {
+  const input = lineTensor(source, box);
+  const inputName = reader.recogniser.inputNames[0];
+  const outputName = reader.recogniser.outputNames[0];
+  if (!input || !inputName || !outputName) return null;
+  const out = (await reader.recogniser.run({ [inputName]: input }))[outputName];
+  if (!out || !(out.data instanceof Float32Array) || out.dims.length !== 3) return null;
+  return { data: out.data, frames: out.dims[1]!, numClasses: out.dims[2]! };
+}
+
+function unionBox(items: LineItem[], source: OffscreenCanvas): Box | null {
+  const x0 = Math.max(0, Math.min(...items.map((i) => i.box.x)));
+  const y0 = Math.max(0, Math.min(...items.map((i) => i.box.y)));
+  const x1 = Math.min(source.width, Math.max(...items.map((i) => i.box.x + i.box.width)));
+  const y1 = Math.min(source.height, Math.max(...items.map((i) => i.box.y + i.box.height)));
+  return x1 - x0 < 4 || y1 - y0 < 4 ? null : { x: x0, y: y0, width: x1 - x0, height: y1 - y0 };
+}
+
+const lineConfidence = (items: LineItem[]) =>
+  items.reduce((s, i) => s + i.confidence, 0) / Math.max(1, items.length);
+
+/**
+ * Re-read lines the recogniser struggled with along their own path. On a
+ * jar or bottle a line bows, so its upright box takes in parts of the
+ * lines either side and reads as nothing; cut out along the centreline
+ * the detector's map shows (lineTrace.ts), the line reads like a flat one.
+ * A re-read only replaces the original when it is more confident.
+ */
+async function rescueWeakLines(
+  reader: Reader,
+  source: OffscreenCanvas,
+  lines: LineItem[][],
+): Promise<LineItem[][]> {
+  const weak = lines.map(
+    (l) => l.length > 0 && (lineConfidence(l) < RESCUE_BELOW || !l.some((i) => i.text.trim())),
+  );
+  if (!weak.includes(true)) return lines;
+  const det = await detectionMap(reader.detector, source);
+  if (!det) return lines;
+  // A typical line's text height: boxes carry 15% padding top and bottom.
+  const heights = lines
+    .flat()
+    .map((i) => i.box.height)
+    .sort((a, b) => a - b);
+  const textHeight = (heights[Math.floor(heights.length / 2)] ?? 0) / 1.3;
+  if (textHeight < 4) return lines;
+  const out: LineItem[][] = [];
+  for (const [n, items] of lines.entries()) {
+    const box = weak[n] ? unionBox(items, source) : null;
+    const trace = box
+      ? traceCentreline(
+          det.map,
+          det.width,
+          det.height,
+          {
+            x0: box.x * det.scale,
+            y0: box.y * det.scale,
+            x1: (box.x + box.width) * det.scale,
+            y1: (box.y + box.height) * det.scale,
+          },
+          textHeight * det.scale,
+        )
+      : null;
+    if (!box || !trace) {
+      out.push(items);
+      continue;
+    }
+    // Copy the line strip by strip, each strip centred on the trace.
+    const lineHeight = Math.round(textHeight * 1.5);
+    const straight = new OffscreenCanvas(Math.round(box.width), lineHeight);
+    const ctx = straight.getContext("2d");
+    if (!ctx) {
+      out.push(items);
+      continue;
+    }
+    const strip = trace.strip / det.scale;
+    trace.centres.forEach((c, k) => {
+      const sx = box.x + k * strip;
+      const w = Math.min(strip, box.x + box.width - sx);
+      if (w > 0)
+        ctx.drawImage(
+          source,
+          sx,
+          c / det.scale - lineHeight / 2,
+          w,
+          lineHeight,
+          k * strip,
+          0,
+          w,
+          lineHeight,
+        );
+    });
+    const probs = await recogniseBox(reader, straight, {
+      x: 0,
+      y: 0,
+      width: straight.width,
+      height: lineHeight,
+    });
+    if (!probs) {
+      out.push(items);
+      continue;
+    }
+    const read = decodeGreedy(
+      probs.data,
+      probs.frames,
+      alignClasses(reader.dictionary, probs.numClasses),
+    );
+    out.push(
+      read.text && read.confidence > lineConfidence(items)
+        ? [{ text: read.text, box, confidence: read.confidence, probs }]
+        : items,
+    );
+  }
+  return out;
+}
 
 /** One line of the photo as the recogniser's input: grey levels scaled to -1..1, 48px high. */
 function lineTensor(source: OffscreenCanvas, box: Box): ort.Tensor | null {
@@ -185,7 +333,7 @@ let spotter: ReturnType<typeof createSpotter> | null = null;
 async function spotNames(
   reader: Reader,
   source: OffscreenCanvas,
-  lines: { text: string; box: Box; confidence: number }[][],
+  lines: LineItem[][],
 ): Promise<Spot[]> {
   const best = new Map<string, { score: number; line: number }>();
   const lineBoxes: Box[] = [];
@@ -194,20 +342,15 @@ async function spotNames(
     if (items.length === 0) continue;
     if (items.every((i) => i.confidence >= SPOT_BELOW_CONFIDENCE)) continue;
     // The line's extent: the union of its words' boxes.
-    const x0 = Math.max(0, Math.min(...items.map((i) => i.box.x)));
-    const y0 = Math.max(0, Math.min(...items.map((i) => i.box.y)));
-    const x1 = Math.min(source.width, Math.max(...items.map((i) => i.box.x + i.box.width)));
-    const y1 = Math.min(source.height, Math.max(...items.map((i) => i.box.y + i.box.height)));
-    if (x1 - x0 < 4 || y1 - y0 < 4) continue;
-    const box = { x: x0, y: y0, width: x1 - x0, height: y1 - y0 };
-    const input = lineTensor(source, box);
-    const inputName = reader.recogniser.inputNames[0];
-    const outputName = reader.recogniser.outputNames[0];
-    if (!input || !inputName || !outputName) continue;
-    const out = (await reader.recogniser.run({ [inputName]: input }))[outputName];
-    if (!out || !(out.data instanceof Float32Array) || out.dims.length !== 3) continue;
-    const frames = out.dims[1]!;
-    const numClasses = out.dims[2]!;
+    const box = unionBox(items, source);
+    if (!box) continue;
+    // A rescued line already has the probabilities of its straightened read.
+    const rescued = items.length === 1 ? items[0]!.probs : undefined;
+    const out = rescued
+      ? { ...rescued, numClasses: rescued.data.length / rescued.frames }
+      : await recogniseBox(reader, source, box);
+    if (!out) continue;
+    const { frames, numClasses } = out;
     if (!spotter) {
       // The same names the matcher accepts: no CAS keys, no generic words.
       const keys = Object.keys(substancesIndex).filter(
@@ -321,15 +464,23 @@ self.addEventListener("message", (event: MessageEvent<WorkerRequest>) => {
           (w, h) => new OffscreenCanvas(w, h),
           measured ?? undefined,
         );
-        const result = await service.recognize(level);
+        // Every line, however unsure: weak lines are re-read, and the
+        // spotter looks at them before any are dropped from the text.
+        const result = await service.recognize(level, { minimumConfidence: 0 });
+        const read: LineItem[][] = "lines" in result ? result.lines : [];
+        const lines = await rescueWeakLines(reader, level, read).catch(() => read);
         // Spotting is extra evidence; a failure there must not lose the read.
-        const spots =
-          "lines" in result ? await spotNames(reader, level, result.lines).catch(() => []) : [];
+        const spots = await spotNames(reader, level, lines).catch(() => []);
+        const kept = lines
+          .map((l) => l.filter((i) => i.confidence >= MIN_LINE_CONFIDENCE && i.text.trim()))
+          .filter((l) => l.length > 0);
+        // Joined as ppu-paddle-ocr joins its own text.
+        const text = kept.map((l) => l.map((i) => i.text).join(" ")).join("\n");
         post({
           type: "result",
           id: msg.id,
-          text: result.text,
-          confidence: result.confidence,
+          text,
+          confidence: lineConfidence(kept.flat()),
           angle,
           spots,
           ms: Math.round(performance.now() - started),
