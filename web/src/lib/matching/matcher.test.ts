@@ -219,6 +219,20 @@ describe("parseIngredients", () => {
     expect(out).toContain("Linalyl Acetate");
     expect(out).not.toContain("Linalyl Acetate. HYGIENE WIPES ULTIMATE");
   });
+
+  it("splits on a full stop between two words, as OCR misreads a comma", () => {
+    const out = parseIngredients("Water.WHOLEGRAIN OATS (10%), Rapeseed Oil, Butylparaben.Parfum");
+    expect(out).toContain("Water");
+    expect(out).toContain("WHOLEGRAIN OATS (10%)");
+    expect(out).toContain("Butylparaben");
+    expect(out).toContain("Parfum");
+  });
+
+  it("keeps abbreviations like C.I. together", () => {
+    const out = parseIngredients("Aqua, Mica, C.I. 77891, Talc");
+    expect(out.some((i) => i.includes("77891"))).toBe(true);
+    expect(out).not.toContain("I");
+  });
 });
 
 describe("boundedDistance", () => {

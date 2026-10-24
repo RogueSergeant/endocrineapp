@@ -53,9 +53,11 @@ const END_OF_LIST_RE = new RegExp(
 // so OCR that wraps "Potassium Sorbate" across two lines doesn't get
 // split into two separate ingredients. We also split on ". " so a
 // trailing fragment like "... Linalyl Acetate. HYGIENE WIPES" peels
-// off the non-ingredient text.
-const COMMA_SPLIT_RE = /[,;•·\u2022/]+|\.\s+/;
-const NEWLINE_SPLIT_RE = /[,;•·\u2022\n\r/]+|\.\s+/;
+// off the non-ingredient text. A full stop between two words with no
+// space ("Water.WHOLEGRAIN") is OCR reading a comma as a full stop; it
+// needs two letters either side so abbreviations like "C.I. 77891" stay.
+const COMMA_SPLIT_RE = /[,;•·\u2022/]+|\.\s+|(?<=[A-Za-z]{2})\.(?=[A-Za-z]{2})/;
+const NEWLINE_SPLIT_RE = /[,;•·\u2022\n\r/]+|\.\s+|(?<=[A-Za-z]{2})\.(?=[A-Za-z]{2})/;
 
 function levenshtein(a: string, b: string, cap: number): number {
   if (a === b) return 0;
