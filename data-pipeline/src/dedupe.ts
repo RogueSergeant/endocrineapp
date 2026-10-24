@@ -41,6 +41,19 @@ function identityName(name: string): string {
   return normalise(name.replace(/\([^)]*\)/g, " "));
 }
 
+/**
+ * The substance's page on edlists.org. Each spreadsheet row's "ID (for
+ * name)" is the site's page id, and /node/<id> serves that substance's
+ * page. A substance listed under several rows takes the id most of them
+ * share.
+ */
+function edlistsUrl(group: readonly { edlistsId?: number | null }[]): string | null {
+  const counts = new Map<number, number>();
+  for (const r of group) if (r.edlistsId) counts.set(r.edlistsId, (counts.get(r.edlistsId) ?? 0) + 1);
+  const [id] = [...counts].sort((a, b) => b[1] - a[1] || a[0] - b[0])[0] ?? [];
+  return id ? `https://edlists.org/node/${id}` : null;
+}
+
 const ABBREV_RE = /\(([A-Z0-9][A-Z0-9\-]{1,})\)\s*$/;
 
 /**
@@ -151,6 +164,7 @@ export function dedupe(rows: RawAssessmentRow[]): Substance[] {
       assessments,
       aliases: dedupeAliases(aliases),
       inciName: null,
+      edlistsUrl: edlistsUrl(group),
     });
   }
   return substances;

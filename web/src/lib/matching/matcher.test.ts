@@ -15,6 +15,7 @@ const SUBSTANCES: Substance[] = [
     assessments: [],
     aliases: ["BBP", "Benzyl butyl phthalate"],
     inciName: null,
+    edlistsUrl: null,
   },
   {
     id: "s-dehp",
@@ -27,6 +28,7 @@ const SUBSTANCES: Substance[] = [
     assessments: [],
     aliases: ["DEHP", "Bis(2-ethylhexyl) phthalate"],
     inciName: null,
+    edlistsUrl: null,
   },
   {
     id: "s-butylparaben",
@@ -39,6 +41,7 @@ const SUBSTANCES: Substance[] = [
     assessments: [],
     aliases: ["Butylparaben", "Butyl paraben"],
     inciName: "Butylparaben",
+    edlistsUrl: null,
   },
   {
     id: "s-bpa",
@@ -51,6 +54,7 @@ const SUBSTANCES: Substance[] = [
     assessments: [],
     aliases: ["BPA", "Bisphenol A"],
     inciName: null,
+    edlistsUrl: null,
   },
   {
     id: "s-bp1",
@@ -63,6 +67,7 @@ const SUBSTANCES: Substance[] = [
     assessments: [],
     aliases: ["BP-1", "Benzophenone-1"],
     inciName: null,
+    edlistsUrl: null,
   },
 ];
 

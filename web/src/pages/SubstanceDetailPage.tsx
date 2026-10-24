@@ -5,6 +5,13 @@ import { Section } from "@/components/Section";
 import { getSubstanceById } from "@/lib/store/scanStore";
 import type { ListId } from "@/types";
 
+// Where each list lives on edlists.org, for a substance without its own page.
+const LIST_PAGE: Record<ListId, string> = {
+  1: "https://edlists.org/the-ed-lists/list-i-substances-identified-as-endocrine-disruptors-by-the-eu",
+  2: "https://edlists.org/the-ed-lists/list-ii-substances-under-eu-investigation-endocrine-disruption",
+  3: "https://edlists.org/the-ed-lists/list-iii-substances-identified-as-endocrine-disruptors-by-participating-national-authorities",
+};
+
 const TIER_EXPLANATION: Record<ListId, string> = {
   1: "Legally identified as an endocrine disruptor at EU level.",
   2: "Currently under investigation by an EU regulatory process.",
@@ -26,7 +33,8 @@ export function SubstanceDetailPage() {
     );
   }
 
-  const edlistsUrl = `https://edlists.org/the-ed-lists${substance.casNumber ? `?q=${encodeURIComponent(substance.casNumber)}` : ""}`;
+  // The site ignores search parameters, so link the substance's own page.
+  const edlistsUrl = substance.edlistsUrl ?? LIST_PAGE[substance.evidenceTier];
 
   return (
     <Layout title={substance.canonicalName}>

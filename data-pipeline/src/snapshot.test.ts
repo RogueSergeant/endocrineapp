@@ -17,6 +17,7 @@ function substance(cas: string | null, aliases: string[], inciName: string | nul
     assessments: [],
     aliases: [...aliases],
     inciName,
+    edlistsUrl: null,
   };
 }
 

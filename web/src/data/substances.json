@@ -25,7 +25,8 @@
         "(1R,4S)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one (4-MBC)",
         "(1R,4S)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/362"
     },
     {
       "id": "edbab6e7-27be-5fa7-802b-8b583ba21ed7",
@@ -53,7 +54,8 @@
         "(1S,3E,4R)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one",
         "(1S,4R)-1,7,7-Trimethyl-3-((E)-4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/363"
     },
     {
       "id": "82da91b2-008d-590e-9801-e4efb67acee4",
@@ -77,7 +79,8 @@
         "(1S,3Z,4R)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one",
         "3-(4-Methylbenzylidene)camphor, >=98.0% (GC)"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/361"
     },
     {
       "id": "702977ec-08f6-54fc-86fa-102cccb67ac6",
@@ -110,7 +113,8 @@
         "HRQQEXIVBZHHOQ-UHFFFAOYSA-N",
         "C25H44O6"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/346"
     },
     {
       "id": "6f67ede6-de52-53f8-a4e4-70fc7ef00494",
@@ -143,7 +147,8 @@
         "Nonylphenol-6-ethoxylate",
         "3,6,9,12,15-Pentaoxaheptadecan-1-ol, 17-(4-nonylphenoxy)-"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/337"
     },
     {
       "id": "e4d5f0ce-3c03-58cb-91cc-43a5788af6d2",
@@ -187,7 +192,8 @@
         "NPEO1",
         "Nonylphenol-1-ethoxylate"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/336"
     },
     {
       "id": "a1fba402-dfe9-5bef-8805-0fbad7f9a0a3",
@@ -216,7 +222,8 @@
         "YWFWPJLGQZVOCG-UHFFFAOYSA-N",
         "2-[2-(7-Methyloctyl)phenoxy]ethan-1-ol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/772"
     },
     {
       "id": "af64ef6e-36a6-5ce5-86cb-c521313368bf",
@@ -255,7 +262,8 @@
         "2-[2-(2-Nonylphenoxy)ethoxy]ethan-1-ol",
         "RRLGETDMEIMLQU-UHFFFAOYSA-N"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/757"
     },
     {
       "id": "a2e644e0-de19-5d3e-a5df-3a200bc3a466",
@@ -295,7 +303,8 @@
         "2-[4-(2,4,4-Trimethyl-2-pentanyl)phenoxy]ethanol",
         "Triton,(-)"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/278"
     },
     {
       "id": "5744b377-c043-5374-8ad5-902e12d3c5a6",
@@ -330,7 +339,8 @@
         "4-(3,6-Dimethyl-3-heptyl)phenol-3,5-d2 monoethoxylate",
         "4-(3,6-Dimethyl-3-heptyl)phenol monoethoxylate Solution in Acetone, 1000ug/mL"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/340"
     },
     {
       "id": "23133baa-bdff-518e-9202-50ec85d87188",
@@ -374,7 +384,8 @@
         "NP-40",
         "triton-x-100"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/279"
     },
     {
       "id": "5e02d3ee-a395-5c39-8254-45bf1e3f2c60",
@@ -409,7 +420,8 @@
         "(4E,14Z)-Sphingadienine-C18-1-phosphate",
         "2-{2-[4-(3,6-Dimethylheptan-3-yl)phenoxy]ethoxy}ethan-1-ol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/338"
     },
     {
       "id": "049aaaeb-b7ba-55ce-b095-700a2af01696",
@@ -438,7 +450,8 @@
         "2,2-dibromo-2-cyanoacetamide (DBNPA)",
         "2,2-dibromo-2-cyanoacetamide"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/260"
     },
     {
       "id": "130e2fbe-0403-598c-adcc-f2b77099a122",
@@ -465,7 +478,8 @@
       "aliases": [
         "20-(4-nonylphenoxy)-3,6,9,12,15,18-hexaoxaicosan-1-ol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/319"
     },
     {
       "id": "65a75594-5b98-5e38-952a-14071246dcbd",
@@ -492,7 +506,8 @@
       "aliases": [
         "20-(isononylphenoxy)-3,6,9,12,15,18-hexaoxaicosan-1-ol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/766"
     },
     {
       "id": "987226ca-8972-5e2d-9026-645acea010fe",
@@ -519,7 +534,8 @@
       "aliases": [
         "20-(nonylphenoxy)-3,6,9,12,15,18-hexaoxaicosan-1-ol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/787"
     },
     {
       "id": "ab7c5ef8-131d-5d9c-b676-2e487824bbfa",
@@ -559,7 +575,8 @@
         "IGEPAL(R) CA-630",
         "Triton(TM) X-100, CP"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/276"
     },
     {
       "id": "5bbdf96c-b807-5f78-baea-dac522aafde3",
@@ -586,7 +603,8 @@
       "aliases": [
         "23-(nonylphenoxy)-3,6,9,12,15,18,21-heptaoxatricosan-1-ol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/344"
     },
     {
       "id": "5f80d033-bf9f-5393-9002-b8c886d8de71",
@@ -613,7 +631,8 @@
       "aliases": [
         "26-(4-Nonylphenoxy)-3,6,9,12,15,18,21,24- octaoxahexacosan -1-ol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/326"
     },
     {
       "id": "242c2609-e053-515d-8c38-ccb11f306866",
@@ -640,7 +659,8 @@
       "aliases": [
         "26-(nonylphenoxy)-3,6,9,12,15,18,21,24-octaoxahexacosan-1-ol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/345"
     },
     {
       "id": "9cdf88a9-786c-5440-b860-ff56e577d615",
@@ -667,7 +687,8 @@
       "aliases": [
         "29-(nonylphenoxy)-3,6,9,12,15,18,21,24,27-nonaoxanonacosanol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/784"
     },
     {
       "id": "7b8c7d7e-e5f0-563b-aefb-fcf9248bdda8",
@@ -690,7 +711,8 @@
         "3-BC",
         "3-Benzylidene Camphor"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/142"
     },
     {
       "id": "2bfb9d8c-6659-51f3-a162-50404534567c",
@@ -717,7 +739,8 @@
       "aliases": [
         "3,6,9,12-Tetraoxatetradecan-1-ol, 14-(4-nonylphenoxy)-"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/332"
     },
     {
       "id": "5b1d5f23-9834-5101-93b8-ba6dbf45d517",
@@ -744,7 +767,8 @@
       "aliases": [
         "3,6,9,12-Tetraoxatetradecan-1-ol, 14-(4-nonylphenoxy)-, branched"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/775"
     },
     {
       "id": "06597f34-2e3b-50f2-ad08-e4d782cb6a71",
@@ -771,7 +795,8 @@
       "aliases": [
         "3,6,9,12,15-Pentaoxaheptadecan-1-ol, 17-(nonylphenoxy)-"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/781"
     },
     {
       "id": "3cf41ebf-4845-556d-bcac-6de349b3329f",
@@ -799,7 +824,8 @@
         "3,6,9,12,15,18,21,24,27-Nonaoxanonacosan-1-ol, 29-(isononylphenoxy)-",
         "HYZLLJKTXYYLDT-UHFFFAOYSA-N"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/778"
     },
     {
       "id": "3d515d4b-1f11-5f4f-8bcf-a66176a4bfd1",
@@ -820,7 +846,8 @@
       "aliases": [
         "4-(1-ethyl-1-methylhexyl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/307"
     },
     {
       "id": "fef6a93e-1cc4-5230-998a-3e0e311d0bc3",
@@ -841,7 +868,8 @@
       "aliases": [
         "4-(1-Ethyl-1,3-dimethylpentyl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/311"
     },
     {
       "id": "5255b68f-3855-523e-8bf0-9cb9f6b5b8e5",
@@ -862,7 +890,8 @@
       "aliases": [
         "4-(1-Ethyl-1,4-dimethylpentyl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/310"
     },
     {
       "id": "e28b52a8-e9e1-5041-905f-a74426bb5cff",
@@ -891,7 +920,8 @@
         "262-Np,4-(1,1,5-trimethylhexyl)phenol",
         "4-(2,6-Dimethyl-2-heptyl)phenol, analytical standard"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/316"
     },
     {
       "id": "c905b071-f6a9-5569-9c97-a11801da5f43",
@@ -913,7 +943,8 @@
         "4-(2-methylhexan-2-yl)phenol",
         "4-(1,1-Dimethylpentyl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/288"
     },
     {
       "id": "dfc489ea-8c06-5bda-bed7-65916e851a50",
@@ -935,7 +966,8 @@
         "4-(2,2-dimethylpentan-3-yl)phenol",
         "4-(1-Ethyl-2,2-dimethylpropyl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/294"
     },
     {
       "id": "a943d87a-dd4c-5d04-9665-3f244d13feea",
@@ -957,7 +989,8 @@
         "4-(2,3-dimethylpentan-2-yl)phenol",
         "4-(1,1,2-Trimethylbutyl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/304"
     },
     {
       "id": "7d411da5-151b-57b7-8e31-4aed08096e0a",
@@ -979,7 +1012,8 @@
         "4-(2,3,3-trimethylbutan-2-yl)phenol",
         "4-(1,1,2,2-tetramethylpropyl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/285"
     },
     {
       "id": "01363580-eda8-5059-bab9-91ab2bcd7c00",
@@ -1000,7 +1034,8 @@
       "aliases": [
         "4-(2,4-dimethylpentan-2-yl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/286"
     },
     {
       "id": "9cd576b9-5d6e-5b27-9231-c1bc7c9806c1",
@@ -1022,7 +1057,8 @@
         "4-(2,4-dimethylpentan-3-yl)phenol",
         "4-[2-Methyl-1-(1-methylethyl)propyl]phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/291"
     },
     {
       "id": "fd965968-04e5-5291-98f8-940a94d794fa",
@@ -1048,7 +1084,8 @@
         "Phenol, 4-(2-ethyl-1-methylhexyl)",
         "4-(2-Ethyl-1-methylhexyl)phenol, analytical standard"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/315"
     },
     {
       "id": "9ae9cdc2-2262-5194-81d2-930c11303ffa",
@@ -1069,7 +1106,8 @@
       "aliases": [
         "4-(3-ethylpentan-3-yl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/287"
     },
     {
       "id": "0b467c59-e733-5194-9af7-e7d03d815251",
@@ -1090,7 +1128,8 @@
       "aliases": [
         "4-(3-ethylpentyl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/299"
     },
     {
       "id": "5f1b5347-784a-5162-afc6-b65dc128e16d",
@@ -1112,7 +1151,8 @@
         "4-(3-methylhexan-2-yl)phenol",
         "4-(1,2-Dimethylpentyl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/290"
     },
     {
       "id": "6741a51d-ee2a-5490-94dd-30b07444663c",
@@ -1133,7 +1173,8 @@
       "aliases": [
         "4-(3-methylhexan-3-yl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/303"
     },
     {
       "id": "563b1806-431f-52c2-a1d7-a8dd0cfbd723",
@@ -1154,7 +1195,8 @@
       "aliases": [
         "4-(3-methylhexyl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/300"
     },
     {
       "id": "e44d1e4b-5483-55c6-8515-9b37f29600ad",
@@ -1175,7 +1217,8 @@
       "aliases": [
         "4-(3,3-dimethylpentan-2-yl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/289"
     },
     {
       "id": "6e1c9697-e040-5208-9c29-35144c793bc3",
@@ -1196,7 +1239,8 @@
       "aliases": [
         "4-(4-methylhexan-2-yl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/292"
     },
     {
       "id": "c3fa6be6-a6b0-5916-9b44-493156e1a36c",
@@ -1217,7 +1261,8 @@
       "aliases": [
         "4-(4-methylhexyl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/301"
     },
     {
       "id": "b631532f-738a-58c8-8eb7-64fed3c19baa",
@@ -1238,7 +1283,8 @@
       "aliases": [
         "4-(4,4-dimethylpentan-2-yl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/305"
     },
     {
       "id": "83610cc3-76a1-596e-adfc-1d0857786733",
@@ -1259,7 +1305,8 @@
       "aliases": [
         "4-(5-methylhexan-2-yl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/293"
     },
     {
       "id": "2d274b0e-7e61-5a16-9842-3b7fe03c1aa5",
@@ -1281,7 +1328,8 @@
         "4-(5-methylhexan-3-yl)phenol",
         "4-(1-Ethyl-3-methylbutyl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/295"
     },
     {
       "id": "56f6670b-2549-5513-8cc4-61ec4c5187e2",
@@ -1302,7 +1350,8 @@
       "aliases": [
         "4-(5-methylhexyl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/302"
     },
     {
       "id": "f2c6254b-845f-5f0b-bd28-26bed0dff116",
@@ -1325,7 +1374,8 @@
         "4-(1-Methylhexyl)phenol",
         "OXAMRILEWOFNPN-UHFFFAOYSA-N"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/297"
     },
     {
       "id": "18b0db09-6de8-5f3e-aae5-1e0a0e51aa51",
@@ -1348,7 +1398,8 @@
         "4-(1-Ethylpentyl)phenol",
         "VVMIIKFOWHZTCV-UHFFFAOYSA-N"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/296"
     },
     {
       "id": "bb8423ff-e578-54ef-a351-b01deb97b32b",
@@ -1372,7 +1423,8 @@
         "4-heptan-4-ylphenol",
         "4-(1-Propylbutyl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/298"
     },
     {
       "id": "e8cb7541-9eec-5fdd-ad4c-c36b219ce18a",
@@ -1406,7 +1458,8 @@
         "4-Heptylphenol, AldrichCPR",
         "BIDD:ER0405"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/281"
     },
     {
       "id": "b8433cd5-619a-5aed-aeee-6913abe28aab",
@@ -1433,7 +1486,8 @@
       "aliases": [
         "4-isododecylphenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/351"
     },
     {
       "id": "16e60aed-16c2-5725-b033-747e73be05de",
@@ -1470,7 +1524,8 @@
         "3-(4-METHYLBENZYLIDENE)-CAMPHOR",
         "(E)-1,7,7-Trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/359"
     },
     {
       "id": "e3ffcddf-a454-5b83-b623-76ad5e5cffd9",
@@ -1514,7 +1569,8 @@
         "3-(4'-Methyl)benzylidene-bornan-2-one",
         "1,7,7-trimethyl-3-(p-tolylmethylene)norbornan-2-one"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/358"
     },
     {
       "id": "84cadc25-e7bc-5a30-9bc0-74793ecfd529",
@@ -1540,7 +1596,8 @@
         "BIDD:ER0102",
         "(1R,3Z,4S)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/364"
     },
     {
       "id": "37601d73-6ac9-5563-bde4-535565fa8c32",
@@ -1578,7 +1635,8 @@
         "3-(4'-methyl)benzylidene-bornan-2-one",
         "3-(4-METHYLBENZYLIDENE)-CAMPHOR"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/360"
     },
     {
       "id": "6e619edf-d017-564e-9ef6-88ca214ceb3c",
@@ -1618,7 +1676,8 @@
         "Adekatol NP",
         "EON 2"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/330"
     },
     {
       "id": "4d8f948a-8d76-50d8-a98e-917941c5ca13",
@@ -1659,7 +1718,8 @@
         "PEG-4 Nonyl phenyl ether",
         "UTXPMECBRCEYCI-UHFFFAOYSA-N"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/320"
     },
     {
       "id": "00e18c86-8198-5d73-ad83-808b3d0abe8d",
@@ -1699,7 +1759,8 @@
         "4-Nonylphenol, branched, ethoxylated",
         "4-Nonylphenol, branched, ethoxylated 1 - 2.5 moles ethoxylated"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/339"
     },
     {
       "id": "2cc9b6fd-c72a-5c6b-91a3-38190a35dea2",
@@ -1726,7 +1787,8 @@
       "aliases": [
         "4-Nonylphenol, ethoxylated 1 - 2.5 moles ethoxylated"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/328"
     },
     {
       "id": "9554c4e5-af37-50db-8e17-d54be6de00eb",
@@ -1759,7 +1821,8 @@
         "QBJGHRMRNHNIKU-UHFFFAOYSA-N",
         "2-(2-(4-(2-Methyloctan-2-yl)phenoxy)ethoxy)ethan-1-ol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/342"
     },
     {
       "id": "307b9be3-550b-5fbc-89ab-5debc5ab0cc3",
@@ -1802,7 +1865,8 @@
         "para-tertiary-butylphenol",
         "4-tertiary-butylphenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/160"
     },
     {
       "id": "deabdb33-03b8-5bed-b9cd-9113e08b2215",
@@ -1842,7 +1906,8 @@
         "p-(1,1,3,3-tetramethylbutyl)-phenol",
         "4-tertiary-octylphenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/140"
     },
     {
       "id": "05e9c8fe-f461-58fe-a178-1bb6b7efb5c8",
@@ -1869,7 +1934,8 @@
       "aliases": [
         "44-(nonylphenoxy)-3,6,9,12,15,18,21,24,27,30,33,36,39,42-tetradecaoxatetratetracontanol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/769"
     },
     {
       "id": "f8b4b9bf-7f13-5582-9dd4-5f15d3066ba3",
@@ -1896,7 +1962,8 @@
       "aliases": [
         "Asulam"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/365"
     },
     {
       "id": "2f28962a-0ce5-5d28-86e8-f31877639ebe",
@@ -1923,7 +1990,8 @@
       "aliases": [
         "Benthiavalicarb"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/366"
     },
     {
       "id": "cc734300-ac03-5a2d-8122-1fbfb67e2676",
@@ -1952,7 +2020,8 @@
         "Benzyl butyl phthalate (BBP)",
         "Benzyl butyl phthalate"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/132"
     },
     {
       "id": "257b52b6-a01f-5752-b2e2-d4622f4d2d25",
@@ -1993,7 +2062,8 @@
         "Bis(2-ethylhexyl) phthalate (DEHP)",
         "Bis(2-ethylhexyl) phthalate"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/133"
     },
     {
       "id": "3f4e66ce-5a50-5598-8a75-36c6925b031a",
@@ -2022,7 +2092,8 @@
         "Bisphenol A",
         "BPA"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/128"
     },
     {
       "id": "5b916070-c984-51f1-853c-f2711f6ca611",
@@ -2050,7 +2121,8 @@
         "4,4'-(1-methylpropylidene)bisphenol",
         "Bisphenol B"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/348"
     },
     {
       "id": "7e5554f3-5397-5be7-be23-478f895e2a2a",
@@ -2092,7 +2164,8 @@
         "Bisphenol S (BPS)",
         "Bisphenol S"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/379"
     },
     {
       "id": "cf64500b-f5b3-5980-840d-429b4fd6376d",
@@ -2126,7 +2199,8 @@
         "Butyl 4-hydroxybenzoate",
         "Butylparaben"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/144"
     },
     {
       "id": "72428b6a-98a1-51c9-b05a-51f1b7ff70af",
@@ -2153,7 +2227,8 @@
       "aliases": [
         "Cholecalciferol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/259"
     },
     {
       "id": "5f8a8563-1bf2-5dc2-975a-b0c39178863f",
@@ -2180,7 +2255,8 @@
       "aliases": [
         "Clofentezine"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/367"
     },
     {
       "id": "5ca5c0f4-9bea-5633-bc40-d879571bc412",
@@ -2207,7 +2283,8 @@
       "aliases": [
         "Cyanamide"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/357"
     },
     {
       "id": "087626c1-a995-5518-85d7-91b25576d710",
@@ -2242,7 +2319,8 @@
         "Dibutyl phthalate (DBP)",
         "Dibutyl phthalate"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/134"
     },
     {
       "id": "e09d303d-dd52-5b6a-b10f-a1211df5415e",
@@ -2295,7 +2373,8 @@
         "Dicyclohexyl phthalate (DCHP)",
         "Dicyclohexyl phthalate"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/141"
     },
     {
       "id": "cd3b0796-8918-5412-b7ef-ac8ac556bceb",
@@ -2340,7 +2419,8 @@
         "di-2-methylpropyl phthalate",
         "AI3-04278 (USDA)"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/131"
     },
     {
       "id": "f8d976fa-af02-5611-9dfd-3b8e87195ef4",
@@ -2379,7 +2459,8 @@
         "4-(3-(4-Chlorophenyl)-3-(3,4-dimethoxyphenyl)acryloyl)morpholine",
         "Dimethomorph isomer 2"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/380"
     },
     {
       "id": "6d2be403-4868-5f2c-9d43-c00261e2a802",
@@ -2417,7 +2498,8 @@
         "UNII-OL44PP5145",
         "EINECS Annex I Index 613-164-00-9"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/715"
     },
     {
       "id": "75a2cf71-b6c8-51cb-8763-058155b80901",
@@ -2444,7 +2526,8 @@
       "aliases": [
         "Formaldehyde, reaction products with branched and linear heptylphenol, carbon disulfide and hydrazine"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/275"
     },
     {
       "id": "de804183-9996-5202-8257-e859ad1f44c3",
@@ -2491,7 +2574,8 @@
         "p-Oxybenzoesaureisobutylester",
         "4-Hydroxybenzoic acid-isobutyl ester"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/158"
     },
     {
       "id": "91709c32-0768-5c2c-a976-94f4308c3d28",
@@ -2512,7 +2596,8 @@
       "aliases": [
         "Isononylphenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/318"
     },
     {
       "id": "2d19ea12-e9dc-57f7-b34d-ef6495070f38",
@@ -2539,7 +2624,8 @@
       "aliases": [
         "Isononylphenol, ethoxylated"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/331"
     },
     {
       "id": "1157371b-acf2-5407-baf4-e5af6895ecde",
@@ -2584,7 +2670,8 @@
         "Mancozin",
         "Manoseb"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/349"
     },
     {
       "id": "15762fa4-e10d-5fb3-b4d2-02d5eb1b8c4f",
@@ -2611,7 +2698,8 @@
       "aliases": [
         "Medetomidine"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/722"
     },
     {
       "id": "a86b409d-0758-5700-99ce-7d23ad888642",
@@ -2638,7 +2726,8 @@
       "aliases": [
         "Mepanipyrim"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/384"
     },
     {
       "id": "8befe946-24ed-55c8-b90e-2e59a1afdf80",
@@ -2665,7 +2754,8 @@
       "aliases": [
         "Metiram"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/381"
     },
     {
       "id": "0480e22e-4b71-57a0-b0a1-5eefef7b26a5",
@@ -2706,7 +2796,8 @@
         "Sencorex L.F.",
         "BAY dic 1468"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/383"
     },
     {
       "id": "853dcca8-acdb-57c1-812b-5dfc995f0606",
@@ -2740,7 +2831,8 @@
         "UNII-24R8721A3S",
         "2-n-nonyl-phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/317"
     },
     {
       "id": "fa417233-93f6-5474-950a-4f244bad8e02",
@@ -2786,7 +2878,8 @@
         "Nonylphenol, branched, ethoxylated 1 - 2.5 moles ethoxylated",
         "Poly (oxy-1,2-ethanediyl), alpha -(nonylphenyl)-omega-hydroxy-, branched"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/327"
     },
     {
       "id": "30d963ce-4704-5b20-a7c6-8cf69b7cf587",
@@ -2893,7 +2986,8 @@
         "Adekatol NP",
         "EON 2"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/322"
     },
     {
       "id": "4b34a11e-bd6a-5e87-b311-54b4767722d7",
@@ -2946,7 +3040,8 @@
         "Nonylphenol, ethoxylated (EO = 4)",
         "Nonylphenol, ethoxylated (polymer)"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/333"
     },
     {
       "id": "277acdf0-cc80-525b-9648-e3395b1266b1",
@@ -2973,7 +3068,8 @@
       "aliases": [
         "Nonylphenolpolyglycolether"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/341"
     },
     {
       "id": "8fc7e0b1-a29d-5363-bb6f-8cc65c5859de",
@@ -3015,7 +3111,8 @@
         "UNII-RN8NP35H6T",
         "nonylphenol ethoxyacetic acid"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/763"
     },
     {
       "id": "0af29242-ba79-5db9-a9a9-ceaf781b5f3f",
@@ -3036,7 +3133,8 @@
       "aliases": [
         "p-(1-methyloctyl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/309"
     },
     {
       "id": "1330f8c3-0cc6-5c72-8cfb-f6711262025b",
@@ -3057,7 +3155,8 @@
       "aliases": [
         "p-(1,1-dimethylheptyl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/306"
     },
     {
       "id": "f9e40e4b-9dc1-59dc-a204-b366a40a95ab",
@@ -3084,7 +3183,8 @@
       "aliases": [
         "p-(1,1-dimethylpropyl)phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/137"
     },
     {
       "id": "ad59b019-1ff0-5679-9154-37e7cd2e4d3b",
@@ -3105,7 +3205,8 @@
       "aliases": [
         "p-isononylphenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/313"
     },
     {
       "id": "c96f4e78-43b3-5fb0-b75e-2b6044a05744",
@@ -3126,7 +3227,8 @@
       "aliases": [
         "p-nonylphenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/308"
     },
     {
       "id": "251afec7-b0d9-52db-9bbc-764207dec2f4",
@@ -3153,7 +3255,8 @@
       "aliases": [
         "Phenol, (tetrapropenyl) derivatives"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/354"
     },
     {
       "id": "5dbdbc19-a83f-55da-b19a-bae0f6757cde",
@@ -3174,7 +3277,8 @@
       "aliases": [
         "Phenol, 4-(1-ethyl-1,2-dimethylpropyl)-"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/284"
     },
     {
       "id": "6a059381-78ce-5f1f-8235-cfd5bb3a6774",
@@ -3201,7 +3305,8 @@
       "aliases": [
         "Phenol, 4-dodecyl, branched"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/353"
     },
     {
       "id": "939d6d37-683f-523e-9ccb-10f306cca08c",
@@ -3228,7 +3333,8 @@
       "aliases": [
         "Phenol, 4-isododecyl-"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/355"
     },
     {
       "id": "dcee3132-a7ae-555b-b3b0-51ceff3fe43c",
@@ -3249,7 +3355,8 @@
       "aliases": [
         "Phenol, 4-nonyl-, branched"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/312"
     },
     {
       "id": "8694d050-001f-54c6-a769-86e1376f10b0",
@@ -3270,7 +3377,8 @@
       "aliases": [
         "Phenol, 4-tert-heptyl-"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/283"
     },
     {
       "id": "39730cda-fca5-5814-b722-14e61884e457",
@@ -3305,7 +3413,8 @@
         "4-(3,4,5-trimethylheptyl)phenol",
         "AOOKHLGAVNECET-UHFFFAOYSA-N"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/356"
     },
     {
       "id": "65ac635c-3850-5783-96fc-2de14e4c7bc5",
@@ -3326,7 +3435,8 @@
       "aliases": [
         "Phenol, heptyl derivs"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/282"
     },
     {
       "id": "30a685c8-5113-520c-8e80-57982ed376ec",
@@ -3347,7 +3457,8 @@
       "aliases": [
         "Phenol, nonyl-, branched"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/314"
     },
     {
       "id": "0bb455b4-ac73-58a0-8b78-48100bec2ed5",
@@ -3368,7 +3479,8 @@
       "aliases": [
         "Phenol, p-isononyl-, phosphite (3:1)"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/273"
     },
     {
       "id": "a2da055f-ee4d-50fd-b865-c32fa4e307f8",
@@ -3390,7 +3502,8 @@
         "Phenol, p-sec-nonyl-, phosphite",
         "p-sec-Nonylphenol phosphite"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/272"
     },
     {
       "id": "fb86be52-0fb3-5855-8e15-6bcca9ccf7b8",
@@ -3419,7 +3532,8 @@
         "4-(2,4-dimethyl-3-propylheptyl)phenol",
         "OZZIOWVRWRTHQO-UHFFFAOYSA-N"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/352"
     },
     {
       "id": "a9a2392a-818e-5582-905d-5141ed61f9fe",
@@ -3446,7 +3560,8 @@
       "aliases": [
         "Poly(oxy-1,2-ethanediyl), α-(nonylphenyl)-ω-hydroxy-, branched"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/760"
     },
     {
       "id": "6cb92978-3460-5a68-a3f5-f6e638ca806e",
@@ -3473,7 +3588,8 @@
       "aliases": [
         "Poly(oxy-1,2-ethanediyl), α-[(1,1,3,3-tetramethylbutyl)phenyl]-ω-hydroxy-"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/277"
     },
     {
       "id": "8380bfc7-eed3-5d30-b70b-ff448b470511",
@@ -3500,7 +3616,8 @@
       "aliases": [
         "Polyethylene glycol p-(1,1,3,3-tetramethylbutyl)phenyl ether"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/280"
     },
     {
       "id": "bf5ddf4c-ce10-514a-bc42-7edf6303c43c",
@@ -3527,7 +3644,8 @@
       "aliases": [
         "Propiconazole"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/373"
     },
     {
       "id": "d6113ffe-239b-5947-8a55-a18776d3f77d",
@@ -3554,7 +3672,8 @@
       "aliases": [
         "Reaction product of 1,3,4-thiadiazolidine-2,5-dithione, formaldehyde and phenol, heptyl derivs."
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/274"
     },
     {
       "id": "f7884eee-ac61-5082-8ff6-ec74993ec71e",
@@ -3581,7 +3700,8 @@
       "aliases": [
         "Triflusulfuron-methyl"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/382"
     },
     {
       "id": "0a73864d-6268-5feb-ab24-7af8359947a6",
@@ -3622,7 +3742,8 @@
         "Triphenyl phosphate (TPP)",
         "Triphenyl phosphate"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/181"
     },
     {
       "id": "e48122c4-db05-5fe5-b9fc-594797863440",
@@ -3657,7 +3778,8 @@
         "Tris (4-nonylphenol, branched) phosphite (TNPP)",
         "Tris (4-nonylphenol, branched) phosphite"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/271"
     },
     {
       "id": "243be029-04a4-5c50-ae48-a49f30d7579d",
@@ -3678,7 +3800,8 @@
       "aliases": [
         "Tris(nonylphenyl) phosphite"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/269"
     },
     {
       "id": "f25bc59a-9486-5e8d-bc75-6d59715f8588",
@@ -3714,7 +3837,8 @@
         "tris(nonylphenyl) phosphite",
         "TRIS(NONYLPHENYL)PHOSPHITE"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/270"
     },
     {
       "id": "0f6c9de1-9cad-5bc1-8463-8d80f6b43fd1",
@@ -3740,7 +3864,8 @@
         "OPZLDVPRAIERSE-UHFFFAOYSA-N",
         "2,2-bis-[4-(methacryloxypropoxy)-phenyl]-propane"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/392"
     },
     {
       "id": "57d0afc1-5112-57b9-af66-2851dacb4bca",
@@ -3761,7 +3886,8 @@
       "aliases": [
         "1-(5,6,7,8-tetrahydro-3,5,5,6,8,8-hexamethyl-2-naphthyl)ethan-1-one"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/187"
     },
     {
       "id": "6239739c-55e4-578d-8846-9b1470aca017",
@@ -3782,7 +3908,8 @@
       "aliases": [
         "1-isopropyl-2,2-dimethyltrimethylene diisobutyrate"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/731"
     },
     {
       "id": "e181e4a3-ebf3-5234-a385-907f6c76dc9a",
@@ -3809,7 +3936,8 @@
       "aliases": [
         "1,3-dihydro-4(or 5)-methyl-2H-benzimidazole-2-thione"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/185"
     },
     {
       "id": "3f45bd2d-9d82-54c6-8f83-abd1228cfb08",
@@ -3836,7 +3964,8 @@
       "aliases": [
         "1,3-dihydro-4(or 5)-methyl-2H-benzimidazole-2-thione, zinc salt"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/186"
     },
     {
       "id": "4199e4b1-e8bd-503b-b861-31cdff4e8912",
@@ -3857,7 +3986,8 @@
       "aliases": [
         "2-[4-[2-[4-(2-hydroxyethoxy)phenyl]propan-2-yl]phenoxy]ethanol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/196"
     },
     {
       "id": "5ca02470-1b3f-5a0e-a713-21a47af0e1a1",
@@ -3878,7 +4008,8 @@
       "aliases": [
         "2-Propenoic acid, methyl ester, reaction products with mixed O,O-bis(branched and linear pentyl and iso-Bu) phosphorodithioates"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/375"
     },
     {
       "id": "b997aaf5-419d-5e78-861c-72333d0e25ed",
@@ -3899,7 +4030,8 @@
       "aliases": [
         "2,2'-[(1-methylethylidene)bis(4,1-phenyleneoxy)]bisethyl diacetate"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/391"
     },
     {
       "id": "522f0d5f-df42-585a-84e8-18c48871c95a",
@@ -3934,7 +4066,8 @@
         "Phenol, 4,4'-methylenebis(2,6-bis(1,1-dimethylethyl)-",
         "AGIDOL 23"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/192"
     },
     {
       "id": "d9a684f9-b56d-502f-a5a1-6be9ac1aeaf0",
@@ -3970,7 +4103,8 @@
         "2,4-Bis(1,1'-dimethylethyl)phenol",
         "AGIDOL 10"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/193"
     },
     {
       "id": "947d8111-2f9b-595f-b4b7-53271c4baa74",
@@ -3991,7 +4125,8 @@
       "aliases": [
         "2,4,6-tribromophenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/390"
     },
     {
       "id": "ed1042ad-045c-50a5-b74e-d3339543a192",
@@ -4012,7 +4147,8 @@
       "aliases": [
         "3-aminopropyldiethylamine"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/386"
     },
     {
       "id": "5808fd16-c2fd-561f-aeb6-89beb4b75eb9",
@@ -4033,7 +4169,8 @@
       "aliases": [
         "3-aminopropyldimethylamine"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/736"
     },
     {
       "id": "3a5d443f-0343-5581-8ee2-6e8bbaf8488d",
@@ -4065,7 +4202,8 @@
         "methylpyrazole",
         "UNII-W7KU1RRO6U"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/204"
     },
     {
       "id": "6b83e381-65f3-53b0-9be5-d401bfa714a8",
@@ -4102,7 +4240,8 @@
         "4-(4-Isopropoxyphenylsulfonyl) Phenol",
         "4-HYDROXYPHENYL 4-ISOPROOXYPHENYLSULFONE"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/207"
     },
     {
       "id": "a4cc1aaf-e6b5-5452-a68f-4d83149f92e7",
@@ -4123,7 +4262,8 @@
       "aliases": [
         "4,4'-isopropylidenebis[2-allylphenol]"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/389"
     },
     {
       "id": "01e71a8e-ea37-5929-8d3b-2eb9a9b56da3",
@@ -4191,7 +4331,8 @@
         "4-[1-(4-hydroxy-3,5-dimethylphenyl)-isopropyl]-2,6-dimethylphenol",
         "Bisxylenol A"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/388"
     },
     {
       "id": "ce8f099c-6760-51c3-ba67-d7964f55d625",
@@ -4224,7 +4365,8 @@
         "Phenol, 4,4'-(1-methylethylidene)bis[2-methyl-",
         "o-Cresol, 4,4'-(2,2-propylene)bis-"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/378"
     },
     {
       "id": "e57e3080-c250-5640-8a20-ca0741c8632d",
@@ -4263,7 +4405,8 @@
         "m-Cresol, 4,4'-butylidenebis[6-tert-butyl-",
         "4,4'-Butylidene bis[6-tert-butyl-3-methylphenol]"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/211"
     },
     {
       "id": "1c52ece0-36d3-54ba-b385-4155f1f05c84",
@@ -4284,7 +4427,8 @@
       "aliases": [
         "6,6'-di-tert-butyl-4,4'-thiodi-m-cresol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/122"
     },
     {
       "id": "3af07c18-35a7-533d-abd0-8a41c0e33c9c",
@@ -4311,7 +4455,8 @@
       "aliases": [
         "Ammonium perchlorate"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/214"
     },
     {
       "id": "7987b9cd-ec13-558a-ad8c-7f00646bfb53",
@@ -4334,7 +4479,8 @@
         "Benzophenone-1 (BP-1)",
         "Benzophenone-1"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/173"
     },
     {
       "id": "21829eb7-2c14-5f70-83da-97109ee2a9bb",
@@ -4361,7 +4507,8 @@
       "aliases": [
         "Benzotriazole"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/216"
     },
     {
       "id": "2ad72329-d692-5942-963d-64214609cc2d",
@@ -4384,7 +4531,8 @@
         "sodium 1H-benzotriazolide",
         "potassium 1H-benzotriazolide"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/813"
     },
     {
       "id": "39bb7010-faa0-52d8-96e6-2eb0a60d57dd",
@@ -4405,7 +4553,8 @@
       "aliases": [
         "Bis(2-propylheptyl) phthalate"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/218"
     },
     {
       "id": "5ec365e7-7c8e-5496-aefc-1aafbd447b98",
@@ -4438,7 +4587,8 @@
         "Buprofezin 100 microg/mL in Cyclohexane",
         "2-(tert-butylimino)-3-isopropyl-5-phenyl-1,3,5-thiadiazinan-4-one"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/798"
     },
     {
       "id": "c539a665-0b6e-5a7e-9ab2-70b38318722c",
@@ -4459,7 +4609,8 @@
       "aliases": [
         "Butanone"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/220"
     },
     {
       "id": "2b4fad63-2ca6-566b-bbd5-63a902d49c6e",
@@ -4482,7 +4633,8 @@
         "Butyl Methoxydibenzoylmethane",
         "Avobenzone"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/811"
     },
     {
       "id": "346335ec-06b7-5969-a19e-e288ae61dfed",
@@ -4563,7 +4715,8 @@
         "E320",
         "E 320"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/264"
     },
     {
       "id": "3563cc67-6f08-5b45-bb1f-00943b9c3938",
@@ -4614,7 +4767,8 @@
         "Topanol O",
         "Topanol OC"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/194"
     },
     {
       "id": "d951e07e-f21d-5103-bd9f-7469f2c91bab",
@@ -4649,7 +4803,8 @@
         "Lilyal",
         "3-(4-tert-Butylphenyl)-2-methylpropionaldehyde"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/265"
     },
     {
       "id": "d926a3ee-9ffc-5987-b7ec-f1dd4355a1aa",
@@ -4689,7 +4844,8 @@
         "PhCl",
         "NCI-C54886"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/374"
     },
     {
       "id": "560674a4-afe9-5d37-9378-29fcd636e740",
@@ -4710,7 +4866,8 @@
       "aliases": [
         "Chloroethane"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/848"
     },
     {
       "id": "c8152af7-24ee-5229-8166-1d469fd06efe",
@@ -4731,7 +4888,8 @@
       "aliases": [
         "Cyclomethicone"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/179"
     },
     {
       "id": "d5215a13-9fb8-5aa2-af08-235e037f1c6f",
@@ -4772,7 +4930,8 @@
         "Cyperco",
         "Cyperil"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/826"
     },
     {
       "id": "08d2f0dc-6bd7-52ba-97ed-d025b4034762",
@@ -4793,7 +4952,8 @@
       "aliases": [
         "Cyprodinil"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/794"
     },
     {
       "id": "5912a78d-abb5-5f26-858d-e0ec3041f194",
@@ -4817,7 +4977,8 @@
         "Decamethylcyclopentasiloxane",
         "Cyclopentasiloxane"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/178"
     },
     {
       "id": "20ceaa81-e1e3-52cd-b59b-246b9f9bf37f",
@@ -4838,7 +4999,8 @@
       "aliases": [
         "Deltamethrin"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/182"
     },
     {
       "id": "6ed92fc1-46ca-5b3b-ac01-645cda544c83",
@@ -4862,7 +5024,8 @@
         "1,2-benzenedicarboxylic acid, dipentyl ester, branched and linear",
         "n-pentyl-isopentyl phthalate"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/824"
     },
     {
       "id": "b70270bb-4239-5a5c-926a-8f67b21283ac",
@@ -4889,7 +5052,8 @@
       "aliases": [
         "dioctyltin oxide"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/226"
     },
     {
       "id": "febd4d8b-a96c-5769-a9d2-9b9978d9493e",
@@ -4916,7 +5080,8 @@
       "aliases": [
         "Diuron"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/253"
     },
     {
       "id": "b63a4de2-1c23-5084-953f-1c4717220b72",
@@ -4937,7 +5102,8 @@
       "aliases": [
         "Esterification products of 1,3-dioxo-2-benzofuran-5-carboxylic acid with nonan-1-ol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/246"
     },
     {
       "id": "cb09f2df-8346-5874-bf85-daa6ef7c764f",
@@ -4964,7 +5130,8 @@
         "ETHIPROLE [MI]",
         "5-amino-3-cyano-1-(2,6-dichloro-4-trifluoromethylphenyl)-4-ethylsulfinylpyrazole"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/800"
     },
     {
       "id": "67a5416c-2481-508f-bfcb-252a9e058d0c",
@@ -4985,7 +5152,8 @@
       "aliases": [
         "Fenoxaprop-P"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/796"
     },
     {
       "id": "dcf7d0df-8f8e-5f7c-b831-82bae8137022",
@@ -5006,7 +5174,8 @@
       "aliases": [
         "Fludioxonil"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/713"
     },
     {
       "id": "93a2c042-2080-5999-8029-452e56af1b21",
@@ -5045,7 +5214,8 @@
         "4,6,6,7,8,8-Hexamethyl-1,3,4,6,7,8-hexahydrocyclopenta[g]isochromene",
         "1,3,4,6,7,8-Hexahydro-4,6,6,7,8,8-hexamethylcyclopenta[g]-2-benzopyran"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/368"
     },
     {
       "id": "7e69da5b-8da6-532c-8221-f5bb6ad5c038",
@@ -5069,7 +5239,8 @@
         "3-iodo-2-propynylbutylcarbamate",
         "Iodopropynyl Butylcarbamate"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/792"
     },
     {
       "id": "5d8874fb-5791-56f4-b94d-b86da77cd62a",
@@ -5092,7 +5263,8 @@
         "Isoamyl p-Methoxycinnamate",
         "Amiloxate"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/241"
     },
     {
       "id": "18ba247f-d909-583b-ad53-d2b49321aee7",
@@ -5146,7 +5318,8 @@
         "E218",
         "E 218"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/177"
     },
     {
       "id": "72e098c4-a733-5379-8667-7b4e6ed82931",
@@ -5167,7 +5340,8 @@
       "aliases": [
         "Mono- and di-phthalate esters (...)"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/393"
     },
     {
       "id": "dd7d893e-06cd-5b96-b468-858067762076",
@@ -5233,7 +5407,8 @@
         "Oxybenzone",
         "Benzophenone-3"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/163"
     },
     {
       "id": "d7693c20-f656-5382-99ad-42a9e992989b",
@@ -5267,7 +5442,8 @@
         "1H,1H,2H,2H-Tridecafluoro-n-octyl Acrylate (stabilized with HQ + MEHQ)",
         "Acrylic Acid 1H,1H,2H,2H-Tridecafluoro-n-octyl Ester"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/201"
     },
     {
       "id": "128d373a-b5ad-566e-b981-26bb0f6bcf39",
@@ -5288,7 +5464,8 @@
       "aliases": [
         "Phenol, isopropylated, phosphate (3:1)"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/255"
     },
     {
       "id": "463f2c8b-1c75-571e-b715-fe6f3d37f7af",
@@ -5340,7 +5517,8 @@
         "Phenol, methylstyrenated",
         "Oligomerisation and alkylation reaction products of 2-phenylpropene and phenol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/254"
     },
     {
       "id": "191ccc35-59b3-5112-9817-1dd83cf2db92",
@@ -5367,7 +5545,8 @@
       "aliases": [
         "Phenol, styrenated (reaction mass of 2,4,6-tris(1-phenyl-ethyl)phenol and Bis(1-phenylethyl) phenol)"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/240"
     },
     {
       "id": "01b3a03a-5892-57a9-8feb-e5942dbe4878",
@@ -5405,7 +5584,8 @@
         "Potassio (clorato di)",
         "Potassium (chlorate de)"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/842"
     },
     {
       "id": "3b9d88ad-208e-5a08-b4e5-8e4ed8d7753e",
@@ -5441,7 +5621,8 @@
         "Kyanostribrnan draselny",
         "Potassium dicyanoargentate (KAg(CN)2)"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/806"
     },
     {
       "id": "c8a39269-47ec-597e-b23d-ed20d95ad7ed",
@@ -5519,7 +5700,8 @@
         "E216",
         "E 216"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/165"
     },
     {
       "id": "459b03d8-d752-5f86-b167-c4a3dab79ab7",
@@ -5540,7 +5722,8 @@
       "aliases": [
         "reaction mass of 1-(1,2,3,4,5,6,7,8-octahydro-2,3,8,8-tetramethyl-2-naphthyl)ethan-1-one and 1-(1,2,3,4,6,7,8,8a-octahydro-2,3,8,8-tetramethyl-2-naphthyl)ethan-1-one and 1-(1,2,3,5,6,7,8,8a-octahydro-2,3,8,8-tetramethyl-2-naphthyl)ethan-1-one"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/256"
     },
     {
       "id": "553f40e8-1900-5ce6-bd12-19e1b78c2593",
@@ -5561,7 +5744,8 @@
       "aliases": [
         "Reaction mass of p-t-butylphenyldiphenyl phosphate and bis(p-t-butylphenyl) phenyl phosphate"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/377"
     },
     {
       "id": "82d2be10-d7fa-5f8d-b8f7-469228ddabe2",
@@ -5626,7 +5810,8 @@
         "Reaction products of phosphoryl trichloride and 2-methyloxirane (TCPP)",
         "Reaction products of phosphoryl trichloride and 2-methyloxirane"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/249"
     },
     {
       "id": "756c114b-4a9c-5b04-85f3-ae4f9b48ed1a",
@@ -5701,7 +5886,8 @@
       "aliases": [
         "Resorcinol"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/166"
     },
     {
       "id": "b4c17e43-a846-55c1-b13b-f1a82ad93f4a",
@@ -5741,7 +5927,8 @@
         "Tumbleaf",
         "Tumbleleaf"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/809"
     },
     {
       "id": "30f29eb8-8a5e-569e-bd52-2c8346969724",
@@ -5762,7 +5949,8 @@
       "aliases": [
         "Sodium Fluoride"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/385"
     },
     {
       "id": "d73cf6be-c0d4-5902-9fcc-77dd461270be",
@@ -5789,7 +5977,8 @@
       "aliases": [
         "Sodium perchlorate"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/236"
     },
     {
       "id": "1bef7b67-921d-5f93-90ab-6d0770e37b96",
@@ -5828,7 +6017,8 @@
         "BA 59",
         "3,5,3',5'-Tetrabromobisphenol A"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/191"
     },
     {
       "id": "c21edd79-bc7f-53a5-8c26-972165e93e00",
@@ -5868,7 +6058,8 @@
         "Thibenzol",
         "Triasox"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/371"
     },
     {
       "id": "68e37be7-51fe-560d-a9be-c3d03da049d4",
@@ -5889,7 +6080,8 @@
       "aliases": [
         "Thiophanate-methyl"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/387"
     },
     {
       "id": "af401a3e-160c-5977-b249-ad74c02f8cba",
@@ -5916,7 +6108,8 @@
       "aliases": [
         "Triclosan"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/243"
     },
     {
       "id": "27245ec1-d361-5c04-a0cb-9202789fd02c",
@@ -5950,7 +6143,8 @@
         "3,3,4,4,5,5,6,6,7,7,8,8,8-tridecafluorooctyl 2-methylprop-2-enoate",
         "Perfluorohexyl ethyl methacrylate"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/202"
     },
     {
       "id": "8e103c5e-a1ea-57eb-b08a-8d2721f419ee",
@@ -5983,7 +6177,8 @@
         "Phosphoric Acid Triethyl Ester",
         "C6H15O4P"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/804"
     },
     {
       "id": "1867d7e1-fb9a-5fa2-9114-86a69a1e8a70",
@@ -6017,7 +6212,8 @@
         "triethylhexyl trimellitate",
         "tri(2-Ethylhexyl) trimellitate"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/817"
     },
     {
       "id": "24455811-f71c-5ced-ad8f-467c5923cd54",
@@ -6049,7 +6245,8 @@
         "Phosphoric Acid Tris(2-ethylhexyl) Ester",
         "Tris(2-ethylhexy)phosphate"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/802"
     },
     {
       "id": "1e293ab9-b958-5114-aefb-4743f57fb29d",
@@ -6090,7 +6287,8 @@
         "Tris[2-chloro-1-(chloromethyl)ethyl] phosphate (TDCP)",
         "Tris[2-chloro-1-(chloromethyl)ethyl] phosphate"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/250"
     },
     {
       "id": "83e7516a-121d-5344-b89c-6f807e575edf",
@@ -6111,7 +6309,8 @@
       "aliases": [
         "Ziram"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/244"
     },
     {
       "id": "3dc7aab5-7b14-5cc2-adcc-5f8c4b50f911",
@@ -6140,7 +6339,8 @@
         "Benzophenone-2 (BP-2)",
         "Benzophenone-2"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/174"
     },
     {
       "id": "ba47d090-85b8-5018-8cdb-e2a528de2e9e",
@@ -6161,7 +6361,8 @@
       "aliases": [
         "Bisphenol AF"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/143"
     },
     {
       "id": "0ce11982-616a-583c-93d3-a571177bfe9b",
@@ -6182,7 +6383,8 @@
       "aliases": [
         "Dipentyl phthalate"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/149"
     },
     {
       "id": "2eabc36e-b70a-5ba1-9e46-0ec869fb64e1",
@@ -6203,7 +6405,8 @@
       "aliases": [
         "Lithium salts (lithium chloride, lithium carbonate, lithium hydroxide)"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/744"
     },
     {
       "id": "4f2eff53-86d0-5caa-aaa6-1d219034d9b0",
@@ -6237,7 +6440,8 @@
         "Union carbide 7207",
         "Silicone SF 1173"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/150"
     },
     {
       "id": "5b82cf2c-0b77-57a2-a78f-1e3abd6cb49b",
@@ -6258,7 +6462,8 @@
       "aliases": [
         "Prochloraz"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/233"
     },
     {
       "id": "0136fb92-7074-5c61-ab8e-236d4e5f7f3f",
@@ -6285,7 +6490,8 @@
       "aliases": [
         "Salicylic acid"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/155"
     },
     {
       "id": "f2f48fba-5842-5131-95e6-10f625bda9b5",
@@ -6318,7 +6524,8 @@
       "aliases": [
         "Triclocarban"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/153"
     },
     {
       "id": "4f341b68-835e-567e-b371-4ea51e979323",
@@ -6339,7 +6546,8 @@
       "aliases": [
         "Tris(methylphenyl)phosphate"
       ],
-      "inciName": null
+      "inciName": null,
+      "edlistsUrl": "https://edlists.org/node/123"
     }
   ]
 }

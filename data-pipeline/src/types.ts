@@ -10,6 +10,8 @@ export interface RawAssessmentRow {
   year: number | null;
   regulatoryField: string | null;
   listId: ListId;
+  /** The row's "ID (for name)": the substance's page id on edlists.org. */
+  edlistsId?: number | null;
 }
 
 export interface Assessment {
@@ -30,6 +32,8 @@ export interface Substance {
   assessments: Assessment[];
   aliases: string[];
   inciName: string | null;
+  /** The substance's page on edlists.org. */
+  edlistsUrl: string | null;
 }
 
 export interface SubstancesFile {

@@ -124,6 +124,7 @@ function retiredSubstance(m: StoredMatch): Substance {
     assessments: [],
     aliases: [],
     inciName: null,
+    edlistsUrl: null,
   };
 }
 

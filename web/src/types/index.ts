@@ -18,6 +18,8 @@ export interface Substance {
   assessments: Assessment[];
   aliases: string[];
   inciName: string | null;
+  /** The substance's own page on edlists.org. */
+  edlistsUrl: string | null;
 }
 
 export interface SubstancesFile {

@@ -23,6 +23,7 @@ const substance: Substance = {
   assessments: [],
   aliases: ["Butylparaben"],
   inciName: "Butylparaben",
+  edlistsUrl: null,
 };
 
 const match: Match = {

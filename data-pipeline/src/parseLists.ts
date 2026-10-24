@@ -10,6 +10,7 @@ const HEADER_ALIASES: Record<keyof Omit<RawAssessmentRow, "listId">, string[]> =
   status: ["status"],
   year: ["year"],
   regulatoryField: ["regulatory field", "regulatory"],
+  edlistsId: ["id (for name)"],
 };
 
 function indexHeaderRow(row: ExcelJS.Row): Map<keyof RawAssessmentRow, number> {
@@ -108,6 +109,7 @@ export async function parseListFile(
       year: parseYear(readCell(row, cols.get("year"))),
       regulatoryField: readCell(row, cols.get("regulatoryField")) || null,
       listId,
+      edlistsId: Number(readCell(row, cols.get("edlistsId"))) || null,
     });
   }
   return rows;
