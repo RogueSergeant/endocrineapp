@@ -2,7 +2,8 @@
 // the substances people most often look for must match the right entry.
 import { parseIngredients } from "./ingredientParser";
 import { matchIngredients } from "./matcher";
-import { isKnownWord } from "@/lib/ocr/ocrVocabulary";
+import { looseMatches } from "./possible";
+import { isKnownWord, repairOcrWords } from "@/lib/ocr/ocrVocabulary";
 import { substanceDb } from "@/lib/store/scanStore";
 
 function matchOne(word: string) {
@@ -63,6 +64,25 @@ describe("bundled substance data", () => {
   ])("still fuzzy-matches the misread %s with the vocabulary in use", (word, cas) => {
     const m = matchIngredients([word], substanceDb.index, substanceDb.lookup, isKnownWord);
     expect(m.map((x) => x.substance.casNumber)).toEqual([cas]);
+  });
+
+  it("flags each part of a slash-joined ingredient, while the list keeps it whole", () => {
+    const text = "Aqua, Methylparaben/Propylparaben, Caprylic/Capric Triglyceride, Parfum";
+    const parsed = parseIngredients(text);
+    expect(parsed).toContain("Methylparaben/Propylparaben");
+    const direct = matchIngredients(parsed, substanceDb.index, substanceDb.lookup, isKnownWord);
+    const loose = looseMatches(
+      text,
+      [],
+      direct,
+      substanceDb.index,
+      substanceDb.lookup,
+      isKnownWord,
+      repairOcrWords,
+    );
+    const found = [...direct, ...loose.confirmed].map((m) => m.substance.casNumber).sort();
+    expect(found).toEqual(["94-13-3", "99-76-3"]);
+    expect(loose.possible).toEqual([]);
   });
 
   it("matches a chemical name whose brackets are part of it", () => {
