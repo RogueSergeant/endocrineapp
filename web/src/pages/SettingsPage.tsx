@@ -24,6 +24,7 @@ export function SettingsPage() {
     <Layout title="Settings">
       <Section label="App">
         <Row k="Version" v={__APP_VERSION__} />
+        <Row k="Build" v={__APP_BUILD__} />
         <Row k="Substance DB" v={substanceDb.version} />
         <Row k="Source updated" v={substanceDb.sourceLastUpdated} />
         <Row k="Substances tracked" v={String(substanceDb.substanceCount)} />

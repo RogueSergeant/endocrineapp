@@ -1,3 +1,4 @@
+import { execSync } from "node:child_process";
 import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
@@ -10,8 +11,24 @@ const isolationHeaders = {
   "Cross-Origin-Embedder-Policy": "require-corp",
 };
 
+// Shown in Settings so a phone can tell which deploy it is running: the
+// package version never changes between deploys.
+function buildId(): string {
+  const date = new Date().toISOString().slice(0, 16).replace("T", " ");
+  try {
+    const sha = execSync("git rev-parse --short HEAD", { encoding: "utf8" }).trim();
+    const dirty = execSync("git status --porcelain", { encoding: "utf8" }).trim() !== "";
+    return `${sha}${dirty ? "+" : ""} · ${date} UTC`;
+  } catch {
+    return `${date} UTC`;
+  }
+}
+
 export default defineConfig({
-  define: { __APP_VERSION__: JSON.stringify(process.env.npm_package_version ?? "dev") },
+  define: {
+    __APP_VERSION__: JSON.stringify(process.env.npm_package_version ?? "dev"),
+    __APP_BUILD__: JSON.stringify(buildId()),
+  },
   resolve: {
     alias: [
       { find: "@", replacement: fileURLToPath(new URL("./src", import.meta.url)) },
@@ -36,6 +53,8 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
+      // Registered in src/lib/appUpdate.ts, which also reloads onto updates.
+      injectRegister: false,
       manifest: {
         name: "ED Scanner",
         short_name: "ED Scanner",

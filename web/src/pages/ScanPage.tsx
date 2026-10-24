@@ -1,6 +1,7 @@
 import { useEffect, type ChangeEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { HeaderLink, Layout } from "@/components/Layout";
+import { reloadIfUpdated } from "@/lib/appUpdate";
 import { preloadOcr, useOcrStatus } from "@/lib/ocr/textRecognition";
 import { useScanStore } from "@/lib/store/scanStore";
 
@@ -10,6 +11,7 @@ export function ScanPage() {
 
   // Start the model download while the user lines up the photo.
   useEffect(() => {
+    reloadIfUpdated();
     preloadOcr();
   }, []);
 
@@ -40,16 +42,9 @@ export function ScanPage() {
         </p>
       </div>
       <div className="stack">
-        <label className="btn btn-primary btn-large">
+        <Link to="/camera" className="btn btn-primary btn-large">
           Take photo
-          <input
-            className="visually-hidden"
-            type="file"
-            accept="image/*"
-            capture="environment"
-            onChange={onFile}
-          />
-        </label>
+        </Link>
         <label className="btn btn-secondary">
           Choose from photos
           <input className="visually-hidden" type="file" accept="image/*" onChange={onFile} />

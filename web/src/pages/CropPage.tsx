@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { Layout } from "@/components/Layout";
 import { useOcrStatus } from "@/lib/ocr/textRecognition";
@@ -64,6 +64,8 @@ const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v
 
 export function CropPage() {
   const navigate = useNavigate();
+  // Photos from the in-app camera retake there; others go back to the start.
+  const retakeTo = (useLocation().state as { retake?: string } | null)?.retake ?? "/";
   const pendingImage = useScanStore((s) => s.pendingImage);
   const ocr = useOcrStatus();
   const stageRef = useRef<HTMLDivElement>(null);
@@ -332,7 +334,7 @@ export function CropPage() {
           <button
             type="button"
             className="btn btn-secondary"
-            onClick={() => navigate("/", { replace: true })}
+            onClick={() => navigate(retakeTo, { replace: true })}
             disabled={busy}
           >
             Retake

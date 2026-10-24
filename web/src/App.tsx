@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { CameraPage } from "@/pages/CameraPage";
 import { CropPage } from "@/pages/CropPage";
 import { HistoryPage } from "@/pages/HistoryPage";
 import { PastePage } from "@/pages/PastePage";
@@ -12,6 +13,7 @@ export function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<ScanPage />} />
+        <Route path="/camera" element={<CameraPage />} />
         <Route path="/crop" element={<CropPage />} />
         <Route path="/paste" element={<PastePage />} />
         <Route path="/results" element={<ResultsPage />} />
