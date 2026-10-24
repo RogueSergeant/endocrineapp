@@ -47,8 +47,22 @@ const hangingOpen = () => ({ open: () => new (FakeRequest as unknown as new () =
 /** Every opened connection, so tests can force-close them like Safari does. */
 let opened: IDBRequest<IDBDatabase>[] = [];
 
-async function freshHistory(): Promise<History> {
-  const factory = new IDBFactory();
+/** A Map-backed localStorage, since Node has none by default. */
+function memoryStorage(): Storage {
+  const m = new Map<string, string>();
+  return {
+    get length() {
+      return m.size;
+    },
+    clear: () => m.clear(),
+    getItem: (k) => m.get(k) ?? null,
+    key: (i) => [...m.keys()][i] ?? null,
+    removeItem: (k) => void m.delete(k),
+    setItem: (k, v) => void m.set(k, String(v)),
+  };
+}
+
+async function freshHistory(factory = new IDBFactory()): Promise<History> {
   opened = [];
   const open = factory.open.bind(factory);
   factory.open = (name: string, version?: number) => {
@@ -63,6 +77,7 @@ async function freshHistory(): Promise<History> {
 
 beforeEach(() => {
   vi.spyOn(console, "warn").mockImplementation(() => {});
+  vi.stubGlobal("localStorage", memoryStorage());
 });
 
 afterEach(() => {
@@ -222,6 +237,27 @@ describe("history unavailable", () => {
     await expect(h.deleteAllScans()).resolves.toBeUndefined();
   });
 
+  it("reports a delete when open() fails on a database that may hold scans", async () => {
+    const factory = new IDBFactory();
+    // Another tab has already upgraded the schema: our v1 open now fails
+    // with VersionError, but the scans are still on disk.
+    const newer = factory.open("ed-scanner", 2);
+    await new Promise((resolve) => (newer.onsuccess = resolve));
+    newer.result.close();
+    const h = await freshHistory(factory);
+    await expect(h.deleteAllScans()).rejects.toMatchObject({ name: "VersionError" });
+  });
+
+  it("treats blocked storage (SecurityError) as nothing stored", async () => {
+    const h = await freshHistory();
+    vi.stubGlobal("indexedDB", {
+      open: () => {
+        throw new DOMException("Storage blocked", "SecurityError");
+      },
+    });
+    await expect(h.deleteAllScans()).resolves.toBeUndefined();
+  });
+
   it("a delete on a broken connection still fails loudly", async () => {
     const h = await freshHistory();
     await h.saveScan(input(1));
@@ -259,11 +295,39 @@ describe("discardScan", () => {
     await h.saveScan(input(5, "late"));
     expect(await h.getScan("late")).toBeUndefined();
     expect(await h.listScans()).toEqual([]);
-    // The read also retried the delete, so the entry is really gone.
-    await vi.waitFor(async () => {
-      await h.deleteScan("noop");
-      expect(await getRaw("late")).toBeUndefined();
-    });
+    // The read purged it, so the entry is really gone.
+    expect(await getRaw("late")).toBeUndefined();
+  });
+
+  it("stays hidden after a reload and is purged when the late save lands", async () => {
+    const factory = new IDBFactory();
+    const before = await freshHistory(factory);
+    await before.discardScan("late");
+    await before.saveScan(input(5, "late")); // commits after the undo
+    // Reload: a new module instance on the same database and storage.
+    vi.resetModules();
+    vi.stubGlobal("indexedDB", factory);
+    const after = (await import("./history")) as History;
+    expect(await after.getScan("late")).toBeUndefined();
+    expect(await after.listScans()).toEqual([]);
+    expect(await getRaw("late")).toBeUndefined();
+  });
+
+  it("is purged before a single-scan read too", async () => {
+    const h = await freshHistory();
+    await h.saveScan(input(1, "keep"));
+    await h.discardScan("gone");
+    await h.saveScan(input(2, "gone"));
+    expect(await h.getScan("keep")).toBeDefined();
+    expect(await getRaw("gone")).toBeUndefined();
+  });
+
+  it("still works when localStorage is unavailable", async () => {
+    vi.stubGlobal("localStorage", undefined);
+    const h = await freshHistory();
+    await h.saveScan(input(1, "x"));
+    await h.discardScan("x");
+    expect(await h.listScans()).toEqual([]);
   });
 
   it("never throws, even when history is broken", async () => {

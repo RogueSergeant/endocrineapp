@@ -137,7 +137,9 @@ async function main(): Promise<void> {
   }
   // Failed lookups (or the whole run, when offline) and a missing CosIng
   // dump fall back to the committed snapshot, so neither drops synonyms.
-  const enriched = applyEnrichment(substances, snapshot, live, cos?.hits ?? null);
+  const enriched = applyEnrichment(substances, snapshot, live, cos?.hits ?? null, {
+    partial: usedSeed,
+  });
   log(
     "pubchem",
     `+${enriched.synonymsAdded} aliases, ${enriched.fromSnapshot} substances from ${config.snapshotPath}`,

@@ -26,6 +26,7 @@ beforeEach(async () => {
 
 afterEach(() => {
   vi.restoreAllMocks();
+  vi.unstubAllGlobals();
 });
 
 describe("completeScan", () => {
@@ -164,23 +165,19 @@ describe("forgetScan / forgetAllScans", () => {
   });
 
   it("delete-all succeeds in a private window where nothing is stored", async () => {
-    vi.spyOn(IDBObjectStore.prototype, "put").mockImplementation(() => {
-      throw new DOMException("Storage full", "QuotaExceededError");
-    });
-    await completeScan(LABEL, LABEL);
+    // A fresh module graph, as a private window never has a cached connection.
     vi.stubGlobal("indexedDB", {
       open: () => {
         throw new Error("blocked in private mode");
       },
     });
-    // Drop the cached connection the way a private window never has one.
     vi.resetModules();
     const fresh = await import("./scan");
     const { useScanStore: store } = await import("@/lib/store/scanStore");
-    store.getState().setCurrentScan(useScanStore.getState().current!);
+    expect(await fresh.completeScan(LABEL, LABEL)).toBeNull();
+    expect(store.getState().current).not.toBeNull();
     await expect(fresh.forgetAllScans()).resolves.toBeUndefined();
     expect(store.getState().current).toBeNull();
-    vi.unstubAllGlobals();
   });
 
   it("delete-all clears history and the scan in memory", async () => {

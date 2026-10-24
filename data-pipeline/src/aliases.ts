@@ -25,13 +25,18 @@ export function splitNames(name: string): string[] {
 export const ABBREVIATION_RE = /^(?=(?:[^A-Z]*[A-Z]){2}|[A-Z]\d)[A-Z0-9][A-Z0-9-]{1,7}$/;
 /**
  * An abbreviation too cryptic to display as a substance's name: "BHT",
- * "TDCIPP", "3-BC", "BP-3". An all-caps word of up to 8 letters such as
- * "PARABENS" can't be told apart from one by its shape, so it counts too:
- * a mixed-case name is preferred, and it is still used when nothing else
- * is available.
+ * "TDCIPP", "TBBPAE", "3-BC", "BP-3". ABBREVIATION_RE also matches all-caps
+ * words ("ATRAZINE", "PARABENS"), so a pronounceable one counts as a word:
+ * five or more letters, no digits or hyphens, at least two vowels and no
+ * run of four consonants.
  */
 export function isBareAbbreviation(name: string): boolean {
-  return ABBREVIATION_RE.test(name);
+  if (!ABBREVIATION_RE.test(name)) return false;
+  const pronounceable =
+    /^[A-Z]{5,}$/.test(name) &&
+    (name.match(/[AEIOU]/g) ?? []).length >= 2 &&
+    !/[^AEIOU]{4}/.test(name);
+  return !pronounceable;
 }
 
 // "Methylparaben", "Cypermethrin": a capitalised common name.

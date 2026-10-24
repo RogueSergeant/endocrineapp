@@ -118,14 +118,17 @@ describe("dedupeAliases", () => {
 });
 
 describe("isBareAbbreviation", () => {
-  it.each(["BHT", "DEHP", "PFOA", "TDCIPP", "TBBPAE", "3-BC", "BP-3", "4-MBC", "D5"])(
+  it.each(["BHT", "DEHP", "PFOA", "TDCIPP", "TBBPAE", "DBDPEO", "3-BC", "BP-3", "4-MBC", "D5"])(
     "%s is bare",
     (s) => {
       expect(isBareAbbreviation(s)).toBe(true);
     },
   );
 
-  it.each(["TRICLOSAN", "Butylparaben", "Bisphenol A"])("%s is readable", (s) => {
-    expect(isBareAbbreviation(s)).toBe(false);
-  });
+  it.each(["ATRAZINE", "LINDANE", "DIURON", "PARABENS", "TRICLOSAN", "Butylparaben", "Bisphenol A"])(
+    "%s is readable",
+    (s) => {
+      expect(isBareAbbreviation(s)).toBe(false);
+    },
+  );
 });

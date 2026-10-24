@@ -59,12 +59,15 @@ describe("pickCanonical", () => {
     expect(
       pickCanonical(["TDCIPP", "Tris(1,3-dichloro-2-propyl) phosphate"]).canonical,
     ).toBe("Tris(1,3-dichloro-2-propyl) phosphate");
-    // A short all-caps word can't be told apart from an abbreviation, so a
-    // mixed-case name wins; it is still used when it is the only name.
-    expect(pickCanonical(["PARABENS", "alkyl 4-hydroxybenzoates"]).canonical).toBe(
-      "alkyl 4-hydroxybenzoates",
-    );
-    expect(pickCanonical(["PARABENS"]).canonical).toBe("PARABENS");
+  });
+
+  it("treats a pronounceable all-caps name as readable", () => {
+    expect(
+      pickCanonical(["ATRAZINE", "2-chloro-4-ethylamino-6-isopropylamino-1,3,5-triazine"])
+        .canonical,
+    ).toBe("ATRAZINE");
+    expect(pickCanonical(["PARABENS", "alkyl 4-hydroxybenzoates"]).canonical).toBe("PARABENS");
+    expect(pickCanonical(["long systematic name here"], ["LINDANE"]).canonical).toBe("LINDANE");
   });
 
   it("uses an abbreviation only when nothing else is left", () => {

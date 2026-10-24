@@ -123,11 +123,18 @@ describe("applyEnrichment", () => {
     expect(r.snapshot).toEqual({});
   });
 
-  it("keeps entries for substances this run didn't see (seed fallback)", () => {
+  it("keeps entries for substances a seed-fallback run didn't see", () => {
     const subs = [substance("94-26-8", ["Butylparaben"])];
-    const r = applyEnrichment(subs, SNAPSHOT, new Map([["94-26-8", ["Butyl paraben"]]]));
+    const live = new Map([["94-26-8", ["Butyl paraben"]]]);
+    const r = applyEnrichment(subs, SNAPSHOT, live, null, { partial: true });
     expect(r.snapshot["80-05-7"]).toEqual(SNAPSHOT["80-05-7"]);
     expect(r.snapshot["94-26-8"]!.synonyms).toEqual(["Butyl paraben"]);
+  });
+
+  it("drops entries for CAS numbers that have left the full lists", () => {
+    const subs = [substance("94-26-8", ["Butylparaben"])];
+    const r = applyEnrichment(subs, SNAPSHOT, new Map([["94-26-8", ["Butyl paraben"]]]));
+    expect(Object.keys(r.snapshot)).toEqual(["94-26-8"]);
   });
 
   it("reads older snapshot entries that have no cosingSynonyms", () => {
