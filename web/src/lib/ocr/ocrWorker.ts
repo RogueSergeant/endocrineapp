@@ -14,8 +14,11 @@ import {
 } from "./chunkedDownload";
 import { deskew } from "./deskew";
 import { createProgress } from "./progress";
+import { createSpotter } from "./spotting";
 import { textAngleFromMap } from "./textAngle";
-import type { WorkerRequest, WorkerResponse } from "./protocol";
+import substancesIndex from "@/data/substances-index.json";
+import { GENERIC_ALIAS_DENYLIST } from "@/lib/matching/matcher";
+import type { Spot, WorkerRequest, WorkerResponse } from "./protocol";
 
 // Names in the chunk manifest written by scripts/chunk-assets.mjs.
 const FILES = ["det", "rec", "dict", "wasm"] as const;
@@ -120,10 +123,124 @@ async function measureTilt(
   return map instanceof Float32Array ? textAngleFromMap(map, w, h) : null;
 }
 
+// The recogniser's input height, and the score a name needs before it is
+// worth reporting to the page (which applies its own, higher bar).
+const REC_HEIGHT = 48;
+const SPOT_REPORT = 0.75;
+// Line crops sent back for the user to check, at most this wide.
+const SNIPPET_WIDTH = 720;
+
 interface Reader {
   service: PaddleOcrService;
   /** A second session on the detection model, for measuring tilt. */
   detector: ort.InferenceSession;
+  /** And on the recognition model, for its raw per-frame probabilities. */
+  recogniser: ort.InferenceSession;
+  dictionary: string[];
+}
+
+type Box = { x: number; y: number; width: number; height: number };
+
+/** One line of the photo as the recogniser's input: grey levels scaled to -1..1, 48px high. */
+function lineTensor(source: OffscreenCanvas, box: Box): ort.Tensor | null {
+  const width = Math.max(8, Math.round((REC_HEIGHT * box.width) / Math.max(1, box.height)));
+  const canvas = new OffscreenCanvas(width, REC_HEIGHT);
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return null;
+  ctx.imageSmoothingQuality = "high";
+  ctx.drawImage(source, box.x, box.y, box.width, box.height, 0, 0, width, REC_HEIGHT);
+  const { data } = ctx.getImageData(0, 0, width, REC_HEIGHT);
+  const plane = width * REC_HEIGHT;
+  const tensor = new Float32Array(3 * plane);
+  for (let i = 0, j = 0; i < plane; i++, j += 4) {
+    const grey = 0.299 * data[j]! + 0.587 * data[j + 1]! + 0.114 * data[j + 2]!;
+    tensor[i] = tensor[plane + i] = tensor[2 * plane + i] = grey / 127.5 - 1;
+  }
+  return new ort.Tensor("float32", tensor, [1, 3, REC_HEIGHT, width]);
+}
+
+/**
+ * The recogniser's classes in output order (index 0 the CTC blank), lined
+ * up with the dictionary the way ppu-paddle-ocr does: the dictionary may or
+ * may not include the blank, and the space class may be implicit.
+ */
+function alignClasses(dictionary: string[], numClasses: number): string[] {
+  const entries = [...dictionary];
+  while (entries.length > 0 && entries[entries.length - 1] === "") entries.pop();
+  const aligned = ["", ...(entries[0] === "" ? entries.slice(1) : entries)];
+  if (aligned.length === numClasses - 1) aligned.push(" ");
+  return aligned.slice(0, numClasses);
+}
+
+let spotter: ReturnType<typeof createSpotter> | null = null;
+
+/**
+ * Every substance name the spotter finds in the lines `result` read from
+ * `source`: the best line for each name, with its text and a crop.
+ */
+async function spotNames(
+  reader: Reader,
+  source: OffscreenCanvas,
+  lines: { text: string; box: Box }[][],
+): Promise<Spot[]> {
+  const best = new Map<string, { score: number; line: number }>();
+  const lineBoxes: Box[] = [];
+  const lineTexts: string[] = [];
+  for (const items of lines) {
+    if (items.length === 0) continue;
+    // The line's extent: the union of its words' boxes.
+    const x0 = Math.max(0, Math.min(...items.map((i) => i.box.x)));
+    const y0 = Math.max(0, Math.min(...items.map((i) => i.box.y)));
+    const x1 = Math.min(source.width, Math.max(...items.map((i) => i.box.x + i.box.width)));
+    const y1 = Math.min(source.height, Math.max(...items.map((i) => i.box.y + i.box.height)));
+    if (x1 - x0 < 4 || y1 - y0 < 4) continue;
+    const box = { x: x0, y: y0, width: x1 - x0, height: y1 - y0 };
+    const input = lineTensor(source, box);
+    const inputName = reader.recogniser.inputNames[0];
+    const outputName = reader.recogniser.outputNames[0];
+    if (!input || !inputName || !outputName) continue;
+    const out = (await reader.recogniser.run({ [inputName]: input }))[outputName];
+    if (!out || !(out.data instanceof Float32Array) || out.dims.length !== 3) continue;
+    const frames = out.dims[1]!;
+    const numClasses = out.dims[2]!;
+    if (!spotter) {
+      // The same names the matcher accepts: no CAS keys, no generic words.
+      const keys = Object.keys(substancesIndex).filter(
+        (k) => !k.startsWith("cas:") && !GENERIC_ALIAS_DENYLIST.has(k),
+      );
+      spotter = createSpotter(keys, alignClasses(reader.dictionary, numClasses), {
+        minScore: SPOT_REPORT,
+      });
+    }
+    const n = lineBoxes.push(box) - 1;
+    lineTexts.push(items.map((i) => i.text).join(" "));
+    for (const hit of spotter.spot(out.data, frames)) {
+      const prev = best.get(hit.key);
+      if (!prev || hit.score > prev.score) best.set(hit.key, { score: hit.score, line: n });
+    }
+  }
+  const snippets = new Map<number, Promise<Blob | null>>();
+  const snippet = (n: number) => {
+    let p = snippets.get(n);
+    if (!p) {
+      const box = lineBoxes[n]!;
+      const scale = Math.min(1, SNIPPET_WIDTH / box.width);
+      const c = new OffscreenCanvas(Math.round(box.width * scale), Math.round(box.height * scale));
+      const ctx = c.getContext("2d");
+      ctx?.drawImage(source, box.x, box.y, box.width, box.height, 0, 0, c.width, c.height);
+      p = ctx ? c.convertToBlob({ type: "image/jpeg", quality: 0.85 }) : Promise.resolve(null);
+      snippets.set(n, p);
+    }
+    return p;
+  };
+  return Promise.all(
+    [...best].map(async ([key, { score, line }]) => ({
+      key,
+      score,
+      line: lineTexts[line]!,
+      snippet: await snippet(line).catch(() => null),
+    })),
+  );
 }
 
 let servicePromise: Promise<Reader> | null = null;
@@ -156,7 +273,12 @@ function getService(): Promise<Reader> {
       executionProviders: ["wasm"],
       graphOptimizationLevel: "all",
     });
-    return { service, detector };
+    const recogniser = await ort.InferenceSession.create(new Uint8Array(rec), {
+      executionProviders: ["wasm"],
+      graphOptimizationLevel: "all",
+    });
+    const dictionary = new TextDecoder().decode(dict).split(/\r?\n/);
+    return { service, detector, recogniser, dictionary };
   })();
   // A failed load (e.g. offline on first visit) must be retryable.
   servicePromise.catch(() => {
@@ -177,7 +299,8 @@ self.addEventListener("message", (event: MessageEvent<WorkerRequest>) => {
   if (msg.type === "recognise") {
     void (async () => {
       try {
-        const { service, detector } = await getService();
+        const reader = await getService();
+        const { service, detector } = reader;
         const canvas = new OffscreenCanvas(msg.bitmap.width, msg.bitmap.height);
         const ctx = canvas.getContext("2d");
         if (!ctx) throw new Error("Canvas unavailable in worker");
@@ -194,12 +317,16 @@ self.addEventListener("message", (event: MessageEvent<WorkerRequest>) => {
           measured ?? undefined,
         );
         const result = await service.recognize(level);
+        // Spotting is extra evidence; a failure there must not lose the read.
+        const spots =
+          "lines" in result ? await spotNames(reader, level, result.lines).catch(() => []) : [];
         post({
           type: "result",
           id: msg.id,
           text: result.text,
           confidence: result.confidence,
           angle,
+          spots,
           ms: Math.round(performance.now() - started),
         });
       } catch (err) {

@@ -191,6 +191,16 @@ button {
 .card:active {
   opacity: 0.7;
 }
+.card-possible {
+  border-style: dashed;
+}
+.match-snippet {
+  display: block;
+  width: 100%;
+  margin: 8px 0 4px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
 .section-label {
   font-size: 12px;
   font-weight: 700;

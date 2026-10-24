@@ -158,6 +158,7 @@ describe("recogniseText", () => {
       text: "Ingredients: Aqua, Glycerin",
       confidence: 0.99,
       angle: 0,
+      spots: [],
       ms: 42,
     });
     const r = await result;
@@ -200,6 +201,7 @@ describe("recogniseText", () => {
       text: "Aqua",
       confidence: 1,
       angle: 0,
+      spots: [],
       ms: 1,
     });
     await expect(result).resolves.toMatchObject({ rawText: "Aqua" });

@@ -30,7 +30,12 @@ export interface SubstancesFile {
 
 export type SubstancesIndex = Record<string, string>;
 
-export type MatchType = "exact" | "fuzzy" | "cas";
+/**
+ * "possible": found only by reading the list more loosely (across commas,
+ * with an uncertain reading, or by the keyword spotter), so the user
+ * should check it against the label.
+ */
+export type MatchType = "exact" | "fuzzy" | "cas" | "possible";
 
 export interface Match {
   substance: Substance;
@@ -39,6 +44,10 @@ export interface Match {
   ingredientPosition: number;
   matchType: MatchType;
   confidence: number;
+  /** For a possible match: the text it was found in, as we read it. */
+  readAs?: string;
+  /** For a possible match from a photo: that line of the photo (not stored). */
+  snippet?: Blob;
 }
 
 export interface StoredMatch {
@@ -50,6 +59,7 @@ export interface StoredMatch {
   ingredientPosition: number;
   matchType: MatchType;
   confidence: number;
+  readAs?: string;
 }
 
 export interface ScanDoc {

@@ -86,7 +86,7 @@ describe("completeScan", () => {
 
 describe("scanImage", () => {
   it("runs OCR then completes the scan", async () => {
-    vi.mocked(recogniseText).mockResolvedValue({ rawText: LABEL, text: LABEL, ms: 5 });
+    vi.mocked(recogniseText).mockResolvedValue({ rawText: LABEL, text: LABEL, spots: [], ms: 5 });
     const id = await scanImage(crop, new AbortController().signal);
     expect(recogniseText).toHaveBeenCalledWith(crop);
     expect(useScanStore.getState().current?.id).toBe(id);
@@ -98,7 +98,7 @@ describe("scanImage", () => {
     const controller = new AbortController();
     vi.mocked(recogniseText).mockImplementation(async () => {
       controller.abort();
-      return { rawText: LABEL, text: LABEL, ms: 5 };
+      return { rawText: LABEL, text: LABEL, spots: [], ms: 5 };
     });
     await expect(scanImage(crop, controller.signal)).rejects.toMatchObject({ name: "AbortError" });
     expect(useScanStore.getState().current).toBe(previous);
@@ -109,7 +109,7 @@ describe("scanImage", () => {
     const previous = { id: "prev", createdAt: 1, ocrText: "", parsedIngredients: [], matches: [] };
     useScanStore.getState().setCurrentScan(previous);
     const controller = new AbortController();
-    vi.mocked(recogniseText).mockResolvedValue({ rawText: LABEL, text: LABEL, ms: 5 });
+    vi.mocked(recogniseText).mockResolvedValue({ rawText: LABEL, text: LABEL, spots: [], ms: 5 });
     // Abort as soon as the put is issued, i.e. mid-save.
     const put = IDBObjectStore.prototype.put;
     vi.spyOn(IDBObjectStore.prototype, "put").mockImplementation(function (

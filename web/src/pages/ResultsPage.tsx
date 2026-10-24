@@ -65,22 +65,41 @@ export function ResultsPage() {
     );
   }
 
-  const flagged = view.matches.length;
+  const confirmed = view.matches.filter((m) => m.matchType !== "possible");
+  const possible = view.matches.filter((m) => m.matchType === "possible");
+  const flagged = confirmed.length;
+  // "No flagged substances" above a possible match would read as all clear.
   const summary =
-    flagged === 0
-      ? "No flagged substances found"
-      : `${flagged} flagged substance${flagged === 1 ? "" : "s"} found`;
+    flagged > 0
+      ? `${flagged} flagged substance${flagged === 1 ? "" : "s"} found`
+      : possible.length > 0
+        ? "No confirmed matches"
+        : "No flagged substances found";
 
   return header(
     <>
       <h2 className="summary">{summary}</h2>
-      {flagged === 0 ? (
+      {flagged === 0 && possible.length === 0 && (
         <p className="muted">
           None of the {substanceDb.substanceCount} substances we track were detected in this list.
           This does not mean the product is safe.
         </p>
-      ) : (
-        view.matches.map((m) => <SubstanceMatchCard key={m.substance.id} match={m} />)
+      )}
+      {confirmed.map((m) => (
+        <SubstanceMatchCard key={m.substance.id} match={m} />
+      ))}
+      {possible.length > 0 && (
+        <>
+          <h3 className="section-label">
+            {possible.length} possible match{possible.length === 1 ? "" : "es"}
+          </h3>
+          <p className="small muted">
+            Part of the list was hard to read, and it may contain these. Check the label to be sure.
+          </p>
+          {possible.map((m) => (
+            <SubstanceMatchCard key={m.substance.id} match={m} />
+          ))}
+        </>
       )}
 
       <button type="button" className="link-btn" onClick={() => setShowIngredients((v) => !v)}>

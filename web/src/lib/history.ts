@@ -181,6 +181,8 @@ export function denormaliseMatch(match: Match): StoredMatch {
     ingredientPosition: match.ingredientPosition,
     matchType: match.matchType,
     confidence: match.confidence,
+    // The photo crop stays in memory: history keeps text only.
+    ...(match.readAs !== undefined ? { readAs: match.readAs } : {}),
   };
 }
 

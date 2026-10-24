@@ -1,7 +1,10 @@
 import type { Match, ScanDoc, StoredMatch, Substance } from "@/types";
 import { parseIngredients } from "@/lib/matching/ingredientParser";
 import { matchIngredients } from "@/lib/matching/matcher";
+import { looseMatches } from "@/lib/matching/possible";
+import type { Spot } from "@/lib/ocr/protocol";
 import { deleteAllScans, deleteScan, discardScan, newId, saveScan } from "@/lib/history";
+import { isKnownWord, repairOcrWords } from "@/lib/ocr/ocrVocabulary";
 import { recogniseText } from "@/lib/ocr/textRecognition";
 import { getSubstanceById, substanceDb, useScanStore } from "@/lib/store/scanStore";
 
@@ -14,6 +17,8 @@ interface CompleteOptions {
   minIngredients?: number;
   /** Aborted when the user has left; nothing is kept and the current scan is left alone. */
   signal?: AbortSignal;
+  /** Substance names the OCR's keyword spotter found in the photo. */
+  spots?: readonly Spot[];
 }
 
 /**
@@ -24,7 +29,7 @@ interface CompleteOptions {
 export async function completeScan(
   rawText: string,
   cleanedText: string,
-  { minIngredients = MIN_OCR_INGREDIENTS, signal }: CompleteOptions = {},
+  { minIngredients = MIN_OCR_INGREDIENTS, signal, spots = [] }: CompleteOptions = {},
 ): Promise<string | null> {
   signal?.throwIfAborted();
   const id = newId();
@@ -35,7 +40,19 @@ export async function completeScan(
       "Only a few words came through. Try a tighter crop, better lighting, or a closer photo.",
     );
   }
-  const matches = matchIngredients(parsed, substanceDb.index, substanceDb.lookup);
+  const direct = matchIngredients(parsed, substanceDb.index, substanceDb.lookup, isKnownWord);
+  // Then what a looser reading finds: names split or glued across commas,
+  // and names the spotter saw in the photo. Possible matches come last.
+  const loose = looseMatches(
+    cleanedText,
+    spots,
+    direct,
+    substanceDb.index,
+    substanceDb.lookup,
+    isKnownWord,
+    repairOcrWords,
+  );
+  const matches = [...direct, ...loose.confirmed, ...loose.possible];
   const saved = await saveScan({
     id,
     createdAt,
@@ -68,9 +85,9 @@ export async function completeScan(
  * scan is left alone; the promise rejects with an AbortError.
  */
 export async function scanImage(crop: ImageBitmap, signal: AbortSignal): Promise<string | null> {
-  const { rawText, text, ms } = await recogniseText(crop);
+  const { rawText, text, spots, ms } = await recogniseText(crop);
   console.info(`OCR took ${ms} ms`);
-  return completeScan(rawText, text, { signal });
+  return completeScan(rawText, text, { signal, spots });
 }
 
 /**
@@ -121,6 +138,7 @@ export function matchesFromDoc(doc: ScanDoc): Match[] {
         ingredientPosition: m.ingredientPosition,
         matchType: m.matchType,
         confidence: m.confidence,
+        ...(m.readAs !== undefined ? { readAs: m.readAs } : {}),
       }) satisfies Match,
   );
 }

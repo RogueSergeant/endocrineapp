@@ -1,13 +1,18 @@
 import { create } from "zustand";
 import { cleanOcrOutput } from "./cleanOcrOutput";
 import { repairOcrWords } from "./ocrVocabulary";
-import type { WorkerRequest, WorkerResponse } from "./protocol";
+import type { Spot, WorkerRequest, WorkerResponse } from "./protocol";
 
 export interface RecognitionResult {
   rawText: string;
   text: string;
+  /** Substance names the keyword spotter found, for possible matches. */
+  spots: Spot[];
   ms: number;
 }
+
+/** What the worker sends back for one image. */
+type WorkerResult = Pick<RecognitionResult, "text" | "spots" | "ms">;
 
 export const OCR_TIMEOUT_MS = 20_000;
 /**
@@ -43,7 +48,7 @@ export const useOcrStatus = create<OcrState>(() => ({
 }));
 
 interface Pending {
-  resolve: (r: { text: string; ms: number }) => void;
+  resolve: (r: WorkerResult) => void;
   reject: (e: Error) => void;
 }
 
@@ -103,7 +108,7 @@ function getWorker(): Worker {
         const p = pending.get(msg.id);
         if (!p) break;
         pending.delete(msg.id);
-        if (msg.type === "result") p.resolve({ text: msg.text, ms: msg.ms });
+        if (msg.type === "result") p.resolve({ text: msg.text, spots: msg.spots, ms: msg.ms });
         else p.reject(new Error(msg.message));
         break;
       }
@@ -150,7 +155,7 @@ export async function recogniseText(bitmap: ImageBitmap): Promise<RecognitionRes
   await waitUntilReady();
   const w = getWorker();
   const id = nextId++;
-  const result = await new Promise<{ text: string; ms: number }>((resolve, reject) => {
+  const result = await new Promise<WorkerResult>((resolve, reject) => {
     const timer = setTimeout(() => {
       pending.delete(id);
       const err = new Error(`Text recognition timed out after ${OCR_TIMEOUT_MS / 1000}s`);
@@ -173,6 +178,7 @@ export async function recogniseText(bitmap: ImageBitmap): Promise<RecognitionRes
   return {
     rawText: result.text,
     text: repairOcrWords(cleanOcrOutput(result.text)),
+    spots: result.spots,
     ms: result.ms,
   };
 }
