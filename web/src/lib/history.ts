@@ -38,22 +38,40 @@ function drop(connection: Connection) {
 
 function db(): Connection {
   if (dbPromise) return dbPromise;
-  const connection: Connection = openDB<HistoryDb>("ed-scanner", 1, {
-    upgrade(database) {
-      const store = database.createObjectStore("scans", { keyPath: "id" });
-      store.createIndex("createdAt", "createdAt");
-    },
-    // Another tab wants a newer schema: step aside so it isn't blocked.
-    blocking: () => drop(connection),
-    terminated: () => drop(connection),
-  });
+  let connection: Connection;
+  try {
+    connection = openDB<HistoryDb>("ed-scanner", 1, {
+      upgrade(database) {
+        const store = database.createObjectStore("scans", { keyPath: "id" });
+        store.createIndex("createdAt", "createdAt");
+      },
+      // Another tab wants a newer schema: step aside so it isn't blocked.
+      blocking: () => drop(connection),
+      terminated: () => drop(connection),
+    });
+  } catch (err) {
+    // Some private modes throw from indexedDB.open() itself.
+    connection = Promise.reject(err);
+  }
   dbPromise = connection;
   connection.catch(() => drop(connection));
   return connection;
 }
 
 /** Errors that mean the connection itself is dead, as opposed to e.g. a full disk. */
-const BROKEN_CONNECTION = new Set(["InvalidStateError", "UnknownError", "TransactionInactiveError"]);
+const BROKEN_CONNECTION = new Set([
+  "InvalidStateError",
+  "UnknownError",
+  "TransactionInactiveError",
+  // Transactions on a connection iOS Safari cut off fail this way, often
+  // without a close event.
+  "AbortError",
+]);
+
+/** IndexedDB couldn't be opened at all (private window, blocked site data): nothing is stored. */
+class HistoryUnavailableError extends Error {
+  override name = "HistoryUnavailableError";
+}
 
 function connectionBroken(err: unknown): boolean {
   return err instanceof TimeoutError || (err instanceof DOMException && BROKEN_CONNECTION.has(err.name));
@@ -62,9 +80,15 @@ function connectionBroken(err: unknown): boolean {
 /** Runs one history operation, bounded in time; a dead or hung connection is dropped. */
 async function run<T>(op: (database: IDBPDatabase<HistoryDb>) => Promise<T>): Promise<T> {
   const connection = db();
+  const opened = connection.then(
+    (d) => d,
+    (err: unknown) => {
+      throw new HistoryUnavailableError(String(err));
+    },
+  );
   try {
     return await withTimeout(
-      connection.then(op),
+      opened.then(op),
       DB_TIMEOUT_MS,
       "Scan history didn't respond. Try reloading the page.",
     );
@@ -129,12 +153,13 @@ export async function saveScan(input: CreateScanInput): Promise<boolean> {
 
 /** The newest `limit` scans, newest first. */
 export async function listScans(limit = 50): Promise<ScanDoc[]> {
+  retryDiscards();
   try {
     return await run(async (d) => {
       const out: ScanDoc[] = [];
       let cursor = await d.transaction("scans").store.index("createdAt").openCursor(null, "prev");
       while (cursor && out.length < limit) {
-        out.push(cursor.value);
+        if (!discarded.has(cursor.value.id)) out.push(cursor.value);
         cursor = await cursor.continue();
       }
       return out;
@@ -145,6 +170,7 @@ export async function listScans(limit = 50): Promise<ScanDoc[]> {
 }
 
 export async function getScan(id: string): Promise<ScanDoc | undefined> {
+  if (discarded.has(id)) return undefined;
   try {
     return await run((d) => d.get("scans", id));
   } catch {
@@ -152,10 +178,40 @@ export async function getScan(id: string): Promise<ScanDoc | undefined> {
   }
 }
 
+/** Deleting from history that can't be opened succeeds: there is nothing stored. */
+async function deleting(op: (database: IDBPDatabase<HistoryDb>) => Promise<void>): Promise<void> {
+  try {
+    await run(op);
+  } catch (err) {
+    if (!(err instanceof HistoryUnavailableError)) throw err;
+  }
+}
+
 export async function deleteScan(id: string): Promise<void> {
-  await run((d) => d.delete("scans", id));
+  await deleting((d) => d.delete("scans", id));
 }
 
 export async function deleteAllScans(): Promise<void> {
-  await run((d) => d.clear("scans"));
+  await deleting((d) => d.clear("scans"));
+}
+
+/**
+ * Scans abandoned mid-save. A hung save can still commit after the delete
+ * meant to undo it (or after it gave up), so for the rest of the session
+ * these stay hidden from History and are deleted again on every read.
+ */
+const discarded = new Set<string>();
+
+function retryDiscards() {
+  for (const id of discarded) void deleteScan(id).catch(() => {});
+}
+
+/** Remove a scan the user abandoned while it was saving. Never throws. */
+export async function discardScan(id: string): Promise<void> {
+  discarded.add(id);
+  try {
+    await deleteScan(id);
+  } catch {
+    // Still hidden; retried on later reads.
+  }
 }

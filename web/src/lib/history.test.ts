@@ -210,6 +210,88 @@ describe("connection handling", () => {
   });
 });
 
+describe("history unavailable", () => {
+  it("deleting succeeds when IndexedDB can't be opened: nothing is stored", async () => {
+    const h = await freshHistory();
+    vi.stubGlobal("indexedDB", {
+      open: () => {
+        throw new Error("blocked in private mode");
+      },
+    });
+    await expect(h.deleteScan("x")).resolves.toBeUndefined();
+    await expect(h.deleteAllScans()).resolves.toBeUndefined();
+  });
+
+  it("a delete on a broken connection still fails loudly", async () => {
+    const h = await freshHistory();
+    await h.saveScan(input(1));
+    vi.spyOn(IDBObjectStore.prototype, "clear").mockImplementationOnce(() => {
+      throw new DOMException("Broken", "UnknownError");
+    });
+    await expect(h.deleteAllScans()).rejects.toThrow();
+  });
+
+  it("drops the connection on an AbortError from a cut-off connection", async () => {
+    const h = await freshHistory();
+    await h.saveScan(input(1));
+    vi.spyOn(IDBObjectStore.prototype, "put").mockImplementationOnce(() => {
+      throw new DOMException("Connection lost", "AbortError");
+    });
+    expect(await h.saveScan(input(2))).toBe(false);
+    expect(await h.saveScan(input(3))).toBe(true);
+    expect(opened).toHaveLength(2);
+  });
+});
+
+describe("discardScan", () => {
+  it("removes a scan the user abandoned", async () => {
+    const h = await freshHistory();
+    await h.saveScan(input(1, "keep"));
+    await h.saveScan(input(2, "abandoned"));
+    await h.discardScan("abandoned");
+    expect((await h.listScans()).map((s) => s.id)).toEqual(["keep"]);
+  });
+
+  it("keeps it hidden and deletes it if the save commits late", async () => {
+    const h = await freshHistory();
+    await h.discardScan("late");
+    // The hung save finally commits after the delete went through.
+    await h.saveScan(input(5, "late"));
+    expect(await h.getScan("late")).toBeUndefined();
+    expect(await h.listScans()).toEqual([]);
+    // The read also retried the delete, so the entry is really gone.
+    await vi.waitFor(async () => {
+      await h.deleteScan("noop");
+      expect(await getRaw("late")).toBeUndefined();
+    });
+  });
+
+  it("never throws, even when history is broken", async () => {
+    const h = await freshHistory();
+    vi.stubGlobal("indexedDB", hangingOpen());
+    vi.useFakeTimers();
+    const discarding = h.discardScan("x");
+    await vi.advanceTimersByTimeAsync(h.DB_TIMEOUT_MS);
+    await expect(discarding).resolves.toBeUndefined();
+  });
+});
+
+/** Read straight from the database, bypassing history.ts's hiding. */
+async function getRaw(id: string): Promise<unknown> {
+  const req = indexedDB.open("ed-scanner", 1);
+  const d = await new Promise<IDBDatabase>((resolve, reject) => {
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+  const get = d.transaction("scans").objectStore("scans").get(id);
+  const value = await new Promise((resolve, reject) => {
+    get.onsuccess = () => resolve(get.result);
+    get.onerror = () => reject(get.error);
+  });
+  d.close();
+  return value;
+}
+
 describe("hangs", () => {
   it("gives up on a save that never settles, so the scan can still finish", async () => {
     const h = await freshHistory();

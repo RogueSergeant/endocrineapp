@@ -51,7 +51,25 @@ export async function readSnapshot(path: string): Promise<Snapshot> {
   if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
     throw new Error(`${path} must be an object keyed by CAS number`);
   }
+  for (const [cas, entry] of Object.entries(parsed)) {
+    const problem = entryProblem(entry);
+    if (problem) throw new Error(`${path}: entry ${cas} ${problem}; fix or restore it`);
+  }
   return parsed as Snapshot;
+}
+
+const isStringArray = (v: unknown) => Array.isArray(v) && v.every((x) => typeof x === "string");
+
+function entryProblem(entry: unknown): string | null {
+  if (!entry || typeof entry !== "object" || Array.isArray(entry)) return "is not an object";
+  const e = entry as Record<string, unknown>;
+  if (!isStringArray(e.synonyms)) return "has synonyms that aren't a list of strings";
+  if (e.inciName !== null && typeof e.inciName !== "string") return "has an inciName that isn't a string or null";
+  // Optional: entries written before CosIng synonyms were recorded lack it.
+  if (e.cosingSynonyms !== undefined && !isStringArray(e.cosingSynonyms)) {
+    return "has cosingSynonyms that aren't a list of strings";
+  }
+  return null;
 }
 
 /** Sorted by CAS, so re-running without changes rewrites identical bytes. */
@@ -74,7 +92,10 @@ export interface EnrichmentResult {
  * `pubchem` is null when PubChem wasn't reachable at all (a CAS missing
  * from it means that lookup failed); `cosing` is null when there is no
  * CosIng dump (a CAS missing from it means CosIng has no entry).
- * Returns the snapshot to commit.
+ * Returns the snapshot to commit: entries for this run's substances are
+ * replaced, and entries for any other CAS are kept. A run that sees fewer
+ * substances (the seed fallback when edlists.org is unreachable, or a
+ * substance missing from the lists for one run) must not erase the rest.
  */
 export function applyEnrichment(
   substances: Substance[],
@@ -82,7 +103,7 @@ export function applyEnrichment(
   pubchem: ReadonlyMap<string, string[]> | null,
   cosing: ReadonlyMap<string, CosingHit> | null = null,
 ): EnrichmentResult {
-  const next: Snapshot = {};
+  const next: Snapshot = { ...snapshot };
   let fromSnapshot = 0;
   let synonymsAdded = 0;
   for (const s of substances) {
@@ -111,6 +132,8 @@ export function applyEnrichment(
         inciName: cos.inciName,
         cosingSynonyms: cos.synonyms,
       };
+    } else {
+      delete next[s.casNumber];
     }
   }
   return { snapshot: next, fromSnapshot, synonymsAdded };

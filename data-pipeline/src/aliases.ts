@@ -25,11 +25,13 @@ export function splitNames(name: string): string[] {
 export const ABBREVIATION_RE = /^(?=(?:[^A-Z]*[A-Z]){2}|[A-Z]\d)[A-Z0-9][A-Z0-9-]{1,7}$/;
 /**
  * An abbreviation too cryptic to display as a substance's name: "BHT",
- * "DEHP", "3-BC", "BP-3". ABBREVIATION_RE alone also matches all-caps words
- * such as "PARABENS", so longer ones without digits or hyphens don't count.
+ * "TDCIPP", "3-BC", "BP-3". An all-caps word of up to 8 letters such as
+ * "PARABENS" can't be told apart from one by its shape, so it counts too:
+ * a mixed-case name is preferred, and it is still used when nothing else
+ * is available.
  */
 export function isBareAbbreviation(name: string): boolean {
-  return ABBREVIATION_RE.test(name) && (name.length <= 5 || /[\d-]/.test(name));
+  return ABBREVIATION_RE.test(name);
 }
 
 // "Methylparaben", "Cypermethrin": a capitalised common name.

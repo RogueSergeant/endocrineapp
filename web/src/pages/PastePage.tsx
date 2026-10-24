@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { cleanOcrOutput } from "@/lib/ocr/cleanOcrOutput";
@@ -9,23 +9,36 @@ export function PastePage() {
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Aborted on unmount, as on the crop page: a check the user walked away
+  // from mid-save mustn't replace the current scan or navigate them back.
+  const unmounted = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    unmounted.current = controller;
+    return () => controller.abort();
+  }, []);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (busy) return;
+    const controller = unmounted.current;
+    if (busy || !controller) return;
+    const { signal } = controller;
     setBusy(true);
     setError(null);
     try {
-      const id = await completeScan(text, cleanOcrOutput(text), { minIngredients: 1 });
+      const id = await completeScan(text, cleanOcrOutput(text), { minIngredients: 1, signal });
+      if (signal.aborted) return;
       navigate(id ? `/results/${id}` : "/results", { replace: true });
     } catch (err) {
+      if (signal.aborted) return;
       setError(
         err instanceof TooFewIngredientsError
           ? "We couldn't find any ingredients in that. Type or paste at least one ingredient."
           : (err as Error).message,
       );
     } finally {
-      setBusy(false);
+      if (!signal.aborted) setBusy(false);
     }
   };
 

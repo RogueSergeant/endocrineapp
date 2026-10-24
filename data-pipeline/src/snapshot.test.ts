@@ -123,6 +123,13 @@ describe("applyEnrichment", () => {
     expect(r.snapshot).toEqual({});
   });
 
+  it("keeps entries for substances this run didn't see (seed fallback)", () => {
+    const subs = [substance("94-26-8", ["Butylparaben"])];
+    const r = applyEnrichment(subs, SNAPSHOT, new Map([["94-26-8", ["Butyl paraben"]]]));
+    expect(r.snapshot["80-05-7"]).toEqual(SNAPSHOT["80-05-7"]);
+    expect(r.snapshot["94-26-8"]!.synonyms).toEqual(["Butyl paraben"]);
+  });
+
   it("reads older snapshot entries that have no cosingSynonyms", () => {
     const subs = [substance("94-26-8", ["Butylparaben"])];
     const legacy = { "94-26-8": { synonyms: ["Butyl paraben"], inciName: null } } as unknown as Snapshot;
@@ -163,6 +170,25 @@ describe("readSnapshot / writeSnapshot", () => {
     await expect(readSnapshot(path)).rejects.toThrow(/not valid JSON/);
     await writeFile(path, "[]");
     await expect(readSnapshot(path)).rejects.toThrow(/keyed by CAS/);
+  });
+
+  it.each([
+    ['{"94-26-8": null}', /94-26-8 is not an object/],
+    ['{"94-26-8": {"synonyms": "Butyl paraben", "inciName": null}}', /94-26-8 has synonyms/],
+    ['{"94-26-8": {"synonyms": [], "inciName": 5}}', /94-26-8 has an inciName/],
+    ['{"94-26-8": {"synonyms": [], "inciName": null, "cosingSynonyms": "x"}}', /cosingSynonyms/],
+  ])("fails clearly on a malformed entry: %s", async (text, message) => {
+    const path = join(dir, "entry.json");
+    await writeFile(path, text);
+    await expect(readSnapshot(path)).rejects.toThrow(message);
+  });
+
+  it("accepts an older entry without cosingSynonyms", async () => {
+    const path = join(dir, "old.json");
+    await writeFile(path, '{"94-26-8": {"synonyms": ["Butyl paraben"], "inciName": null}}');
+    expect(await readSnapshot(path)).toEqual({
+      "94-26-8": { synonyms: ["Butyl paraben"], inciName: null },
+    });
   });
 
   it("round-trips, sorted by CAS, with identical bytes on rewrite", async () => {

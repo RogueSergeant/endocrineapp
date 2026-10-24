@@ -1,7 +1,7 @@
 import type { Match, ScanDoc, StoredMatch, Substance } from "@/types";
 import { parseIngredients } from "@/lib/matching/ingredientParser";
 import { matchIngredients } from "@/lib/matching/matcher";
-import { deleteAllScans, deleteScan, newId, saveScan } from "@/lib/history";
+import { deleteAllScans, deleteScan, discardScan, newId, saveScan } from "@/lib/history";
 import { recogniseText } from "@/lib/ocr/textRecognition";
 import { getSubstanceById, substanceDb, useScanStore } from "@/lib/store/scanStore";
 
@@ -47,7 +47,7 @@ export async function completeScan(
   if (signal?.aborted) {
     // The user left while it was saving: take back the history entry
     // (also when the save timed out, in case it commits late).
-    await deleteScan(id).catch(() => {});
+    await discardScan(id);
     signal.throwIfAborted();
   }
   // The current scan keeps the id even if saving failed: a save that timed
@@ -75,8 +75,8 @@ export async function scanImage(crop: ImageBitmap, signal: AbortSignal): Promise
 
 /**
  * Delete one scan from history and, if it is the current one, from
- * memory. Memory is cleared first, so that part works even when history
- * is unavailable and the delete throws.
+ * memory. Memory is cleared first, so it is cleared even if the delete
+ * fails; where history is unavailable there is nothing to delete.
  */
 export async function forgetScan(id: string): Promise<void> {
   const { current, clearCurrentScan } = useScanStore.getState();
