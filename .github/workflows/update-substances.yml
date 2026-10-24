@@ -55,10 +55,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet -- web/src/data/substances.json web/src/data/substances-index.json; then
+          if git diff --quiet -- web/src/data/substances.json web/src/data/substances-index.json data-pipeline/data/pubchem-snapshot.json; then
             echo "No changes to commit."
             exit 0
           fi
-          git add web/src/data/substances.json web/src/data/substances-index.json
+          git add web/src/data/substances.json web/src/data/substances-index.json data-pipeline/data/pubchem-snapshot.json
           git commit -m "Update substances.json from edlists.org (${{ inputs.source_label }})"
           git push origin main

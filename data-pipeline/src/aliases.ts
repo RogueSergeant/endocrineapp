@@ -22,7 +22,7 @@ export function splitNames(name: string): string[] {
 }
 
 // "BHT", "BP-3", "D5", "4-MBC": short, upper case, at least two letters.
-const ABBREVIATION_RE = /^(?=(?:[^A-Z]*[A-Z]){2}|[A-Z]\d)[A-Z0-9][A-Z0-9-]{1,7}$/;
+export const ABBREVIATION_RE = /^(?=(?:[^A-Z]*[A-Z]){2}|[A-Z]\d)[A-Z0-9][A-Z0-9-]{1,7}$/;
 // "Methylparaben", "Cypermethrin": a capitalised common name.
 const COMMON_NAME_RE = /^[A-Z][a-z]{3,}[a-z0-9 -]*$/;
 
@@ -43,9 +43,12 @@ export function bracketedNames(name: string): string[] {
   return out;
 }
 
-/** True for a cell that packs several names together ("A; B", "A: B"). */
+/**
+ * True for a cell that packs several names together ("A; B", "A: B",
+ * "A, Bisphenol S"). Uses the splitter's own rule so the two always agree.
+ */
 export function isCompoundName(name: string): boolean {
-  return /;|:\s/.test(name);
+  return splitNames(name).length > 1;
 }
 
 /**
@@ -54,7 +57,7 @@ export function isCompoundName(name: string): boolean {
  */
 export function expandName(name: string): string[] {
   const parts = splitNames(name);
-  const out = isCompoundName(name) && parts.length > 1 ? [] : [name.trim()];
+  const out = parts.length > 1 ? [] : [name.trim()];
   for (const part of parts) {
     out.push(part);
     out.push(...bracketedNames(part));

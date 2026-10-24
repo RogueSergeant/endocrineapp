@@ -8,7 +8,8 @@
     "start": "tsx src/index.ts",
     "fetch": "tsx src/fetchEdLists.ts",
     "build": "tsx src/buildSubstancesJson.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
   },
   "dependencies": {
     "exceljs": "^4.4.0",
@@ -20,7 +21,8 @@
     "@types/node": "^22.10.0",
     "@types/uuid": "^10.0.0",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vitest": "^3.2.7"
   },
   "engines": {
     "node": ">=20"

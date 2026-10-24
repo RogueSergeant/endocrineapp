@@ -20,7 +20,9 @@ This will:
    `data/cosing/` — the EU Cosmetic Ingredient Database CSV.
    Get it from https://ec.europa.eu/growth/tools-databases/cosing/.
 4. Enrich each CAS-bearing substance with PubChem synonyms (cached on
-   disk, capped at 20 synonyms each, rate-limited to 5 req/s).
+   disk, capped at 20 synonyms each, rate-limited to 5 req/s). Lookups
+   that fail fall back to the committed snapshot (see below), which is
+   then updated with every successful lookup.
 5. Write `web/src/data/substances.json` and
    `web/src/data/substances-index.json`.
 
@@ -29,9 +31,21 @@ This will:
 | Variable | Effect |
 |---|---|
 | `ED_USE_SEED=1` | Skip the live fetch and use the curated seed dataset in `src/seed.ts`. Useful for offline/CI environments. |
-| `ED_NETWORK=0` | Skip PubChem enrichment. Synonyms from the previously published `substances.json` are carried forward (matched by substance id) instead of being dropped; the same happens if any PubChem lookup fails. |
+| `ED_NETWORK=0` | Skip PubChem enrichment and take every substance's synonyms from `data/pubchem-snapshot.json`. A substance whose PubChem lookup fails during a normal run gets its synonyms from the snapshot too. |
+| `ED_SNAPSHOT_PATH=/some/file.json` | Read and write the snapshot somewhere other than `data/pubchem-snapshot.json`. |
 | `ED_OUT_DIR=/some/dir` | Write the output somewhere other than `web/src/data/`. |
 | `ED_SOURCE_LAST_UPDATED=2026-04` | Override the `sourceLastUpdated` field written into `substances.json`. |
+
+## Snapshot
+
+`data/pubchem-snapshot.json` is committed and holds the PubChem synonyms
+and CosIng INCI names per CAS number, so the pipeline produces the same
+data offline or when PubChem is having a bad day. The pipeline never
+reads its own previous output back: an alias removed from
+`CURATED_ALIASES` or from the source spreadsheets disappears on the next
+run, and synonyms taken from the snapshot go through the same filter as
+live ones. `npm test` checks that the committed spreadsheets and snapshot
+reproduce `web/src/data` exactly.
 
 ## Cache
 

@@ -7,6 +7,7 @@ import type {
 } from "./types.ts";
 import { normalise } from "./normalise.ts";
 import {
+  ABBREVIATION_RE,
   CURATED_ALIASES,
   dedupeAliases,
   expandName,
@@ -31,7 +32,14 @@ function normaliseCas(cas: string | null): string | null {
 
 const ABBREV_RE = /\(([A-Z0-9][A-Z0-9\-]{1,})\)\s*$/;
 
-export function pickCanonical(names: string[]): { canonical: string; abbrev: string | null } {
+/**
+ * Display name for a substance. `curated` are label names known for its CAS
+ * (CURATED_ALIASES, label/INCI name first), considered only by the fallback.
+ */
+export function pickCanonical(
+  names: string[],
+  curated: readonly string[] = [],
+): { canonical: string; abbrev: string | null } {
   // Prefer the shortest name that ends in a parenthesised abbreviation.
   let best: string | null = null;
   let bestAbbrev: string | null = null;
@@ -44,9 +52,14 @@ export function pickCanonical(names: string[]): { canonical: string; abbrev: str
     }
   }
   if (best) return { canonical: best, abbrev: bestAbbrev };
-  // Fallback: shortest name.
-  const sorted = [...names].sort((a, b) => a.length - b.length);
-  return { canonical: sorted[0] ?? "", abbrev: null };
+  // Fallback: the shortest readable source name, or the curated label name
+  // when it is no longer (it replaces systematic names and source typos).
+  // A bare abbreviation ("3-BC") is used only when there is nothing else.
+  const byLength = (list: readonly string[]) => [...list].sort((a, b) => a.length - b.length);
+  const source = byLength(names.filter((n) => !ABBREVIATION_RE.test(n)))[0];
+  const label = curated.find((n) => !ABBREVIATION_RE.test(n));
+  if (label && (!source || label.length <= source.length)) return { canonical: label, abbrev: null };
+  return { canonical: source ?? byLength(names)[0] ?? "", abbrev: null };
 }
 
 function maxTier(a: ListId, b: ListId): ListId {
@@ -78,7 +91,7 @@ export function dedupe(rows: RawAssessmentRow[]): Substance[] {
       const split = splitNames(n);
       return split.length > 0 ? split : [n];
     });
-    const { canonical, abbrev } = pickCanonical(parts);
+    const { canonical, abbrev } = pickCanonical(parts, cas ? CURATED_ALIASES[cas] : []);
     let tier: ListId = first.listId;
     let health = false;
     let env = false;

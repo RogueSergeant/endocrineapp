@@ -45,7 +45,7 @@ async function fetchSynonyms(cas: string): Promise<string[] | null> {
   return json.InformationList?.Information?.[0]?.Synonym ?? [];
 }
 
-function cleanSynonyms(raw: string[]): string[] {
+export function cleanSynonyms(raw: string[]): string[] {
   const out: string[] = [];
   const seen = new Set<string>();
   for (const s of raw) {
@@ -68,14 +68,20 @@ export interface PubchemStats {
   fetched: number;
   notFound: number;
   errors: number;
-  synonymsAdded: number;
 }
 
-export async function enrichPubchem(
+export interface PubchemResult {
+  stats: PubchemStats;
+  /** Cleaned synonyms per CAS for every lookup that succeeded ([] when not found). */
+  synonyms: Map<string, string[]>;
+}
+
+/** Look up synonyms for every substance with a CAS. Failed lookups are left out of `synonyms`. */
+export async function lookupPubchem(
   substances: Substance[],
   cacheDir: string,
   rateLimitPerSec: number,
-): Promise<PubchemStats> {
+): Promise<PubchemResult> {
   await mkdir(cacheDir, { recursive: true });
   const limit = pLimit(Math.max(1, Math.floor(rateLimitPerSec)));
   const stats: PubchemStats = {
@@ -83,8 +89,8 @@ export async function enrichPubchem(
     fetched: 0,
     notFound: 0,
     errors: 0,
-    synonymsAdded: 0,
   };
+  const found = new Map<string, string[]>();
   let lastTickAt = 0;
   const minIntervalMs = 1000 / Math.max(1, rateLimitPerSec);
 
@@ -94,14 +100,10 @@ export async function enrichPubchem(
       limit(async () => {
         const cas = s.casNumber as string;
         const cached = await readCache(cacheDir, cas);
-        let synonyms: string[] = [];
         if (cached) {
           stats.fromCache++;
-          if (cached.notFound) {
-            stats.notFound++;
-          } else {
-            synonyms = cached.synonyms;
-          }
+          if (cached.notFound) stats.notFound++;
+          found.set(cas, cached.notFound ? [] : cleanSynonyms(cached.synonyms));
         } else {
           const wait = Math.max(0, lastTickAt + minIntervalMs - Date.now());
           if (wait > 0) await new Promise((r) => setTimeout(r, wait));
@@ -110,6 +112,7 @@ export async function enrichPubchem(
             const fetched = await fetchSynonyms(cas);
             if (fetched === null) {
               stats.notFound++;
+              found.set(cas, []);
               await writeCache(cacheDir, {
                 cas,
                 fetchedAt: new Date().toISOString(),
@@ -117,7 +120,8 @@ export async function enrichPubchem(
                 notFound: true,
               });
             } else {
-              synonyms = cleanSynonyms(fetched);
+              const synonyms = cleanSynonyms(fetched);
+              found.set(cas, synonyms);
               stats.fetched++;
               await writeCache(cacheDir, {
                 cas,
@@ -130,18 +134,8 @@ export async function enrichPubchem(
             process.stderr.write(`  ! PubChem error for ${cas}: ${(err as Error).message}\n`);
           }
         }
-        if (synonyms.length === 0) return;
-        const seen = new Set(s.aliases.map((a) => a.toLowerCase()));
-        for (const syn of synonyms) {
-          const k = syn.toLowerCase();
-          if (!seen.has(k)) {
-            seen.add(k);
-            s.aliases.push(syn);
-            stats.synonymsAdded++;
-          }
-        }
       }),
     );
   await Promise.all(tasks);
-  return stats;
+  return { stats, synonyms: found };
 }

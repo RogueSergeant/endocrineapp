@@ -46,6 +46,8 @@ export interface PipelineConfig {
   rawDir: string;
   cacheDir: string;
   cosingDir: string;
+  /** Committed PubChem/CosIng enrichment, see snapshot.ts. */
+  snapshotPath: string;
   outDir: string;
   pubchemRateLimitPerSec: number;
   fuzzyEnrichmentEnabled: boolean;
