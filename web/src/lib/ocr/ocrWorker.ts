@@ -127,6 +127,10 @@ async function measureTilt(
 // worth reporting to the page (which applies its own, higher bar).
 const REC_HEIGHT = 48;
 const SPOT_REPORT = 0.75;
+// Lines whose every word the recogniser read at least this confidently
+// are left to the text-level search: re-running the recogniser on them
+// costs time and the spotter would only confirm the text.
+const SPOT_BELOW_CONFIDENCE = 0.95;
 // Line crops sent back for the user to check, at most this wide.
 const SNIPPET_WIDTH = 720;
 
@@ -181,13 +185,14 @@ let spotter: ReturnType<typeof createSpotter> | null = null;
 async function spotNames(
   reader: Reader,
   source: OffscreenCanvas,
-  lines: { text: string; box: Box }[][],
+  lines: { text: string; box: Box; confidence: number }[][],
 ): Promise<Spot[]> {
   const best = new Map<string, { score: number; line: number }>();
   const lineBoxes: Box[] = [];
   const lineTexts: string[] = [];
   for (const items of lines) {
     if (items.length === 0) continue;
+    if (items.every((i) => i.confidence >= SPOT_BELOW_CONFIDENCE)) continue;
     // The line's extent: the union of its words' boxes.
     const x0 = Math.max(0, Math.min(...items.map((i) => i.box.x)));
     const y0 = Math.max(0, Math.min(...items.map((i) => i.box.y)));
