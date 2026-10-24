@@ -9,6 +9,8 @@ export function cleanOcrOutput(text: string): string {
   let s = text;
   // Joins words split across lines: "buty-\nlparaben" → "butylparaben"
   s = s.replace(/-\n\s*/g, "");
+  // A stray space read after a hyphen before a number: "Isoceteth- 10".
+  s = s.replace(/([A-Za-z])- (\d)/g, "$1-$2");
   // Normalise smart quotes / dashes that confuse downstream regexes
   s = s
     .replace(/[\u2018\u2019]/g, "'")
