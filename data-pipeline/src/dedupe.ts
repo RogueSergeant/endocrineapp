@@ -31,6 +31,16 @@ function normaliseCas(cas: string | null): string | null {
   return trimmed;
 }
 
+/**
+ * The name a substance without a CAS number is identified by. Frozen at the
+ * normaliser's original rule (every bracketed part dropped): the key
+ * becomes the substance id stored in users' scan history, so it must not
+ * move when the matching normaliser changes.
+ */
+function identityName(name: string): string {
+  return normalise(name.replace(/\([^)]*\)/g, " "));
+}
+
 const ABBREV_RE = /\(([A-Z0-9][A-Z0-9\-]{1,})\)\s*$/;
 
 /**
@@ -83,7 +93,7 @@ export function dedupe(rows: RawAssessmentRow[]): Substance[] {
   const groups = new Map<string, RawAssessmentRow[]>();
   for (const row of rows) {
     const cas = normaliseCas(row.casNumber);
-    const key = cas ? `cas:${cas}` : `name:${normalise(row.name)}`;
+    const key = cas ? `cas:${cas}` : `name:${identityName(row.name)}`;
     if (!key.endsWith(":")) {
       const list = groups.get(key) ?? [];
       list.push(row);

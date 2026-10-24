@@ -93,8 +93,19 @@ describe("normaliser", () => {
     expect(normalise("Éthylhéxyl")).toBe("ethylhexyl");
   });
 
-  it("removes parenthesised content", () => {
-    expect(normalise("Bis(2-ethylhexyl) phthalate")).toBe("bis phthalate");
+  it("drops a bracketed note after a space", () => {
+    expect(normalise("WHOLEGRAIN OATS (10%)")).toBe("wholegrain oats");
+    expect(normalise("Benzophenone-3 (BP-3)")).toBe("benzophenone 3");
+  });
+
+  it("keeps a bracket glued to a word as part of the chemical name", () => {
+    expect(normalise("Bis(2-ethylhexyl) phthalate")).toBe("bis 2 ethylhexyl phthalate");
+    expect(normalise("Tris(2-ethylhexyl) phosphate")).toBe("tris 2 ethylhexyl phosphate");
+  });
+
+  it("drops a glued bracket holding only capitals, a trademark or similar mark", () => {
+    expect(normalise("Triton(TM) X-114")).toBe("triton x 114");
+    expect(normalise("IGEPAL(R) CA-630")).toBe("igepal ca 630");
   });
 
   it("collapses hyphens, underscores, and whitespace", () => {
