@@ -4240,7 +4240,11 @@
       "aliases": [
         "BHA",
         "2-tert-butyl-4-methoxyphenol (BHA)",
-        "2-tert-butyl-4-methoxyphenol"
+        "2-tert-butyl-4-methoxyphenol",
+        "Butylated Hydroxyanisole",
+        "Butylhydroxyanisole",
+        "E320",
+        "E 320"
       ],
       "inciName": null
     },
@@ -5063,6 +5067,8 @@
         "2,6-di-tert-butyl-p-cresol",
         "butylated hydroxytoluene (BHT)",
         "butylated hydroxytoluene",
+        "E321",
+        "E 321",
         "2,6-Di-tert-butyl-4-methylphenol",
         "Butylhydroxytoluene",
         "2,6-Di-t-butyl-4-methylphenol",
@@ -5526,7 +5532,9 @@
       ],
       "aliases": [
         "Methyl 4-hydroxybenzoate (Methylparaben)",
-        "Methylparaben"
+        "Methylparaben",
+        "E218",
+        "E 218"
       ],
       "inciName": null
     },
@@ -5869,7 +5877,9 @@
       ],
       "aliases": [
         "Propyl 4-hydroxybenzoate",
-        "Propylparaben"
+        "Propylparaben",
+        "E216",
+        "E 216"
       ],
       "inciName": null
     },

@@ -8,6 +8,7 @@ import type {
 import { normalise } from "./normalise.ts";
 import {
   CURATED_ALIASES,
+  CURATED_ALIASES_BY_NAME,
   dedupeAliases,
   expandName,
   readabilityRank,
@@ -128,6 +129,7 @@ export function dedupe(rows: RawAssessmentRow[]): Substance[] {
       if (stripped) aliases.push(stripped);
     }
     if (cas) aliases.push(...(CURATED_ALIASES[cas] ?? []));
+    for (const n of allNames) aliases.push(...(CURATED_ALIASES_BY_NAME[n] ?? []));
     substances.push({
       id: substanceId(key),
       casNumber: cas,

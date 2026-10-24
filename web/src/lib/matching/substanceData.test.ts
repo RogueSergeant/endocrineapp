@@ -30,9 +30,21 @@ describe("bundled substance data", () => {
     ["4-Methy1benzylidene Camphor", "36861-47-9"],
     ["Benzophen0ne-3", "131-57-7"],
     ["Buty1paraben", "94-26-8"],
+    // Food additive E-numbers, in the spellings labels use.
+    ["E321", "128-37-0"],
+    ["E-321", "128-37-0"],
+    ["E 218", "99-76-3"],
+    ["E216", "94-13-3"],
   ])("matches %s to CAS %s", (word, cas) => {
     expect(matchOne(word).map((m) => m.cas)).toEqual([cas]);
   });
+
+  it.each(["Butylated Hydroxyanisole", "BHA", "E320", "E-320"])(
+    "matches %s to BHA, which the source lists without a CAS number",
+    (word) => {
+      expect(matchOne(word).map((m) => m.name)).toEqual(["2-tert-butyl-4-methoxyphenol (BHA)"]);
+    },
+  );
 
   it("has no aliases that still pack several names into one", () => {
     const joined = Object.keys(substanceDb.index).filter((k) => k.includes(";"));

@@ -95,6 +95,27 @@ export const CURATED_ALIASES: Readonly<Record<string, readonly string[]>> = {
   "556-67-2": ["Cyclotetrasiloxane"], // D4
   "71617-10-2": ["Isoamyl p-Methoxycinnamate", "Amiloxate"],
   "55406-53-6": ["Iodopropynyl Butylcarbamate"], // IPBC
+  // Food additive E-numbers, which food labels print instead of the name.
+  // Both spellings: the normaliser keeps "E321" whole and reads "E-321"
+  // and "E 321" as "e 321".
+  "128-37-0": ["E321", "E 321"], // BHT
+  "99-76-3": ["E218", "E 218"], // Methylparaben
+  "94-13-3": ["E216", "E 216"], // Propylparaben
+};
+
+/**
+ * Label names for substances the source lists without a CAS number, so
+ * they get no PubChem synonyms; keyed by the exact source name.
+ */
+export const CURATED_ALIASES_BY_NAME: Readonly<Record<string, readonly string[]>> = {
+  // The common name and E-number labels print; the source has only the
+  // systematic name and the abbreviation.
+  "2-tert-butyl-4-methoxyphenol (BHA)": [
+    "Butylated Hydroxyanisole",
+    "Butylhydroxyanisole",
+    "E320",
+    "E 320",
+  ],
 };
 
 /** Case-insensitive de-duplication that keeps the first spelling seen. */
