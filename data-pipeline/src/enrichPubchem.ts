@@ -45,6 +45,24 @@ async function fetchSynonyms(cas: string): Promise<string[] | null> {
   return json.InformationList?.Information?.[0]?.Synonym ?? [];
 }
 
+/**
+ * Database and registry identifiers PubChem lists among the synonyms
+ * ("DTXSID0021414", "NSC 407921", "RefChem:191857", "EINECS 201-116-6", the
+ * UNII "BQC0BKB72S"). No label prints them, and they would take slots from
+ * real names. Recognised by shape rather than by a list of registries: a
+ * short letter prefix then a number (of three or more digits, hyphens
+ * allowed) and nothing
+ * else, or a ten-character code mixing capitals and digits. Names keep
+ * their words ("Triton X-100", "Igepal CA-630") or are short ("BP-3",
+ * "4-MBC"); E-numbers are names on food labels and stay.
+ */
+export function looksLikeIdentifier(name: string): boolean {
+  const t = name.trim();
+  if (/^E\s?-?\d{3}[a-z]?$/i.test(t)) return false;
+  if (/^[A-Za-z]{1,10}[\s:_-]?(?=(?:\D*\d){3})\d[\d-]*[A-Za-z]?$/.test(t)) return true;
+  return /^(?=(?:.*\d){2})(?=(?:.*[A-Z]){2})[A-Z0-9]{10}$/.test(t);
+}
+
 export function cleanSynonyms(raw: string[]): string[] {
   const out: string[] = [];
   const seen = new Set<string>();
@@ -54,6 +72,7 @@ export function cleanSynonyms(raw: string[]): string[] {
     if (!t || t.length > MAX_LEN) continue;
     if (CAS_RE.test(t)) continue;
     if (!/[a-z]/i.test(t)) continue;
+    if (looksLikeIdentifier(t)) continue;
     const k = t.toLowerCase();
     if (seen.has(k)) continue;
     seen.add(k);

@@ -39,16 +39,11 @@
         "4-Methylbenzylidene Camphor",
         "Enzacamene",
         "3-(4'-Methylbenzylidene)camphor",
-        "RefChem:1066747",
         "Bicyclo(2.2.1)heptan-2-one, 1,7,7-trimethyl-3-((4-methylphenyl)methylene)-",
         "4-Methylbenzylidenecamphor",
         "1,7,7-trimethyl-3-[(4-methylphenyl)methylidene]bicyclo[2.2.1]heptan-2-one",
         "Methyl Benzylidene Camphor",
         "3-(4'-Methyl)benzylidene-bornan-2-one",
-        "SCHEMBL83091",
-        "UYB80641",
-        "DA-30146",
-        "NS00009412",
         "1,7,7-trimethyl-3-(p-tolylmethylene)norbornan-2-one"
       ],
       "inciName": null
@@ -75,24 +70,19 @@
         "(1R,3E,4S)-1,7,7-trimethyl-3-(4- methylbenzylidene)bicyclo[2.2.1]heptan-2-one",
         "Enzacamene, (+)-",
         "4-Methylbenzylidenecamphor",
-        "7576E1028E",
         "UNII-7576E1028E",
-        "Parsol 5000",
         "3-(p-Methylbenzylidene)-DL-camphor",
         "Neo Heliopan MBC",
         "Uvinul MBC 95",
-        "Eusolex 6300",
         "4-MBC [Sunscreen]",
         "p-Methylbenzylidenecamphor",
         "UNII-8I3XWY40L9",
         "Enzacamene [USAN:USP:INN]",
         "3-(p-Methylbenzylidene)camphor",
         "1,7,7-Trimethyl-3-(4-methylbenzylidene)bicyclo(2.2.1)heptan-2-one",
-        "MFCD00209662",
         "(+/-)-3-(p-methylbenzylidene)camphor",
         "3-(4'-methyl)benzylidene-bornan-2-one",
-        "3-(4-METHYLBENZYLIDENE)-CAMPHOR",
-        "EINECS 253-242-6"
+        "3-(4-METHYLBENZYLIDENE)-CAMPHOR"
       ],
       "inciName": null
     },
@@ -118,9 +108,6 @@
         "(1R,3Z,4S)-1,7,7-trimethyl-3-(4- methylbenzylidene)bicyclo[2.2.1]heptan-2-one",
         "4-Methylbenzylidene-camphor",
         "BIDD:ER0102",
-        "DTXSID601360722",
-        "PD132059",
-        "M3357",
         "(1R,3Z,4S)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one"
       ],
       "inciName": null
@@ -144,9 +131,7 @@
       "aliases": [
         "4-MBC",
         "(1R,4S)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one (4-MBC)",
-        "(1R,4S)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one",
-        "SCHEMBL28738973",
-        "DTXSID301360723"
+        "(1R,4S)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one"
       ],
       "inciName": null
     },
@@ -172,11 +157,7 @@
         "(1S,3E,4R)-1,7,7-trimethyl-3-(4- methylbenzylidene)bicyclo[2.2.1]heptan-2-one",
         "Enzacamene, (-)",
         "UNII-955UIJ2GWS",
-        "955UIJ2GWS",
-        "RefChem:200789",
         "(-)enzacamene",
-        "DTXSID901360721",
-        "Q27271743",
         "(1S,3E,4R)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one",
         "(1S,4R)-1,7,7-Trimethyl-3-((E)-4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one"
       ],
@@ -202,7 +183,6 @@
         "4-MBC",
         "(1S,3Z,4R)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one (4-MBC)",
         "(1S,3Z,4R)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one",
-        "DTXSID001360724",
         "3-(4-Methylbenzylidene)camphor, >=98.0% (GC)"
       ],
       "inciName": null
@@ -233,17 +213,11 @@
         "METHYL BENZYLIDENE CAMPHOR",
         "3-(4-Methylbenzylidene)camphor",
         "(3E)-1,7,7-trimethyl-3-[(4-methylphenyl)methylidene]bicyclo[2.2.1]heptan-2-one",
-        "DTXSID8047896",
         "enzacamenum",
         "(3E)-1,7,7-trimethyl-3-((4-methylphenyl)methylidene)bicyclo(2.2.1)heptan-2-one",
-        "Eusolex-6300",
         "4-MBC cpd",
-        "RefChem:920992",
-        "DTXCID30814258",
-        "8I3XWY40L9",
         "Enzacamene D-L form",
         "4-Methylbenzylidenecamphor",
-        "Parsol 5000",
         "3-(p-Methylbenzylidene)-DL-camphor",
         "3-(4-METHYLBENZYLIDENE)-CAMPHOR",
         "(E)-1,7,7-Trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one"
@@ -275,18 +249,11 @@
       "aliases": [
         "14-(nonylphenoxy)-3,6,9,12-tetraoxatetradecan-1-ol",
         "3,6,9,12-Tetraoxatetradecan-1-ol, 14-(nonylphenoxy)-",
-        "EINECS 247-555-7",
-        "DTXSID7074826",
-        "RefChem:487187",
-        "DTXCID2037475",
         "2-[2-[2-[2-[2-(2-nonylphenoxy)ethoxy]ethoxy]ethoxy]ethoxy]ethanol",
-        "MFCD00134081",
         "14-(2-nonylphenoxy)-3,6,9,12-tetraoxatetradecan-1-ol",
-        "SCHEMBL1741013",
         "Pentaoxyethylene nonylphenyl ether",
         "HRQQEXIVBZHHOQ-UHFFFAOYSA-N",
-        "C25H44O6",
-        "NS00013901"
+        "C25H44O6"
       ],
       "inciName": null
     },
@@ -319,10 +286,6 @@
         "p-Nonylphenol hexaethoxylate",
         "NPEO6",
         "Nonylphenol-6-ethoxylate",
-        "SCHEMBL6930339",
-        "DTXSID90858719",
-        "DB-251104",
-        "NS00076701",
         "3,6,9,12,15-Pentaoxaheptadecan-1-ol, 17-(4-nonylphenoxy)-"
       ],
       "inciName": null
@@ -353,8 +316,6 @@
         "2-(4-nonylphenoxy)ethanol",
         "2-(p-Nonylphenoxy)ethanol",
         "Ethanol, 2-(4-nonylphenoxy)-",
-        "ZMD36H3ESX",
-        "RefChem:1061958",
         "Nonoxinol",
         "4-Nonyl Phenol Monoethoxylate",
         "4-Nonylphenol Monoethoxylate",
@@ -397,13 +358,8 @@
       ],
       "aliases": [
         "2-(isononylphenoxy)ethanol",
-        "EINECS 284-987-5",
-        "DTXSID90234054",
-        "RefChem:84758",
-        "DTXCID90156545",
         "YWFWPJLGQZVOCG-UHFFFAOYSA-N",
-        "2-[2-(7-Methyloctyl)phenoxy]ethan-1-ol",
-        "NS00038730"
+        "2-[2-(7-Methyloctyl)phenoxy]ethan-1-ol"
       ],
       "inciName": null
     },
@@ -434,11 +390,9 @@
         "Terics",
         "Nonylphenol monoethoxylate",
         "Ethanol, 2-(nonylphenoxy)-",
-        "RefChem:891403",
         "2-(2-nonylphenoxy)ethanol",
         "Ethanol,2-(nonylphenoxy)-",
         "2-(o-Nonylphenoxy)ethanol",
-        "RN8NP35H6T",
         "Ethanol, 2-(o-nonylphenoxy)-",
         "Ethanol, 2-(2-nonylphenoxy)-",
         "Nonylphenoxyglycol",
@@ -446,10 +400,8 @@
         "Ethylene glycol nonylphenyl ether",
         "marlophen 89",
         "nonylphenolethoxylate",
-        "EINECS 248-762-5",
         "UNII-RN8NP35H6T",
-        "nonylphenol ethoxyacetic acid",
-        "SCHEMBL30863"
+        "nonylphenol ethoxyacetic acid"
       ],
       "inciName": null
     },
@@ -479,16 +431,10 @@
         "2-[2-(4-nonylphenoxy)ethoxy]ethanol",
         "4-Nonylphenol diethoxylate",
         "Nonoxynol-2",
-        "U4A966MO25",
-        "DTXSID9058600",
-        "RefChem:1071320",
-        "DTXCID0016588",
         "4-Nonyl Phenol Diethoxylate",
         "2-(2-(4-Nonylphenoxy)ethoxy)ethanol",
         "2-[2-(4-nonylphenoxy)ethoxy]ethan-1-ol",
         "Ethanol, 2-(2-(4-nonylphenoxy)ethoxy)-",
-        "CHEMBL194034",
-        "MFCD00148006",
         "Polyoxyethylene (12) nonylphenyl ether",
         "Ethanol, 2-[2-(4-nonylphenoxy)ethoxy]-",
         "DSSTox_CID_16588",
@@ -525,21 +471,16 @@
         "2-[2-(nonylphenoxy)ethoxy]ethanol",
         "PONPE-2",
         "Diethylene glycol nonylphenol ether",
-        "EINECS 248-291-5",
         "Nonylphenol mono(oxyethylene) ethanol",
         "Ethanol, 2-(2-(nonylphenoxy)ethoxy)-",
         "Diethylene glycol mono(nonylphenyl) ether",
         "alpha-Nonylphenyl-omega-hydroxybis(oxyethylene)",
         "Ethanol, 2-[2-(nonylphenoxy)ethoxy]-",
         "2-(2-(NONYLPHENOXY)ETHOXY)ETHANOL",
-        "RefChem:592177",
         "Ethanol, 2-2-(nonylphenoxy)ethoxy-",
         "2-[2-(2-nonylphenoxy)ethoxy]ethanol",
         "2-[2-(2-Nonylphenoxy)ethoxy]ethan-1-ol",
-        "SCHEMBL7263986",
-        "DTXSID00872587",
-        "RRLGETDMEIMLQU-UHFFFAOYSA-N",
-        "NS00013899"
+        "RRLGETDMEIMLQU-UHFFFAOYSA-N"
       ],
       "inciName": null
     },
@@ -570,10 +511,8 @@
         "Ethanol, 2-[2-[2-[2-(4-nonylphenoxy)ethoxy]ethoxy]ethoxy]-",
         "Tetraethylene glycol mono(p-nonylphenyl) ether",
         "2-(2-(2-(2-(4-Nonylphenoxy)ethoxy)ethoxy)ethoxy)ethanol",
-        "EINECS 230-770-5",
         "Ethanol, 2-(2-(2-(2-(4-nonylphenoxy)ethoxy)ethoxy)ethoxy)-",
         "Ethanol, 2-(2-(2-(2-(p-nonylphenoxy)ethoxy)ethoxy)ethoxy)-",
-        "RefChem:200832",
         "Ethanol, 2-2-2-2-(4-nonylphenoxy)ethoxyethoxyethoxy-",
         "4-nonylphenol tetraethoxylate",
         "Nonoxynol-4",
@@ -582,9 +521,6 @@
         "NPEO4",
         "Nonylphenol-4-ethoxylate",
         "PEG-4 Nonyl phenyl ether",
-        "CHEMBL2107128",
-        "DTXSID0064624",
-        "SCHEMBL10705426",
         "UTXPMECBRCEYCI-UHFFFAOYSA-N"
       ],
       "inciName": null
@@ -613,9 +549,6 @@
       ],
       "aliases": [
         "2-[4-(1,1,3,3-tetramethylbutyl)phenoxy]ethanol",
-        "RefChem:1100551",
-        "DTXSID8034085",
-        "DTXCID901325284",
         "Triton X 100",
         "4-tert-Octylphenol Monoethoxylate",
         "Octoxynol-1",
@@ -625,13 +558,10 @@
         "2-[4-(2,4,4-trimethylpentan-2-yl)phenoxy]ethanol",
         "Octoxynol 1",
         "2-[4-(2,4,4-trimethylpentan-2-yl)phenoxy]ethan-1-ol",
-        "20CAX7IO75",
         "2-(4-(1,1,3,3-Tetramethylbutyl)phenoxy)ethanol",
-        "NSC-5259",
         "2-(4-(2,4,4-trimethylpentan-2-yl)phenoxy)ethanol",
         "2-[4-(2,4,4-Trimethyl-2-pentanyl)phenoxy]ethanol",
-        "Triton,(-)",
-        "NCGC00091012-01"
+        "Triton,(-)"
       ],
       "inciName": null
     },
@@ -659,18 +589,12 @@
       ],
       "aliases": [
         "2-[4-(3,6-dimethylheptan-3-yl)phenoxy]ethanol",
-        "DTXSID70675860",
         "2-(4-(3,6-Dimethylheptan-3-yl)phenoxy)ethanol",
-        "RefChem:251825",
-        "DTXCID60809470",
         "4-(3',6'-Dimethyl-3'-heptyl)phenol Monoethoxylate",
         "2-(4-(3,6-Dimethylheptan-3-yl)phenoxy)ethan-1-ol",
         "4-(3'6'-Dimethyl-3'-heptyl)phenol Monoethoxylate",
         "2-[4-(3,6-dimethylheptan-3-yl)phenoxy]ethan-1-ol",
         "1119449-37-4 (unlabeled)",
-        "AKOS030243142",
-        "MSK167554-1000B",
-        "NS00134733",
         "4-(3,6-Dimethyl-3-heptyl)phenol-3,5-d2 monoethoxylate",
         "4-(3,6-Dimethyl-3-heptyl)phenol monoethoxylate Solution in Acetone, 1000ug/mL"
       ],
@@ -702,14 +626,12 @@
         "2-{2-[4-(2,4,4-trimethylpentan-2-yl)phenoxy]ethoxy}ethanol",
         "2-[2-[4-(2,4,4-trimethylpentan-2-yl)phenoxy]ethoxy]ethanol",
         "2-(2-(4-(2,4,4-Trimethylpentan-2-yl)phenoxy)ethoxy)ethanol",
-        "RefChem:865000",
         "4-tert-Octylphenol Diethoxylate",
         "Octoxynol-2",
         "2-{2-[4-(1,1,3,3-TETRAMETHYLBUTYL)PHENOXY]ETHOXY}ETHANOL",
         "2-(2-[4-(1,1,3,3-Tetramethylbutyl)phenoxy]ethoxy)ethanol",
         "Ethanol, 2-[2-[4-(1,1,3,3-tetramethylbutyl)phenoxy]ethoxy]-",
         "2-[2-[4-(1,1,3,3-Tetramethylbutyl)phenoxy]ethoxy]ethanol",
-        "P801HF8Z9A",
         "4-iso-Octylphenol-di-ethoxylate",
         "Ethanol, 2-(2-(4-(1,1,3,3-tetramethylbutyl)phenoxy)ethoxy)-",
         "2-{2-[4-(2,4,4-Trimethylpentan-2-yl)phenoxy]ethoxy}ethan-1-ol",
@@ -748,15 +670,11 @@
         "2-{2-[4-(3,6-dimethylheptan-3-yl)phenoxy]ethoxy}ethanol",
         "2-[2-[4-(3,6-dimethylheptan-3-yl)phenoxy]ethoxy]ethanol",
         "2-(2-(4-(3,6-dimethylheptan-3-yl)phenoxy)ethoxy)ethanol",
-        "RefChem:452840",
         "4-(3',6'-Dimethyl-3'-heptyl)phenol Diethoxylate",
         "(4E, 14Z)-Sphingadienine-C18-1-phosphate",
         "2-{2-[4-(3,6-Dimethyl-3-heptyl)phenoxy]ethoxy}ethanol",
-        "DTXSID50675863",
         "2-{2-[4-(3',6'-Dimethyl-3'-heptyl)phenoxy]ethoxy}ethanol",
-        "MSK167555-100B",
         "(4E,14Z)-Sphingadienine-C18-1-phosphate",
-        "NS00134734",
         "2-{2-[4-(3,6-Dimethylheptan-3-yl)phenoxy]ethoxy}ethan-1-ol"
       ],
       "inciName": null
@@ -896,8 +814,6 @@
       "aliases": [
         "20-[4-(1,1,3,3-tetramethylbutyl)phenoxy]-3,6,9,12,15,18-hexaoxaicosan-1-ol",
         "20-(4-(1,1,3,3-Tetramethylbutyl)phenoxy)-3,6,9,12,15,18-hexaoxaicosan-1-ol",
-        "EINECS 219-682-8",
-        "RefChem:483879",
         "Triton X-100.7",
         "Triton(TM) X-114",
         "20-(4-(2,4,4-Trimethylpentan-2-yl)phenoxy)-3,6,9,12,15,18-hexaoxaicosan-1-ol",
@@ -909,11 +825,7 @@
         "Triton(TM) X-45",
         "Triton(TM) X-100",
         "IGEPAL(R) CA-630",
-        "Triton(TM) X-100, CP",
-        "DGW88559XL",
-        "CHEMBL2104613",
-        "SCHEMBL29350411",
-        "DTXSID60179685"
+        "Triton(TM) X-100, CP"
       ],
       "inciName": null
     },
@@ -1153,10 +1065,7 @@
       ],
       "aliases": [
         "3,6,9,12,15,18,21,24,27-Nonaoxanonacosan-1-ol, 29-(isononylphenoxy)-",
-        "RefChem:272195",
-        "SCHEMBL6855044",
-        "HYZLLJKTXYYLDT-UHFFFAOYSA-N",
-        "NS00050390"
+        "HYZLLJKTXYYLDT-UHFFFAOYSA-N"
       ],
       "inciName": null
     },
@@ -1257,15 +1166,9 @@
         "para-tert-Octylphenol",
         "Phenol, p-(tert-octyl)-",
         "Phenol, p-(1,1,3,3-tetramethylbutyl)-",
-        "DTXSID9022360",
-        "IOY9FVU3J3",
         "p-(1',1',3',3'-Tetramethylbutyl)fenol",
-        "NSC-5427",
-        "NSC-7248",
         "p-(1,1,3,3-tetramethylbutyl)-phenol",
-        "DTXCID602360",
-        "4-tertiary-octylphenol",
-        "RefChem:6769"
+        "4-tertiary-octylphenol"
       ],
       "inciName": null
     },
@@ -1290,15 +1193,10 @@
         "4-(2,6-DIMETHYL-2-HEPTYL)PHENOL",
         "4-(2,6-Dimethylheptan-2-yl)phenol",
         "262-NP,  4-(1,1,5-Trimethylhexyl)phenol",
-        "SCHEMBL25230502",
-        "DTXSID00617379",
         "INFJVYKPPXZLJX-UHFFFAOYSA-N",
         "4-[1,1,5-trimethylhexyl]-phenol",
         "Phenol, 4-(1,1,5-trimethylhexyl)",
-        "AKOS025295419",
         "262-Np,4-(1,1,5-trimethylhexyl)phenol",
-        "NS00134735",
-        "H42094",
         "4-(2,6-Dimethyl-2-heptyl)phenol, analytical standard"
       ],
       "inciName": null
@@ -1321,13 +1219,7 @@
       ],
       "aliases": [
         "4-(2-methylhexan-2-yl)phenol",
-        "4-(1,1-Dimethylpentyl)phenol",
-        "DTXSID801029300",
-        "RefChem:510093",
-        "DTXCID301514566",
-        "SCHEMBL199438",
-        "SCHEMBL199439",
-        "NS00134446"
+        "4-(1,1-Dimethylpentyl)phenol"
       ],
       "inciName": null
     },
@@ -1349,12 +1241,7 @@
       ],
       "aliases": [
         "4-(2,2-dimethylpentan-3-yl)phenol",
-        "4-(1-Ethyl-2,2-dimethylpropyl)phenol",
-        "RefChem:286680",
-        "SCHEMBL12086475",
-        "SCHEMBL28930117",
-        "DTXSID701029369",
-        "NS00134614"
+        "4-(1-Ethyl-2,2-dimethylpropyl)phenol"
       ],
       "inciName": null
     },
@@ -1376,12 +1263,7 @@
       ],
       "aliases": [
         "4-(2,3-dimethylpentan-2-yl)phenol",
-        "RefChem:510692",
-        "4-(1,1,2-Trimethylbutyl)phenol",
-        "SCHEMBL7202909",
-        "DTXSID001029370",
-        "NS00134615",
-        "EN300-8799062"
+        "4-(1,1,2-Trimethylbutyl)phenol"
       ],
       "inciName": null
     },
@@ -1403,12 +1285,7 @@
       ],
       "aliases": [
         "4-(2,3,3-trimethylbutan-2-yl)phenol",
-        "4-(1,1,2,2-tetramethylpropyl)phenol",
-        "DTXSID001029332",
-        "RefChem:510027",
-        "DTXCID701514601",
-        "SCHEMBL9844421",
-        "NS00134581"
+        "4-(1,1,2,2-tetramethylpropyl)phenol"
       ],
       "inciName": null
     },
@@ -1451,12 +1328,7 @@
       ],
       "aliases": [
         "4-(2,4-dimethylpentan-3-yl)phenol",
-        "4-[2-Methyl-1-(1-methylethyl)propyl]phenol",
-        "DTXSID001029287",
-        "RefChem:517263",
-        "DTXCID101514558",
-        "SCHEMBL2048576",
-        "NS00134433"
+        "4-[2-Methyl-1-(1-methylethyl)propyl]phenol"
       ],
       "inciName": null
     },
@@ -1478,15 +1350,10 @@
       ],
       "aliases": [
         "4-(3-ethylheptan-2-yl)phenol",
-        "DTXSID30696536",
-        "RefChem:287623",
-        "DTXCID30647285",
         "4-(2-ETHYL-1-METHYLHEXYL)PHENOL",
         "GSSYEGRAMDNVJA-UHFFFAOYSA-N",
         "4-[2-Ethyl-1-methylhexyl]-phenol",
         "Phenol, 4-(2-ethyl-1-methylhexyl)",
-        "NS00134736",
-        "G69244",
         "4-(2-Ethyl-1-methylhexyl)phenol, analytical standard"
       ],
       "inciName": null
@@ -1551,11 +1418,7 @@
       ],
       "aliases": [
         "4-(3-methylhexan-2-yl)phenol",
-        "4-(1,2-Dimethylpentyl)phenol",
-        "DTXSID101029361",
-        "RefChem:510126",
-        "DTXCID001514624",
-        "NS00134607"
+        "4-(1,2-Dimethylpentyl)phenol"
       ],
       "inciName": null
     },
@@ -1724,12 +1587,7 @@
       ],
       "aliases": [
         "4-(5-methylhexan-3-yl)phenol",
-        "4-(1-Ethyl-3-methylbutyl)phenol",
-        "DTXSID101029359",
-        "RefChem:510309",
-        "DTXCID601514622",
-        "SCHEMBL12201279",
-        "NS00134606"
+        "4-(1-Ethyl-3-methylbutyl)phenol"
       ],
       "inciName": null
     },
@@ -1750,12 +1608,7 @@
         }
       ],
       "aliases": [
-        "4-(5-methylhexyl)phenol",
-        "DTXSID901029434",
-        "RefChem:514776",
-        "DTXCID401514688",
-        "SCHEMBL980192",
-        "NS00134365"
+        "4-(5-methylhexyl)phenol"
       ],
       "inciName": null
     },
@@ -1778,12 +1631,7 @@
       "aliases": [
         "4-(heptan-2-yl)phenol",
         "4-(1-Methylhexyl)phenol",
-        "DTXSID301029329",
-        "RefChem:510385",
-        "DTXCID501514598",
-        "SCHEMBL6686936",
-        "OXAMRILEWOFNPN-UHFFFAOYSA-N",
-        "NS00134556"
+        "OXAMRILEWOFNPN-UHFFFAOYSA-N"
       ],
       "inciName": null
     },
@@ -1806,13 +1654,7 @@
       "aliases": [
         "4-(heptan-3-yl)phenol",
         "4-(1-Ethylpentyl)phenol",
-        "DTXSID901029327",
-        "RefChem:510311",
-        "DTXCID801514597",
-        "SCHEMBL27295229",
-        "SCHEMBL28125000",
-        "VVMIIKFOWHZTCV-UHFFFAOYSA-N",
-        "NS00134460"
+        "VVMIIKFOWHZTCV-UHFFFAOYSA-N"
       ],
       "inciName": null
     },
@@ -1834,22 +1676,9 @@
       ],
       "aliases": [
         "4-(heptan-4-yl)phenol",
-        "DTXSID30496952",
-        "RefChem:289048",
-        "DTXCID30447762",
         "Phenol, 4-(1-propylbutyl)-",
         "4-heptan-4-ylphenol",
-        "4-(1-Propylbutyl)phenol",
-        "MFCD20489522",
-        "SCHEMBL984302",
-        "GAA46571",
-        "AKOS027196475",
-        "CCG-358021",
-        "AS-58890",
-        "NS00134459",
-        "EN300-217636",
-        "W12544",
-        "Z1322793592"
+        "4-(1-Propylbutyl)phenol"
       ],
       "inciName": null
     },
@@ -1874,19 +1703,13 @@
         "4-n-Heptylphenol",
         "p-Heptylphenol",
         "p-Hydroxyheptylbenzene",
-        "I743Z35DVB",
-        "DTXSID2037714",
-        "DTXCID209036",
-        "RefChem:1071280",
         "Phenol, 4-heptyl-",
         "HEPTANYL-P-PHENOL",
-        "MFCD00041751",
         "4-(Hept-1-yl)phenol",
         "p-n-Heptylphenol",
         "UNII-I743Z35DVB",
         "p-heptyl phenol",
         "4-Heptylphenol #",
-        "EINECS 217-862-0",
         "PHENOL, P-HEPTYL-",
         "4-Heptylphenol, AldrichCPR",
         "BIDD:ER0405"
@@ -2016,8 +1839,6 @@
         "4-(1,1-Dimethylheptyl)phenolDiethoxylate",
         "4-tert-Nonylphenol-diethoxylate",
         "QBJGHRMRNHNIKU-UHFFFAOYSA-N",
-        "DTXSID301029274",
-        "NS00134426",
         "2-(2-(4-(2-Methyloctan-2-yl)phenoxy)ethoxy)ethan-1-ol"
       ],
       "inciName": null
@@ -2061,10 +1882,7 @@
         "4-tert-butyl phenol",
         "Ucar butylphenol 4-T flake",
         "para-tertiary-butylphenol",
-        "DTXSID1020221",
-        "4-tertiary-butylphenol",
-        "O81VMW36CV",
-        "CHEBI:34444"
+        "4-tertiary-butylphenol"
       ],
       "inciName": null
     },
@@ -2557,14 +2375,12 @@
         "Hatcol DIBP",
         "1,2-Benzenedicarboxylic acid, bis(2-methylpropyl) ester",
         "Diisobutylester kyseliny ftalove",
-        "DTXSID9022522",
         "1,2-Benzenedicarboxylic acid, 1,2-bis(2-methylpropyl) ester",
         "isobutyl-o-phthalate",
         "di-isobutyl phthalate",
         "bis(2-methylpropyl) phthalate",
         "di-2-methylpropyl phthalate",
-        "AI3-04278 (USDA)",
-        "IZ67FTN290"
+        "AI3-04278 (USDA)"
       ],
       "inciName": null
     },
@@ -2593,21 +2409,14 @@
       "aliases": [
         "Dimethomorph",
         "Acrobat",
-        "DTXSID7034545",
         "3-(4-chlorophenyl)-3-(3,4-dimethoxyphenyl)-1-morpholin-4-ylprop-2-en-1-one",
         "Akrobat",
         "Forum",
         "Festival C",
-        "CME 151",
         "3-(4-chlorophenyl)-3-(3,4-dimethoxyphenyl)-1-(morpholin-4-yl)prop-2-en-1-one",
-        "3EXL2158GV",
-        "DTXCID5014545",
-        "CHEBI:81848",
         "Athlete",
         "4-(3-(4-Chlorophenyl)-3-(3,4-dimethoxyphenyl)-1-oxo-2-propenyl)morpholine",
         "2-Propen-1-one, 3-(4-chlorophenyl)-3-(3,4-dimethoxyphenyl)-1-(4-morpholinyl)-",
-        "RefChem:588062",
-        "CME-151",
         "Morpholine, 4-(3-(4-chlorophenyl)-3-(3,4-dimethoxyphenyl)-1-oxo-2-propenyl)-",
         "4-(3-(4-Chlorophenyl)-3-(3,4-dimethoxyphenyl)acryloyl)morpholine",
         "Dimethomorph isomer 2"
@@ -2641,20 +2450,12 @@
         "Fluthiamide",
         "Thiafluamide",
         "Fluthiamid",
-        "Foe 5043",
-        "FOE-5043",
-        "DTXSID2032552",
-        "OL44PP5145",
         "BAY FOE-5043",
-        "DTXCID0012552",
-        "CHEBI:81920",
         "N-ISOPROPYL-(5-TRIFLUOROMETHYL-1,3,4-THIADIAZOL-2-YL)-(4'-FLUOROOXYACETANILIDE)",
-        "RefChem:140823",
         "Flufenacet [ISO]",
         "Flufenacet 10 microg/mL in Cyclohexane",
         "BAY-FOE 5043",
         "C14H13F4N3O2S",
-        "HSDB 7011",
         "UNII-OL44PP5145",
         "EINECS Annex I Index 613-164-00-9"
       ],
@@ -2723,16 +2524,11 @@
         "Isobutyl-4-hydroxybenzoate",
         "Isobutyl parahydroxybenzoate",
         "Benzoic acid, 4-hydroxy-, 2-methylpropyl ester",
-        "DTXSID4020749",
         "isobutyl-p-hydroxybenzoate",
         "BENZOIC ACID, p-HYDROXY-, ISOBUTYL ESTER",
-        "0QQJ25X58G",
-        "DTXCID20749",
         "i-BHB",
-        "RefChem:923642",
         "2-Methylpropyl 4-hydroxybenzoate",
         "4-Hydroxybenzoic Acid Isobutyl Ester",
-        "MFCD00020167",
         "p-Hydroxybenzoic acid isobutyl ester",
         "p-Oxybenzoesaureisobutylester",
         "4-Hydroxybenzoic acid-isobutyl ester"
@@ -2821,7 +2617,6 @@
         "Manzin",
         "Fore",
         "Zinc manganese ethylenebisdithiocarbamate",
-        "R0HY55EB9E",
         "Carmazine",
         "Karamate",
         "Kascade",
@@ -2950,13 +2745,8 @@
         "Lexone 4L",
         "Sencor 4F",
         "Sencorer",
-        "Bayer 6159H",
-        "Bayer 6443H",
-        "Bay 94337",
-        "Bayer 94337",
         "Sencorex L.F.",
-        "BAY dic 1468",
-        "DTXSID6024204"
+        "BAY dic 1468"
       ],
       "inciName": null
     },
@@ -2981,19 +2771,13 @@
         "Phenol, nonyl-",
         "Nonyl phenol",
         "n-Nonylphenol",
-        "DTXSID3021857",
         "Hydroxyl No. 253",
         "Prevostsel VON-100",
-        "RefChem:88777",
         "Nonanal-methyl anthranilate",
         "Nonyl phenol (mixed isomers)",
-        "79F6A2ILP5",
-        "DTXCID301285171",
-        "NSC-71410",
         "2-Nonylphenol",
         "o-Nonylphenol",
         "Phenol, 2-nonyl-",
-        "24R8721A3S",
         "2-n-nonylphenol",
         "UNII-24R8721A3S",
         "2-n-nonyl-phenol"
@@ -3138,17 +2922,11 @@
         "Poly(oxy-1,2-ethanediyl), a-(nonylphenyl)-w-hydroxy-",
         "4-Nonylphenol diethoxylate",
         "Nonoxynol-2",
-        "U4A966MO25",
-        "DTXSID9058600",
-        "RefChem:1071320",
-        "DTXCID0016588",
         "2-[2-(4-Nonylphenoxy)ethoxy]ethanol",
         "4-Nonyl Phenol Diethoxylate",
         "2-(2-(4-Nonylphenoxy)ethoxy)ethanol",
         "2-[2-(4-nonylphenoxy)ethoxy]ethan-1-ol",
         "Ethanol, 2-(2-(4-nonylphenoxy)ethoxy)-",
-        "CHEMBL194034",
-        "MFCD00148006",
         "Polyoxyethylene (12) nonylphenyl ether",
         "Ethanol, 2-[2-(4-nonylphenoxy)ethoxy]-",
         "DSSTox_CID_16588",
@@ -3498,13 +3276,9 @@
         "p-Nonylphenol, phosphite (3:1)",
         "DOVERPHOS 4",
         "Tris(p-nonylphenyl) phosphite",
-        "E423N4NW2Z",
-        "DTXSID60872866",
         "Phenol, nonyl-, 1,1',1''-phosphite",
         "Tris[p-nonylphenyl] phosphite",
         "Trisnonylphenylphosphit",
-        "RefChem:900350",
-        "DTXCID707903",
         "Phenol,nonyl-,phosphite (3:1)",
         "TRIS(NONYLPHENYL)PHOSPHITE [INCI]",
         "Phenol, nonyl-, phosphite (3:1)",
@@ -3564,13 +3338,8 @@
       ],
       "aliases": [
         "Phenol, dodecyl-, branched",
-        "DTXSID70880593",
         "4-(3,4,5-trimethylheptyl)phenol",
-        "RefChem:287462",
-        "DTXCID209853",
-        "NOCAS_880593",
-        "AOOKHLGAVNECET-UHFFFAOYSA-N",
-        "NS00011470"
+        "AOOKHLGAVNECET-UHFFFAOYSA-N"
       ],
       "inciName": null
     },
@@ -3655,11 +3424,7 @@
       ],
       "aliases": [
         "Phenol, p-sec-nonyl-, phosphite",
-        "p-sec-Nonylphenol phosphite",
-        "DTXSID401029439",
-        "RefChem:858175",
-        "DTXCID801514692",
-        "NS00134381"
+        "p-sec-Nonylphenol phosphite"
       ],
       "inciName": null
     },
@@ -3687,10 +3452,7 @@
       ],
       "aliases": [
         "Phenol, tetrapropylene-",
-        "RefChem:861438",
-        "DTXSID0029765",
         "4-(2,4-dimethyl-3-propylheptyl)phenol",
-        "DTXSID40891934",
         "OZZIOWVRWRTHQO-UHFFFAOYSA-N"
       ],
       "inciName": null
@@ -3974,15 +3736,8 @@
         "(1-methylethylidene)bis(4,1-phenyleneoxy-3,1-propanediyl) bismethacrylate",
         "2,2-Bis-(4-(3-methacryloxypropoxy)phenyl)propane",
         "BIS-PMA",
-        "RefChem:569543",
         "Bisphenol A bis(3-methacryloyloxypropyl) ether",
-        "EINECS 248-607-1",
-        "EC 248-607-1",
-        "SCHEMBL346370",
-        "DTXSID20950351",
         "OPZLDVPRAIERSE-UHFFFAOYSA-N",
-        "NS00008887",
-        "H81710",
         "2,2-bis-[4-(methacryloxypropoxy)-phenyl]-propane"
       ],
       "inciName": null
@@ -4112,14 +3867,11 @@
         "Cyclopenta[g]-2-benzopyran, 1,3,4,6,7,8-hexahydro-4,6,6,7,8,8-hexamethyl-",
         "Hexahydrohexamethyl cyclopentabenzopyran",
         "1,3,4,6,7,8-Hexahydro-4,6,6,7,8,8-hexamethyl-cyclopenta-gamma-2-benzopyran",
-        "14170060AT",
-        "CHEBI:83784",
         "Hexahydro-4,6,6,7,8,8-hexamethylcyclopenta-gamma-2-benzopyran",
         "1,3,4,6,7,8-Hexahydro-4,6,6,7,8,8-hexamethylindeno(5,6-c)pyran",
         "Cyclopenta(g)-2-benzopyran, 1,3,4,6,7,8-hexahydro-4,6,6,7,8,8-hexamethyl-",
         "1,3,4,6,7,8-hexahydro-4,6,6,7,8,8-hexamethylindeno[5,6-c]pyran",
         "hexahydro-hexamethylcyclopenta-benzopyran",
-        "RefChem:633508",
         "4,6,6,7,8,8-Hexamethyl-1,3,4,6,7,8-hexahydrocyclopenta[g]isochromene",
         "1,3,4,6,7,8-Hexahydro-4,6,6,7,8,8-hexamethylcyclopenta[g]-2-benzopyran"
       ],
@@ -4281,9 +4033,7 @@
         "Tetrabromodiphenylopropane",
         "2,6-dibromo-4-[2-(3,5-dibromo-4-hydroxyphenyl)propan-2-yl]phenol",
         "2,2',6,6'-TETRABROMOBISPHENOL A",
-        "FG 2000",
         "4,4'-(1-Methylethylidene)bis(2,6-dibromophenol)",
-        "DTXSID1026081",
         "BA 59",
         "3,5,3',5'-Tetrabromobisphenol A"
       ],
@@ -4329,25 +4079,19 @@
       "aliases": [
         "2,2′,6,6′-Tetra-tert-butyl-4,4′- methylenediphenol",
         "4,4'-METHYLENEBIS(2,6-DI-TERT-BUTYLPHENOL)",
-        "Ionox 220",
         "Binox M",
         "Antioxidant E 702",
-        "Ethyl 702",
         "4,4'-Methylenebis(2,6-di-t-butylphenol)",
         "MB 1 (Antioxidant)",
         "Ionox 220 antioxidant",
         "LZ-MB 1",
-        "Etil 702",
         "L 3MB1",
         "E 702",
         "Phenol, 4,4'-methylenebis[2,6-bis(1,1-dimethylethyl)-",
         "Phenol, 4,4'-methylenebis(2,6-di-tert-butyl-",
-        "DTXSID7022411",
         "VANLUBE DTB",
         "Phenol, 4,4'-methylenebis(2,6-bis(1,1-dimethylethyl)-",
-        "NSC-30551",
-        "AGIDOL 23",
-        "ETHANOX 702"
+        "AGIDOL 23"
       ],
       "inciName": null
     },
@@ -4373,21 +4117,17 @@
         "2,4-DI-T-BUTYLPHENOL",
         "2,4-bis(tert-butyl)phenol",
         "Antioxidant No. 33",
-        "Prodox 146",
         "1-Hydroxy-2,4-di-tert-butylbenzene",
         "Phenol, 2,4-di-tert-butyl-",
         "Phenol, 2,4-bis(1,1-dimethylethyl)-",
         "Prodox 146A-85X",
         "2,4-Bis(1,1-dimethylethyl)phenol",
         "2,4-tert-butylphenol",
-        "FOB94G6HZT",
         "2,4-bis(1,1-dimethylethyl)-phenol",
         "Phenol, 2,4-di(1,1-dimethylethyl)-",
         "2,4-DTBP",
-        "DTXSID2026602",
         "2,4-Bis(1,1'-dimethylethyl)phenol",
-        "AGIDOL 10",
-        "NSC-174502"
+        "AGIDOL 10"
       ],
       "inciName": null
     },
@@ -4498,22 +4238,14 @@
         "3-methylpyrazole",
         "1H-Pyrazole, 3-methyl-",
         "3(5)-Methylpyrazole",
-        "W7KU1RRO6U",
-        "DTXSID3073260",
-        "RefChem:504324",
-        "DTXCID0034726",
         "5-methyl-1H-pyrazole",
         "3-Methyl-1H-pyrazole",
         "1H-Pyrazole,5-methyl-",
         "5-Methylpyrazole",
         "1H-Pyrazole, 5-methyl-",
-        "MFCD00005240",
         "Pyrazole, 5-methyl-",
         "PYRAZOLE, 3-METHYL-",
-        "MFCD08685900",
         "methylpyrazole",
-        "CHEMBL3275944",
-        "EINECS 215-925-7",
         "UNII-W7KU1RRO6U"
       ],
       "inciName": null
@@ -4541,16 +4273,10 @@
         "2-Propenoic acid, 3,3,4,4,5,5,6,6,7,7,8,8,8-tridecafluorooctyl ester",
         "2-(Perfluorohexyl)ethyl acrylate",
         "1,1,2,2-Tetrahydroperfluorooctyl acrylate",
-        "H8RP8R77R9",
         "CHEMINOX FAAC 6",
-        "EINECS 241-527-8",
         "ACTYFLON G 06C",
-        "EC 241-527-8",
         "ACRYLIC ACID, 3,3,4,4,5,5,6,6,7,7,8,8,8-TRIDECAFLUOROOCTYL ESTER",
-        "RefChem:860266",
         "3,3,4,4,5,5,6,6,7,7,8,8,8-tridecafluorooctyl prop-2-enoate",
-        "C11H7F13O2",
-        "MFCD00042351",
         "1H,1H,2H,2H-Tridecafluoro-n-octyl Acrylate",
         "(perfluorohexyl)ethyl acrylate",
         "1H,1H,2H,2H-Tridecafluoro-n-octyl Acrylate (stabilized with HQ + MEHQ)",
@@ -4577,23 +4303,17 @@
       "aliases": [
         "3,3,4,4,5,5,6,6,7,7,8,8,8-tridecafluorooctyl methacrylate",
         "Tridecafluorohexylethyl methacrylate",
-        "A3INR94K4A",
         "CAPSTONE 62MA",
         "CHEMINOX FAMAC 6",
         "ACTYFLON G 06B",
         "FAMAC 6",
         "UNII-A3INR94K4A",
         "FLUOWET MA 600",
-        "EINECS 218-407-9",
-        "EC 218-407-9",
-        "M 1620",
         "3,3,4,4,5,5,6,6,7,7,8,8,8-TRIDECAFLUOROOCTYLMETHACRYLATE-",
-        "RefChem:9327",
         "PERFLUOROHEXYLETHYL METHACRYLATE",
         "2-(perfluorohexyl)ethyl methacrylate",
         "1H,1H,2H,2H-Perfluorooctyl methacrylate",
         "3,3,4,4,5,5,6,6,7,7,8,8,8-tridecafluorooctyl 2-methylprop-2-enoate",
-        "MFCD00077580",
         "Perfluorohexyl ethyl methacrylate"
       ],
       "inciName": null
@@ -4620,11 +4340,9 @@
         "4-(4-isopropoxyphenylsulfonyl)phenol",
         "BPSIP compound",
         "4-hydroxyphenyl 4-isopropoxyphenylsulfone",
-        "RefChem:514291",
         "4-((4-Isopropoxyphenyl)sulfonyl)phenol",
         "4-hydroxy-4'-isopropoxydiphenylsulfone",
         "4-Hydroxyphenyl 4-Isopropoxyphenyl Sulfone",
-        "MFCD01861244",
         "4-(4-propan-2-yloxyphenyl)sulfonylphenol",
         "Phenol, 4-[[4-(1-methylethoxy)phenyl]sulfonyl]-",
         "4-[(4-Isopropoxyphenyl)sulfonyl]phenol",
@@ -4632,10 +4350,7 @@
         "Phenol, 4-((4-(1-methylethoxy)phenyl)sulfonyl)-",
         "D8(HPS)",
         "4-(4-isopropoxyphenyl)sulfonylphenol",
-        "SCHEMBL26268",
-        "DTXSID2058706",
         "4-(4-Isopropoxyphenylsulfonyl) Phenol",
-        "EC 405-520-5",
         "4-HYDROXYPHENYL 4-ISOPROOXYPHENYLSULFONE"
       ],
       "inciName": null
@@ -4711,7 +4426,6 @@
         "TMBPA",
         "4,4'-isopropylidenedi-2,6-xylol (TMBPA)",
         "4,4'-isopropylidenedi-2,6-xylol",
-        "RefChem:506703",
         "2,2-Bis(4-hydroxy-3,5-dimethylphenyl)propane",
         "4,4'-(propane-2,2-diyl)bis(2,6-dimethylphenol)",
         "Tetramethylbisphenol A",
@@ -4719,17 +4433,14 @@
         "4-[2-(4-hydroxy-3,5-dimethylphenyl)propan-2-yl]-2,6-dimethylphenol",
         "2,2-Bis(3,5-dimethyl-4-hydroxyphenyl)propane",
         "4,4'-propane-2,2-diylbis(2,6-dimethylphenol)",
-        "MFCD00068238",
         "4,4'-Isopropylidenebis(2,6-dimethylphenol)",
         "Phenol, 4,4'-(1-methylethylidene)bis[2,6-dimethyl-",
         "4-[1-(4-Hydroxy-3,5-dimethylphenyl)-1-methylethyl]-2,6-dimethylphenol",
-        "DTXSID8047973",
         "4-[1-(4-hydroxy-3,5-dimethyl-phenyl)-1-methyl-ethyl]-2,6-dimethyl-phenol",
         "2,2-bis-(3,5-dimethyl-4-hydroxyphenyl)-propane",
         "Phenol, 4,4'-(1-methylethylidene)bis(2,6-dimethyl-",
         "4-[1-(4-hydroxy-3,5-dimethylphenyl)-isopropyl]-2,6-dimethylphenol",
-        "Bisxylenol A",
-        "NSC73730"
+        "Bisxylenol A"
       ],
       "inciName": null
     },
@@ -4755,11 +4466,6 @@
         "3,3'-Dimethylbisphenol A",
         "Nonox DCP",
         "Dicresylolpropane",
-        "DTXSID8047890",
-        "98817I7XJ2",
-        "NSC-408489",
-        "DTXCID4027866",
-        "RefChem:484991",
         "4-(2,2-dichloro-1-(4-hydroxyphenyl)ethenyl)phenol",
         "2,2-Bis(4-hydroxy-3-methylphenyl)propane",
         "4,4'-(Propane-2,2-diyl)bis(2-methylphenol)",
@@ -4767,8 +4473,6 @@
         "4-[2-(4-hydroxy-3-methylphenyl)propan-2-yl]-2-methylphenol",
         "2,2-Bis(3-methyl-4-hydroxyphenyl)propane",
         "Phenol, 4,4'-(1-methylethylidene)bis[2-methyl-",
-        "MFCD00002232",
-        "NSC 408489",
         "o-Cresol, 4,4'-(2,2-propylene)bis-"
       ],
       "inciName": null
@@ -4802,9 +4506,7 @@
         "Antage W300",
         "1,1-Bis(2-methyl-4-hydroxy-5-tert-butylphenyl)butane",
         "4,4'-Butylidenebis(6-tert-butyl-3-methylphenyl)",
-        "IM86P8WF2S",
         "m-Cresol, 4,4'-butylidenebis(6-tert-butyl-",
-        "NSC-67485",
         "4,4'-Butylidene bis(6-tert-butyl-3-methylphenol)",
         "Phenol, 4,4'-butylidenebis(2-(1,1-dimethylethyl)-5-methyl-",
         "Phenol, 4,4'-butylidenebis[2-(1,1-dimethylethyl)-5-methyl-",
@@ -4975,21 +4677,14 @@
       "aliases": [
         "Buprofezin",
         "2-(tert-butylimino)-5-phenyl-3-(propan-2-yl)-1,3,5-thiadiazinan-4-one",
-        "CHEBI:3218",
-        "RefChem:1062068",
         "Applaud",
         "Buprofezine",
-        "NNI 750",
-        "PP618",
         "(E)-buprofezin",
         "(Z)-2-(TERT-BUTYLIMINO)-3-ISOPROPYL-5-PHENYL-1,3,5-THIADIAZINAN-4-ONE",
         "2-tert-Butylimino-3-isopropyl-5-phenyl-1,3,5-thiadiazinan-4-one",
         "2-tert-butylimino-5-phenyl-3-propan-2-yl-1,3,5-thiadiazinan-4-one",
-        "3B8KGI239I",
         "Buprofenzin",
-        "DTXSID8034401",
         "2-tert-Butylimino-3-isopropyl-5-phenylperhydro-1,3,5-thiadiazinan-4-one",
-        "MFCD01681899",
         "Buprofezin 10 microg/mL in Cyclohexane",
         "Buprofezin 100 microg/mL in Cyclohexane",
         "2-(tert-butylimino)-3-isopropyl-5-phenyl-1,3,5-thiadiazinan-4-one"
@@ -5113,22 +4808,16 @@
         "Lilial",
         "lily aldehyde",
         "2-(4-tert-Butylbenzyl)propionaldehyde",
-        "DTXSID9026500",
         "4-tert-butyl-alpha-methylhydrocinnamaldehyde",
         "Benzenepropanal, 4-(1,1-dimethylethyl)-alpha-methyl-",
-        "T7540GJV69",
         "p-tert-Butyl-alpha-methylhydrocinnamic aldehyde",
-        "NSC-22275",
-        "DTXCID606500",
         "BETA-LILIAL",
-        "RefChem:153446",
         "3-(4-(tert-Butyl)phenyl)-2-methylpropanal",
         "3-(4-tert-Butylphenyl)isobutyraldehyde",
         "Lilestralis",
         "3-(4-tert-Butylphenyl)-2-methylpropanal",
         "Lilyal",
-        "3-(4-tert-Butylphenyl)-2-methylpropionaldehyde",
-        "MFCD00047655"
+        "3-(4-tert-Butylphenyl)-2-methylpropionaldehyde"
       ],
       "inciName": null
     },
@@ -5397,25 +5086,12 @@
       ],
       "aliases": [
         "Ethiprole",
-        "5527E53JNB",
-        "DTXSID6058003",
-        "RefChem:592703",
-        "DTXCID9031771",
         "Ethiprole [ISO]",
-        "MFCD07366662",
         "Kirappu",
         "C13H9Cl2F3N4OS",
         "UNII-5527E53JNB",
-        "rpa 107382",
         "ETHIPROLE [MI]",
-        "SCHEMBL27048",
-        "CHEMBL2228921",
-        "CHEBI:81827",
-        "HMS3741G13",
-        "MSK20309",
-        "AKOS015914939",
-        "5-amino-3-cyano-1-(2,6-dichloro-4-trifluoromethylphenyl)-4-ethylsulfinylpyrazole",
-        "AS-14739"
+        "5-amino-3-cyano-1-(2,6-dichloro-4-trifluoromethylphenyl)-4-ethylsulfinylpyrazole"
       ],
       "inciName": null
     },
@@ -5757,8 +5433,6 @@
         "Chlorate of potassium",
         "Chloric acid, potassium salt",
         "Potash chlorate (DOT)",
-        "H35KS68EE7",
-        "DTXSID6047448",
         "KALI CHLORICUM",
         "Potassio (clorato di)",
         "Potassium (chlorate de)"
@@ -5788,15 +5462,11 @@
         "Potassium dicyanoargentate(1-)",
         "Argentate(1-), dicyano-, potassium",
         "Potassium silver cyanide (KAg(CN)2)",
-        "46KRR09TKY",
         "Potassium dicyanoargentate(I)",
-        "DTXCID204269",
         "Silver potassium cyanide",
         "RCRA WASTE NO.-P099",
-        "DTXSID5024269",
         "POTASSIUM ARGENTOCYANIDE (KAG(CN)2)",
         "Potassium argentocyanide",
-        "S-900",
         "SILVER POTASSIUM CYANIDE (AGK(CN)2)",
         "POTASSIUM CYANOARGENTATE(I) (KAG(CN)2)",
         "Potassium bis(cyano-C)argentate(1-)",
@@ -6268,17 +5938,9 @@
         "Triethylfosfat",
         "Ethyl phosphate ((EtO)3PO)",
         "o-Phosphoric acid triethyl ester",
-        "QIH4K96K7J",
-        "DTXSID8026228",
-        "NSC-2677",
-        "DTXCID806228",
-        "CHEBI:45927",
-        "RefChem:191513",
         "Ethyl phosphate",
         "Phosphoric Acid Triethyl Ester",
-        "C6H15O4P",
-        "NSC 2677",
-        "MFCD00009077"
+        "C6H15O4P"
       ],
       "inciName": null
     },
@@ -6305,20 +5967,14 @@
         "Totm",
         "Tri-2-ethylhexyl trimellitate",
         "Staflex TOTM",
-        "Morflex 510",
-        "Hatcol 200",
         "Trimex T 08",
         "1,2,4-Benzenetricarboxylic acid, tris(2-ethylhexyl) ester",
         "Monosizer W710L",
-        "DTXSID9026265",
-        "DTXCID806265",
         "378539Q830",
-        "RefChem:900194",
         "Kodaflex TOTM",
         "Tris(2-ethylhexyl)trimellitate",
         "triethylhexyl trimellitate",
-        "tri(2-Ethylhexyl) trimellitate",
-        "MFCD00053799"
+        "tri(2-Ethylhexyl) trimellitate"
       ],
       "inciName": null
     },
@@ -6346,20 +6002,11 @@
         "Tri(2-ethylhexyl) phosphate",
         "Phosphoric acid, tris(2-ethylhexyl) ester",
         "2-Ethyl-1-hexanol phosphate",
-        "BQC0BKB72S",
-        "DTXSID0021414",
-        "NSC-407921",
-        "DTXCID801414",
-        "RefChem:191857",
-        "MFCD00009491",
         "Tri(ethylhexyl) phosphate",
         "Tris-(2-ethylhexyl)fosfat",
-        "NSC 407921",
         "TOF",
         "Phosphoric Acid Tris(2-ethylhexyl) Ester",
-        "Tris(2-ethylhexy)phosphate",
-        "CAS-78-42-2",
-        "CCRIS 615"
+        "Tris(2-ethylhexy)phosphate"
       ],
       "inciName": null
     },
@@ -6588,17 +6235,7 @@
         "Cyclomethicone 4",
         "NUC silicone VS 7207",
         "Union carbide 7207",
-        "Silicone SF 1173",
-        "DTXSID7027205",
-        "KF 994",
-        "SF 1173",
-        "UC 7207",
-        "VS 7207",
-        "CZ227117JE",
-        "NSC-345674",
-        "DTXCID107205",
-        "CHEBI:25640",
-        "RefChem:167770"
+        "Silicone SF 1173"
       ],
       "inciName": null
     },
