@@ -73,6 +73,14 @@ describe("completeScan", () => {
     expect(await completeScan(LABEL, LABEL)).toBeNull();
     expect(useScanStore.getState().current?.matches).toHaveLength(1);
   });
+
+  it("keeps an id on an unsaved scan, so a late commit lines up with History", async () => {
+    vi.spyOn(IDBObjectStore.prototype, "put").mockImplementation(() => {
+      throw new DOMException("Storage full", "QuotaExceededError");
+    });
+    await completeScan(LABEL, LABEL);
+    expect(useScanStore.getState().current?.id).toEqual(expect.any(String));
+  });
 });
 
 describe("scanImage", () => {
@@ -90,6 +98,25 @@ describe("scanImage", () => {
     vi.mocked(recogniseText).mockImplementation(async () => {
       controller.abort();
       return { rawText: LABEL, text: LABEL, ms: 5 };
+    });
+    await expect(scanImage(crop, controller.signal)).rejects.toMatchObject({ name: "AbortError" });
+    expect(useScanStore.getState().current).toBe(previous);
+    expect(await listScans()).toEqual([]);
+  });
+
+  it("takes back the history entry if the user leaves while it saves", async () => {
+    const previous = { id: "prev", createdAt: 1, ocrText: "", parsedIngredients: [], matches: [] };
+    useScanStore.getState().setCurrentScan(previous);
+    const controller = new AbortController();
+    vi.mocked(recogniseText).mockResolvedValue({ rawText: LABEL, text: LABEL, ms: 5 });
+    // Abort as soon as the put is issued, i.e. mid-save.
+    const put = IDBObjectStore.prototype.put;
+    vi.spyOn(IDBObjectStore.prototype, "put").mockImplementation(function (
+      this: IDBObjectStore,
+      ...args: Parameters<IDBObjectStore["put"]>
+    ) {
+      controller.abort();
+      return put.apply(this, args);
     });
     await expect(scanImage(crop, controller.signal)).rejects.toMatchObject({ name: "AbortError" });
     expect(useScanStore.getState().current).toBe(previous);
@@ -115,6 +142,25 @@ describe("forgetScan / forgetAllScans", () => {
     const newer = await completeScan(LABEL, LABEL);
     await forgetScan(older!);
     expect(useScanStore.getState().current?.id).toBe(newer);
+  });
+
+  it("clears the scan in memory even when history is unavailable", async () => {
+    await completeScan(LABEL, LABEL);
+    const id = useScanStore.getState().current!.id!;
+    vi.spyOn(IDBObjectStore.prototype, "clear").mockImplementation(() => {
+      throw new DOMException("Broken", "UnknownError");
+    });
+    vi.spyOn(IDBObjectStore.prototype, "delete").mockImplementation(() => {
+      throw new DOMException("Broken", "UnknownError");
+    });
+    await expect(forgetAllScans()).rejects.toThrow();
+    expect(useScanStore.getState().current).toBeNull();
+
+    await completeScan(LABEL, LABEL);
+    const again = useScanStore.getState().current!.id!;
+    expect(again).not.toBe(id);
+    await expect(forgetScan(again)).rejects.toThrow();
+    expect(useScanStore.getState().current).toBeNull();
   });
 
   it("delete-all clears history and the scan in memory", async () => {

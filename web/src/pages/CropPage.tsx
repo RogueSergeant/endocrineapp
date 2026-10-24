@@ -77,7 +77,7 @@ export function CropPage() {
   const running = useRef(false);
   // Aborted when the page unmounts, so a scan the user walked away from
   // can't save, replace the current scan or navigate them back.
-  const unmounted = useRef(new AbortController());
+  const unmounted = useRef<AbortController | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -205,8 +205,9 @@ export function CropPage() {
   const runScan = useCallback(async () => {
     // Ref guard (not just `busy`): a quick double tap can get past the
     // state check before React re-renders.
-    if (running.current || !source) return;
-    const { signal } = unmounted.current;
+    const controller = unmounted.current;
+    if (running.current || !source || !controller) return;
+    const { signal } = controller;
     running.current = true;
     setBusy(true);
     setError(null);

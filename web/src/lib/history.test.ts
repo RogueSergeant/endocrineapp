@@ -28,8 +28,11 @@ const match: Match = {
   confidence: 1,
 };
 
-function input(createdAt: number) {
+let counter = 0;
+
+function input(createdAt: number, id = `scan-${++counter}`) {
   return {
+    id,
     createdAt,
     ocrText: "Aqua, Glycerin, Butylparaben",
     parsedIngredients: ["Aqua", "Glycerin", "Butylparaben"],
@@ -71,9 +74,9 @@ afterEach(() => {
 describe("saveScan / getScan", () => {
   it("stores a scan with denormalised matches and reads it back", async () => {
     const h = await freshHistory();
-    const id = await h.saveScan(input(1000));
-    expect(id).toEqual(expect.any(String));
-    const doc = await h.getScan(id!);
+    const id = h.newId();
+    expect(await h.saveScan(input(1000, id))).toBe(true);
+    const doc = await h.getScan(id);
     expect(doc).toMatchObject({
       id,
       createdAt: 1000,
@@ -87,22 +90,24 @@ describe("saveScan / getScan", () => {
     expect(await h.getScan("missing")).toBeUndefined();
   });
 
-  it("still saves when crypto.randomUUID is unavailable (insecure context)", async () => {
+  it("still makes ids when crypto.randomUUID is unavailable (insecure context)", async () => {
     const h = await freshHistory();
     vi.stubGlobal("crypto", { getRandomValues: crypto.getRandomValues.bind(crypto) });
-    const id = await h.saveScan(input(1000));
+    const id = h.newId();
     expect(id).toMatch(/^[0-9a-f]{32}$/);
-    expect(await h.getScan(id!)).toBeDefined();
+    expect(h.newId()).not.toBe(id);
+    expect(await h.saveScan(input(1000, id))).toBe(true);
+    expect(await h.getScan(id)).toBeDefined();
   });
 
-  it("returns null instead of throwing when IndexedDB is unavailable", async () => {
+  it("returns false instead of throwing when IndexedDB is unavailable", async () => {
     const h = await freshHistory();
     vi.stubGlobal("indexedDB", {
       open: () => {
         throw new Error("blocked");
       },
     });
-    expect(await h.saveScan(input(1000))).toBeNull();
+    expect(await h.saveScan(input(1000))).toBe(false);
     expect(await h.listScans()).toEqual([]);
   });
 });
@@ -126,9 +131,9 @@ describe("listScans", () => {
 describe("deleteScan / deleteAllScans", () => {
   it("removes one scan, then all of them", async () => {
     const h = await freshHistory();
-    const a = await h.saveScan(input(1));
-    await h.saveScan(input(2));
-    await h.deleteScan(a!);
+    await h.saveScan(input(1, "a"));
+    await h.saveScan(input(2, "b"));
+    await h.deleteScan("a");
     expect((await h.listScans()).map((s) => s.createdAt)).toEqual([2]);
     await h.deleteAllScans();
     expect(await h.listScans()).toEqual([]);
@@ -141,8 +146,7 @@ describe("connection recovery", () => {
     await h.saveScan(input(1));
     expect(opened).toHaveLength(1);
     forceCloseDatabase(opened[0]!.result as never);
-    const id = await h.saveScan(input(2));
-    expect(id).not.toBeNull();
+    expect(await h.saveScan(input(2))).toBe(true);
     expect(opened).toHaveLength(2);
     expect((await h.listScans()).map((s) => s.createdAt)).toEqual([2, 1]);
   });
@@ -157,6 +161,55 @@ describe("connection recovery", () => {
   });
 });
 
+describe("connection handling", () => {
+  it("closes the old connection when the browser asks it to step aside", async () => {
+    const h = await freshHistory();
+    await h.saveScan(input(1));
+    const first = opened[0]!.result;
+    let closed = false;
+    first.addEventListener("close", () => (closed = true));
+    const origClose = first.close.bind(first);
+    first.close = () => {
+      closed = true;
+      origClose();
+    };
+    // Another tab opening a newer version fires versionchange on ours.
+    const upgrade = indexedDB.open("ed-scanner", 2);
+    await new Promise((resolve, reject) => {
+      upgrade.onsuccess = resolve;
+      upgrade.onerror = reject;
+    });
+    expect(closed).toBe(true);
+    upgrade.result.close();
+  });
+
+  it("does not drop the connection for an error that isn't about the connection", async () => {
+    const h = await freshHistory();
+    await h.saveScan(input(1));
+    vi.spyOn(IDBObjectStore.prototype, "put").mockImplementationOnce(() => {
+      throw new DOMException("Storage full", "QuotaExceededError");
+    });
+    expect(await h.saveScan(input(2))).toBe(false);
+    expect(await h.saveScan(input(3))).toBe(true);
+    expect(opened).toHaveLength(1);
+  });
+
+  it("a late event from a dropped connection leaves the new one alone", async () => {
+    const h = await freshHistory();
+    await h.saveScan(input(1));
+    const old = opened[0]!.result;
+    // Break the first connection so the next call opens a second one.
+    old.close();
+    await h.listScans();
+    expect((await h.listScans()).length).toBe(1);
+    expect(opened).toHaveLength(2);
+    // The first connection now reports termination, late.
+    forceCloseDatabase(old as never);
+    expect(await h.saveScan(input(2))).toBe(true);
+    expect(opened).toHaveLength(2);
+  });
+});
+
 describe("hangs", () => {
   it("gives up on a save that never settles, so the scan can still finish", async () => {
     const h = await freshHistory();
@@ -164,7 +217,7 @@ describe("hangs", () => {
     vi.stubGlobal("indexedDB", hangingOpen());
     const saved = h.saveScan(input(1));
     await vi.advanceTimersByTimeAsync(h.DB_TIMEOUT_MS);
-    expect(await saved).toBeNull();
+    expect(await saved).toBe(false);
   });
 
   it("returns an empty list and undefined from reads that hang", async () => {
@@ -195,9 +248,9 @@ describe("hangs", () => {
     vi.stubGlobal("indexedDB", hangingOpen());
     const first = h.saveScan(input(1));
     await vi.advanceTimersByTimeAsync(h.DB_TIMEOUT_MS);
-    expect(await first).toBeNull();
+    expect(await first).toBe(false);
     vi.useRealTimers();
     vi.stubGlobal("indexedDB", real);
-    expect(await h.saveScan(input(2))).not.toBeNull();
+    expect(await h.saveScan(input(2))).toBe(true);
   });
 });

@@ -3,11 +3,11 @@
 // windows, blocked site data), hanging (a WebKit bug can leave open() or a
 // request pending forever) or being closed by the browser (iOS Safari drops
 // the connection of a backgrounded PWA): saving silently does nothing and
-// reading returns an empty list, so scanning still works. A failed call
-// drops the cached connection so the next one reopens it.
+// reading returns an empty list, so scanning still works. A broken or hung
+// connection is closed and dropped so the next call reopens it.
 import { openDB, type DBSchema, type IDBPDatabase } from "idb";
 import type { Match, ScanDoc, StoredMatch } from "@/types";
-import { withTimeout } from "@/lib/timeout";
+import { TimeoutError, withTimeout } from "@/lib/timeout";
 
 interface HistoryDb extends DBSchema {
   scans: {
@@ -19,42 +19,57 @@ interface HistoryDb extends DBSchema {
 
 export const DB_TIMEOUT_MS = 8000;
 
-let dbPromise: Promise<IDBPDatabase<HistoryDb>> | null = null;
+type Connection = Promise<IDBPDatabase<HistoryDb>>;
 
-function resetDb() {
-  dbPromise = null;
+let dbPromise: Connection | null = null;
+
+/**
+ * Forget a connection and close it. Only clears the cache if it still
+ * holds that connection, so a late event from an old one can't drop a
+ * newer, healthy one.
+ */
+function drop(connection: Connection) {
+  if (dbPromise === connection) dbPromise = null;
+  connection.then(
+    (d) => d.close(),
+    () => {},
+  );
 }
 
-function db(): Promise<IDBPDatabase<HistoryDb>> {
-  dbPromise ??= openDB<HistoryDb>("ed-scanner", 1, {
+function db(): Connection {
+  if (dbPromise) return dbPromise;
+  const connection: Connection = openDB<HistoryDb>("ed-scanner", 1, {
     upgrade(database) {
       const store = database.createObjectStore("scans", { keyPath: "id" });
       store.createIndex("createdAt", "createdAt");
     },
     // Another tab wants a newer schema: step aside so it isn't blocked.
-    blocking(_current, _next, event) {
-      (event.target as IDBDatabase).close();
-      resetDb();
-    },
-    terminated: resetDb,
+    blocking: () => drop(connection),
+    terminated: () => drop(connection),
   });
-  const opened = dbPromise;
-  opened.catch(() => {
-    if (dbPromise === opened) resetDb();
-  });
-  return opened;
+  dbPromise = connection;
+  connection.catch(() => drop(connection));
+  return connection;
 }
 
-/** Runs one history operation, bounded in time; any failure drops the connection. */
+/** Errors that mean the connection itself is dead, as opposed to e.g. a full disk. */
+const BROKEN_CONNECTION = new Set(["InvalidStateError", "UnknownError", "TransactionInactiveError"]);
+
+function connectionBroken(err: unknown): boolean {
+  return err instanceof TimeoutError || (err instanceof DOMException && BROKEN_CONNECTION.has(err.name));
+}
+
+/** Runs one history operation, bounded in time; a dead or hung connection is dropped. */
 async function run<T>(op: (database: IDBPDatabase<HistoryDb>) => Promise<T>): Promise<T> {
+  const connection = db();
   try {
     return await withTimeout(
-      db().then(op),
+      connection.then(op),
       DB_TIMEOUT_MS,
       "Scan history didn't respond. Try reloading the page.",
     );
   } catch (err) {
-    resetDb();
+    if (connectionBroken(err)) drop(connection);
     throw err;
   }
 }
@@ -80,6 +95,8 @@ export function denormaliseMatch(match: Match): StoredMatch {
 }
 
 export interface CreateScanInput {
+  /** From newId(), chosen by the caller so it is known even if saving fails. */
+  id: string;
   createdAt: number;
   ocrText: string;
   parsedIngredients: string[];
@@ -87,11 +104,14 @@ export interface CreateScanInput {
   substancesDbVersion: string;
 }
 
-/** Returns the saved scan's id, or null if it couldn't be stored. */
-export async function saveScan(input: CreateScanInput): Promise<string | null> {
+/**
+ * Returns whether the scan was stored. A save that timed out can still
+ * commit later; it then appears in History under `input.id`.
+ */
+export async function saveScan(input: CreateScanInput): Promise<boolean> {
   try {
     const doc: ScanDoc = {
-      id: newId(),
+      id: input.id,
       createdAt: input.createdAt,
       ocrText: input.ocrText,
       parsedIngredients: input.parsedIngredients,
@@ -100,10 +120,10 @@ export async function saveScan(input: CreateScanInput): Promise<string | null> {
       substancesDbVersion: input.substancesDbVersion,
     };
     await run((d) => d.put("scans", doc));
-    return doc.id;
+    return true;
   } catch (err) {
     console.warn("saveScan failed, continuing without history:", err);
-    return null;
+    return false;
   }
 }
 

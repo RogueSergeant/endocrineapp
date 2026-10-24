@@ -107,6 +107,26 @@ describe("load watchdog", () => {
     expect(worker().terminated).toBe(false);
   });
 
+  it("gives initialisation after the download its own, longer allowance", () => {
+    client.preloadOcr();
+    worker().reply({ type: "progress", loaded: 10, total: 10 });
+    worker().reply({ type: "downloaded" });
+    vi.advanceTimersByTime(client.INIT_TIMEOUT_MS - 1000);
+    expect(status().status).toBe("loading");
+    worker().reply({ type: "ready" });
+    expect(status().status).toBe("ready");
+    expect(worker().terminated).toBe(false);
+  });
+
+  it("gives up on an initialisation that never finishes, without blaming the network", () => {
+    client.preloadOcr();
+    worker().reply({ type: "downloaded" });
+    vi.advanceTimersByTime(client.INIT_TIMEOUT_MS);
+    expect(status().status).toBe("error");
+    expect(status().error).toMatch(/took too long to start/);
+    expect(worker().terminated).toBe(true);
+  });
+
   it("lets a retry start a fresh worker after a stall", () => {
     client.preloadOcr();
     vi.advanceTimersByTime(client.LOAD_STALL_MS);

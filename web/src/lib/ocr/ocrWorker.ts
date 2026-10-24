@@ -73,11 +73,13 @@ function getService(): Promise<PaddleOcrService> {
     if (!(dictRes instanceof Response) || !dictRes.ok) {
       throw new Error("Couldn't download the OCR dictionary");
     }
+    const dictionary = await dictRes.arrayBuffer();
+    post({ type: "downloaded" });
     const service = new PaddleOcrService({
       model: {
         detection: det as ArrayBuffer,
         recognition: rec as ArrayBuffer,
-        charactersDictionary: await dictRes.arrayBuffer(),
+        charactersDictionary: dictionary,
       },
       session: { executionProviders: ["wasm"], graphOptimizationLevel: "all" },
       // Batched recognition (the library default of 6) garbles this

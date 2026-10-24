@@ -16,6 +16,13 @@ export const OCR_TIMEOUT_MS = 20_000;
  */
 export const LOAD_STALL_MS = 45_000;
 const STALL_MESSAGE = "The text reader download stalled. Check your connection and try again.";
+/**
+ * Initialising the models after the download sends no progress, and can be
+ * slow on low-end phones, so it gets its own, longer allowance.
+ */
+export const INIT_TIMEOUT_MS = 120_000;
+const INIT_MESSAGE =
+  "The text reader took too long to start on this device. Try again, or paste the ingredients instead.";
 
 type OcrStatus = "idle" | "loading" | "ready" | "error";
 
@@ -49,15 +56,18 @@ function clearLoadWatchdog() {
   loadWatchdog = null;
 }
 
-/** (Re)start the stall timer; called when loading starts and on each progress message. */
-function armLoadWatchdog() {
+/**
+ * (Re)start the load timer: LOAD_STALL_MS while downloading, re-armed on
+ * each progress message, then INIT_TIMEOUT_MS once everything is downloaded.
+ */
+function armLoadWatchdog(ms = LOAD_STALL_MS, message = STALL_MESSAGE) {
   clearLoadWatchdog();
   loadWatchdog = setTimeout(() => {
     loadWatchdog = null;
     if (useOcrStatus.getState().status !== "loading") return;
-    useOcrStatus.setState({ status: "error", error: STALL_MESSAGE });
-    resetWorker(new Error(STALL_MESSAGE));
-  }, LOAD_STALL_MS);
+    useOcrStatus.setState({ status: "error", error: message });
+    resetWorker(new Error(message));
+  }, ms);
 }
 
 function send(w: Worker, msg: WorkerRequest, transfer: Transferable[] = []) {
@@ -73,6 +83,11 @@ function getWorker(): Worker {
       case "progress":
         useOcrStatus.setState({ loaded: msg.loaded, total: msg.total });
         if (useOcrStatus.getState().status === "loading") armLoadWatchdog();
+        break;
+      case "downloaded":
+        if (useOcrStatus.getState().status === "loading") {
+          armLoadWatchdog(INIT_TIMEOUT_MS, INIT_MESSAGE);
+        }
         break;
       case "ready":
         clearLoadWatchdog();
