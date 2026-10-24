@@ -207,6 +207,20 @@ describe("parseIngredients", () => {
     expect(out).not.toContain("Marketing copy here");
   });
 
+  it("keeps long ingredient names, dropping only sentence-like fragments", () => {
+    const out = parseIngredients(
+      "INGREDIENTS: Aqua, Aloe Barbadensis (Aloe) Leaf Juice Powder, " +
+        "Citrus Aurantium Dulcis Peel Oil Extract, Geraniol, " +
+        "avoid contact with the eyes and keep out of reach",
+    );
+    expect(out).toEqual([
+      "Aqua",
+      "Aloe Barbadensis (Aloe) Leaf Juice Powder",
+      "Citrus Aurantium Dulcis Peel Oil Extract",
+      "Geraniol",
+    ]);
+  });
+
   it("filters sentence-like tokens that aren't ingredients", () => {
     const out = parseIngredients(
       "INGREDIENTS: Aqua, Glycerin, Tolerance tested under dermatological control",

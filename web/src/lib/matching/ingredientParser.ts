@@ -210,9 +210,28 @@ export function parseIngredients(rawOcrText: string): string[] {
     .filter((p) => p.length > 0)
     // Drop common label scaffolding
     .filter((p) => !/^(may contain|caps?|n°|nº)\s*$/i.test(p))
-    // Drop tokens that look like sentences rather than ingredient names —
-    // anything with 6+ words is almost certainly a warning fragment that
-    // slipped past the end-marker slice.
-    .filter((p) => p.split(/\s+/).length < 6);
+    // Drop warning fragments that slipped past the end-marker slice.
+    .filter((p) => !looksLikeSentence(p));
   return parts;
+}
+
+// English function words: articles, pronouns, prepositions, auxiliaries.
+// Sentences are full of them; ingredient names, however long, almost
+// never contain any ("Citrus Aurantium Dulcis Peel Oil Extract").
+const FUNCTION_WORDS = new Set(
+  "a an the this that these it its you your we our they is are be been was were do does did not no " +
+    "can may should must will would to of in on at by for from with into onto out off up as if or " +
+    "when than then after before".split(" "),
+);
+
+/**
+ * A warning or instruction rather than an ingredient: long and made of
+ * sentence words. Length alone isn't enough: INCI names run to six words
+ * and more ("Aloe Barbadensis (Aloe) Leaf Juice Powder"), and so do runs
+ * of ingredients merged by a comma the OCR lost.
+ */
+function looksLikeSentence(item: string): boolean {
+  const words = item.toLowerCase().split(/\s+/);
+  if (words.length < 6) return false;
+  return words.filter((w) => FUNCTION_WORDS.has(w.replace(/[^a-z]/g, ""))).length >= 2;
 }
