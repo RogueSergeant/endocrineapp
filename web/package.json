@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "models": "node scripts/fetch-models.mjs",
+    "models": "node scripts/fetch-models.mjs && node scripts/chunk-assets.mjs",
     "predev": "npm run models",
     "dev": "vite --host",
     "prebuild": "npm run models",

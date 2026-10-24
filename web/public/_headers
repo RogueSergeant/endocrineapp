@@ -16,6 +16,14 @@
 /models/*
   Cache-Control: public, max-age=31536000, immutable
 
+# OCR download chunks are named by their SHA-256.
+/chunks/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# The chunk manifest changes with each model or runtime update.
+/chunks.json
+  Cache-Control: no-cache
+
 # The service worker must be revalidated so updates roll out.
 /sw.js
   Cache-Control: no-cache

@@ -66,5 +66,7 @@ data-pipeline/data/cosing/
 
 # Web build artefacts (models are fetched by web/scripts/fetch-models.mjs)
 web/public/models/
+web/public/chunks/
+web/public/chunks.json
 .wrangler/
 dev-dist/

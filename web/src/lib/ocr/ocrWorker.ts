@@ -5,55 +5,78 @@
 import * as ort from "onnxruntime-web";
 import wasmUrl from "onnxruntime-web/ort-wasm-simd-threaded.wasm?url";
 import { PaddleOcrService } from "ppu-paddle-ocr/web";
+import {
+  DownloadInterruptedError,
+  downloadChunkedFile,
+  loadManifest,
+  openChunkStore,
+  pruneStore,
+} from "./chunkedDownload";
 import { deskew } from "./deskew";
 import { createProgress } from "./progress";
 import type { WorkerRequest, WorkerResponse } from "./protocol";
 
-// Keep in sync with MODEL_DIR in scripts/fetch-models.mjs.
-const MODEL_BASE = "/models/ppocrv5-en";
-
-// Approximate sizes, used for the progress bar only when the server
-// doesn't send Content-Length (e.g. compressed responses).
-const MODEL_FILES = [
-  { name: "det", url: `${MODEL_BASE}/det.ort`, approxBytes: 4_896_928 },
-  { name: "rec", url: `${MODEL_BASE}/rec.ort`, approxBytes: 7_962_368 },
-] as const;
+// Names in the chunk manifest written by scripts/chunk-assets.mjs.
+const FILES = ["det", "rec", "dict", "wasm"] as const;
+const CHUNK_CACHE = "ocr-chunks-v1";
+// Where the service worker used to cache the unchunked files.
+const OLD_CACHE = "ocr-assets";
 
 declare const self: DedicatedWorkerGlobalScope;
 
-// ppu-paddle-ocr points onnxruntime at a CDN unless told otherwise.
+// ppu-paddle-ocr points onnxruntime at a CDN unless told otherwise. The
+// binary itself comes from the chunked download (wasmBinary, below), so
+// this URL is only a fallback that is never fetched.
 ort.env.wasm.wasmPaths = { wasm: wasmUrl };
 
 function post(msg: WorkerResponse) {
   self.postMessage(msg);
 }
 
-async function fetchWithProgress(
-  url: string,
-  approxBytes: number,
-  onBytes: (loaded: number, total: number) => void,
-): Promise<ArrayBuffer> {
-  const res = await fetch(url);
-  if (!res.ok || !res.body) throw new Error(`Couldn't download ${url} (HTTP ${res.status})`);
-  const header = Number(res.headers.get("Content-Length"));
-  const total = header > 0 ? header : approxBytes;
-  const reader = res.body.getReader();
-  const chunks: Uint8Array[] = [];
-  let loaded = 0;
-  for (;;) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    chunks.push(value);
-    loaded += value.byteLength;
-    onBytes(loaded, total);
+const MB = (bytes: number) => (bytes / 1_000_000).toFixed(1);
+
+async function downloadAll() {
+  const store = await openChunkStore(CHUNK_CACHE);
+  const manifest = await loadManifest({ store });
+  const files = FILES.map((name) => {
+    const file = manifest.files[name];
+    if (!file) throw new Error(`The text reader manifest is missing ${name}`);
+    return { name, file };
+  });
+  const progress = createProgress(
+    files.map((f) => ({ name: f.name, approxBytes: f.file.gzipBytes })),
+  );
+  const total = files.reduce((sum, f) => sum + f.file.gzipBytes, 0);
+  let saved = 0;
+  const results = await Promise.allSettled(
+    files.map(({ name, file }) =>
+      downloadChunkedFile(file, {
+        store,
+        onBytes: (loaded) => {
+          const p = progress.update(name, loaded, file.gzipBytes);
+          saved = p.loaded;
+          post({ type: "progress", ...p });
+        },
+      }),
+    ),
+  );
+  // Wait for every file to finish or give up before reporting, so each
+  // keeps saving chunks while it can.
+  const failed = results.find((r) => r.status === "rejected");
+  if (failed) {
+    const reason = (failed as PromiseRejectedResult).reason as unknown;
+    if (reason instanceof DownloadInterruptedError) {
+      throw new Error(
+        `The download was interrupted (${MB(saved)} of ${MB(total)} MB saved; trying again picks up from there).`,
+      );
+    }
+    throw reason;
   }
-  const out = new Uint8Array(loaded);
-  let offset = 0;
-  for (const c of chunks) {
-    out.set(c, offset);
-    offset += c.byteLength;
-  }
-  return out.buffer;
+  const value = (i: number) => (results[i] as PromiseFulfilledResult<ArrayBuffer>).value;
+  void pruneStore(store, manifest).catch(() => undefined);
+  // Cache Storage only exists in secure contexts (not plain-HTTP dev on a LAN).
+  void self.caches?.delete(OLD_CACHE).catch(() => undefined);
+  return { det: value(0), rec: value(1), dict: value(2), wasm: value(3) };
 }
 
 let servicePromise: Promise<PaddleOcrService> | null = null;
@@ -61,25 +84,14 @@ let servicePromise: Promise<PaddleOcrService> | null = null;
 function getService(): Promise<PaddleOcrService> {
   if (servicePromise) return servicePromise;
   servicePromise = (async () => {
-    const progress = createProgress(MODEL_FILES);
-    const [det, rec, dictRes] = await Promise.all([
-      ...MODEL_FILES.map((f) =>
-        fetchWithProgress(f.url, f.approxBytes, (l, t) => {
-          post({ type: "progress", ...progress.update(f.name, l, t) });
-        }),
-      ),
-      fetch(`${MODEL_BASE}/dict.txt`),
-    ]);
-    if (!(dictRes instanceof Response) || !dictRes.ok) {
-      throw new Error("Couldn't download the OCR dictionary");
-    }
-    const dictionary = await dictRes.arrayBuffer();
+    const { det, rec, dict, wasm } = await downloadAll();
+    ort.env.wasm.wasmBinary = wasm;
     post({ type: "downloaded" });
     const service = new PaddleOcrService({
       model: {
-        detection: det as ArrayBuffer,
-        recognition: rec as ArrayBuffer,
-        charactersDictionary: dictionary,
+        detection: det,
+        recognition: rec,
+        charactersDictionary: dict,
       },
       session: { executionProviders: ["wasm"], graphOptimizationLevel: "all" },
       // Batched recognition (the library default of 6) garbles this

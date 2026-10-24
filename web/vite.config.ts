@@ -52,28 +52,13 @@ export default defineConfig({
       },
       workbox: {
         // Precache the app shell and substance data. The OCR models and WASM
-        // runtime (~27 MB) are cached on first use instead: precaching them
-        // would download everything twice on a first visit, once for the
-        // service worker and once for the OCR worker.
+        // runtime are left out: the OCR worker downloads them in resumable
+        // chunks and caches them itself (src/lib/ocr/chunkedDownload.ts).
         globPatterns: ["**/*.{js,css,html,svg,png,webmanifest}"],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         navigateFallback: "/index.html",
         clientsClaim: true,
         skipWaiting: true,
-        runtimeCaching: [
-          {
-            // Both are content-addressed (hashed or versioned paths), so
-            // cache-first is safe.
-            urlPattern: ({ url }) =>
-              url.pathname.startsWith("/models/") || url.pathname.endsWith(".wasm"),
-            handler: "CacheFirst",
-            options: {
-              cacheName: "ocr-assets",
-              expiration: { maxEntries: 10 },
-              cacheableResponse: { statuses: [200] },
-            },
-          },
-        ],
       },
     }),
   ],
