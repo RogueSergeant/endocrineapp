@@ -144,6 +144,36 @@ async function capture(video: HTMLVideoElement, track: MediaStreamTrack): Promis
   );
 }
 
+// Camera requests in order: as sharp as the camera allows, then plain.
+const CAMERA_REQUESTS: MediaTrackConstraints[] = [
+  { facingMode: { ideal: "environment" }, width: { ideal: 3840 }, height: { ideal: 2160 } },
+  { facingMode: { ideal: "environment" } },
+];
+// How long a granted camera gets to show a picture before the next request
+// is tried; and how long the page waits before offering other ways to take
+// the photo. Either can stall without an error when another app or tab
+// holds the camera.
+const START_TIMEOUT_MS = 6000;
+
+/** Whether the video shows a picture within `ms`. */
+function framesArrive(video: HTMLVideoElement, ms: number): Promise<boolean> {
+  if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && video.videoWidth > 0) {
+    return Promise.resolve(true);
+  }
+  return new Promise((resolve) => {
+    const done = (ok: boolean) => {
+      clearTimeout(timer);
+      video.removeEventListener("loadeddata", onFrame);
+      video.removeEventListener("playing", onFrame);
+      resolve(ok);
+    };
+    const onFrame = () => done(true);
+    const timer = setTimeout(() => done(false), ms);
+    video.addEventListener("loadeddata", onFrame);
+    video.addEventListener("playing", onFrame);
+  });
+}
+
 export function CameraPage() {
   const navigate = useNavigate();
   const setPendingImage = useScanStore((s) => s.setPendingImage);
@@ -155,32 +185,50 @@ export function CameraPage() {
   const [caps, setCaps] = useState<CameraCapabilities>({});
   const [torch, setTorch] = useState(false);
 
+  // Bumped by "Try again" to start the camera afresh.
+  const [attempt, setAttempt] = useState(0);
+
   useEffect(() => {
     let cancelled = false;
-    if (!navigator.mediaDevices?.getUserMedia) {
+    // The stream being started, so it can be stopped on the way out.
+    let pending: MediaStream | null = null;
+    const stop = (stream: MediaStream | null) => stream?.getTracks().forEach((t) => t.stop());
+    const getUserMedia = navigator.mediaDevices?.getUserMedia?.bind(navigator.mediaDevices);
+    if (!getUserMedia) {
       setError({
         title: "This browser can't show the camera here",
         body: "Use your camera app or choose a photo instead.",
       });
       return;
     }
-    navigator.mediaDevices
-      .getUserMedia({
-        audio: false,
-        // Ask high: ingredient lists are small print, and the browser
-        // gives the closest the camera supports.
-        video: {
-          facingMode: { ideal: "environment" },
-          width: { ideal: 3840 },
-          height: { ideal: 2160 },
-        },
-      })
-      .then(
-        (stream) => {
-          if (cancelled) {
-            stream.getTracks().forEach((t) => t.stop());
-            return;
-          }
+
+    void (async () => {
+      const video = videoRef.current;
+      if (!video) return;
+      // High resolution first (ingredient lists are small print), then a
+      // plain request: some phones' browsers stall on the first rather than
+      // refuse it. Each granted camera must show a picture in time.
+      for (const constraints of CAMERA_REQUESTS) {
+        let stream: MediaStream;
+        try {
+          // No time limit here: the first time, the browser is waiting on
+          // the user's answer to its permission prompt. The page offers
+          // other ways to take the photo while it waits (`slow`).
+          stream = await getUserMedia({ audio: false, video: constraints });
+        } catch (err) {
+          if (cancelled) return;
+          setError(describeError(err));
+          return;
+        }
+        if (cancelled) {
+          stop(stream);
+          return;
+        }
+        pending = stream;
+        video.srcObject = stream;
+        video.play().catch(() => undefined);
+        if (await framesArrive(video, START_TIMEOUT_MS)) {
+          if (cancelled) return;
           streamRef.current = stream;
           const track = stream.getVideoTracks()[0];
           if (track) {
@@ -189,24 +237,43 @@ export function CameraPage() {
             if (c.focusMode?.includes("continuous"))
               void applyCamera(track, { focusMode: "continuous" });
           }
-          const video = videoRef.current;
-          if (!video) return;
-          video.srcObject = stream;
-          video.play().then(
-            () => setLive(true),
-            () => setLive(true),
-          );
-        },
-        (err: unknown) => {
-          if (!cancelled) setError(describeError(err));
-        },
-      );
+          setLive(true);
+          return;
+        }
+        // A stream but no picture: release it and try the next request.
+        stop(stream);
+        pending = null;
+        video.srcObject = null;
+        if (cancelled) return;
+      }
+      setError({
+        title: "The camera didn't start",
+        body: "It may be in use by another app or browser tab. Close those and try again, or use your camera app below.",
+      });
+    })();
+
     return () => {
       cancelled = true;
-      streamRef.current?.getTracks().forEach((t) => t.stop());
+      stop(pending);
+      stop(streamRef.current);
       streamRef.current = null;
     };
-  }, []);
+  }, [attempt]);
+
+  // Still no picture after a while: offer other ways to take the photo.
+  const [slow, setSlow] = useState(false);
+  useEffect(() => {
+    if (live) return;
+    setSlow(false);
+    const timer = setTimeout(() => setSlow(true), START_TIMEOUT_MS);
+    return () => clearTimeout(timer);
+  }, [live, attempt]);
+
+  const tryAgain = () => {
+    setError(null);
+    setLive(false);
+    setAttempt((a) => a + 1);
+  };
 
   const openInCrop = (image: Blob) => {
     setPendingImage(image);
@@ -261,6 +328,9 @@ export function CameraPage() {
           {error.body}
         </div>
         <div className="stack">
+          <button type="button" className="btn btn-secondary" onClick={tryAgain}>
+            Try again
+          </button>
           <label className="btn btn-primary btn-large">
             Use camera app
             <input
@@ -287,7 +357,35 @@ export function CameraPage() {
         <PhotosWaiting className="on-dark" />
         <div className="camera-stage">
           <video ref={videoRef} playsInline muted autoPlay onPointerDown={onPreviewTap} />
-          {!live && <div className="busy-overlay">Opening the camera…</div>}
+          {!live && (
+            <div className="busy-overlay">
+              Opening the camera…
+              {slow && (
+                <div className="camera-slow">
+                  <p className="small">Taking a while? Another app or tab may be using it.</p>
+                  <label className="btn btn-secondary">
+                    Use camera app
+                    <input
+                      className="visually-hidden"
+                      type="file"
+                      accept="image/*"
+                      capture="environment"
+                      onChange={onFile}
+                    />
+                  </label>
+                  <label className="btn btn-secondary">
+                    Choose from photos
+                    <input
+                      className="visually-hidden"
+                      type="file"
+                      accept="image/*"
+                      onChange={onFile}
+                    />
+                  </label>
+                </div>
+              )}
+            </div>
+          )}
         </div>
         <div className="camera-actions">
           {caps.torch && (

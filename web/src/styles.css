@@ -494,6 +494,16 @@ button {
 .shutter:disabled {
   opacity: 0.4;
 }
+.camera-slow {
+  display: grid;
+  gap: 10px;
+  width: min(320px, 100% - 2 * var(--gutter));
+  text-align: center;
+  font-weight: 400;
+}
+.camera-slow .btn {
+  width: 100%;
+}
 .torch-btn {
   position: absolute;
   left: var(--gutter);
