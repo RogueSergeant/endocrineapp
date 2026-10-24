@@ -97,6 +97,12 @@ function getService(): Promise<PaddleOcrService> {
       // Batched recognition (the library default of 6) garbles this
       // model's output; one line per inference reads correctly.
       recognition: { recBatchSize: 1, charactersDictionary: [] },
+      // The library pads each detected line by 40% of its height above and
+      // below. Ingredient lists are set with tight leading, so that pulls
+      // half of the neighbouring lines into every strip and the recogniser
+      // reads two lines at once. Measured on real and synthetic labels:
+      // 0.4 recovered ~50% of words, 0.15 ~99%; 0.1 starts clipping.
+      detection: { paddingVertical: 0.15 },
     });
     await service.initialize();
     return service;
