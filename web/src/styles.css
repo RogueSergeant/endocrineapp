@@ -355,13 +355,46 @@ button {
 }
 .crop-handle {
   position: absolute;
-  width: 32px;
-  height: 32px;
-  margin: -16px 0 0 -16px;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
   border-radius: 50%;
   background: #fff;
-  border: 3px solid var(--accent);
+  border: 2px solid var(--accent);
   touch-action: none;
+}
+/* A fingertip-sized touch target around the small visible dot. */
+.crop-handle::before {
+  content: "";
+  position: absolute;
+  inset: -15px;
+  border-radius: 50%;
+}
+.crop-loupe {
+  position: absolute;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  background: #000;
+  pointer-events: none;
+}
+.crop-loupe-photo,
+.crop-loupe svg {
+  position: absolute;
+  inset: 0;
+}
+.crop-loupe-photo {
+  background-repeat: no-repeat;
+}
+.crop-loupe-edges {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.5;
+}
+.crop-loupe-cross {
+  stroke: var(--accent);
+  stroke-width: 2;
 }
 .crop-actions {
   display: grid;

@@ -37,6 +37,13 @@ const INITIAL_CORNERS: Quad = [
   { x: 0.05, y: 0.675 },
 ];
 
+// Magnifier shown above a corner while it is dragged, since the finger
+// covers the very spot being lined up: its size, magnification, and how
+// far it sits from the corner (clear of a fingertip).
+const LOUPE = 120;
+const LOUPE_ZOOM = 3;
+const LOUPE_GAP = 70;
+
 const shift = (q: Quad, dx: number, dy: number): Quad =>
   q.map((p) => ({ x: p.x + dx, y: p.y + dy })) as unknown as Quad;
 
@@ -106,6 +113,8 @@ export function CropPage() {
   const [stage, setStage] = useState({ w: 0, h: 0 });
   const [corners, setCorners] = useState<Quad>(INITIAL_CORNERS);
   const [busy, setBusy] = useState(false);
+  // The corner being dragged, for the magnifier.
+  const [activeCorner, setActiveCorner] = useState<0 | 1 | 2 | 3 | null>(null);
   const [error, setError] = useState<{ title: string; body: string } | null>(null);
   const drag = useRef<Drag | null>(null);
   const running = useRef(false);
@@ -178,6 +187,7 @@ export function CropPage() {
       startY: e.clientY,
       start: corners,
     };
+    setActiveCorner(mode === "move" ? null : mode);
   };
 
   const onPointerMove = (e: ReactPointerEvent<HTMLDivElement>) => {
@@ -213,7 +223,10 @@ export function CropPage() {
   };
 
   const onPointerUp = (e: ReactPointerEvent<HTMLDivElement>) => {
-    if (drag.current?.pointerId === e.pointerId) drag.current = null;
+    if (drag.current?.pointerId === e.pointerId) {
+      drag.current = null;
+      setActiveCorner(null);
+    }
   };
 
   // Tapping outside the selection re-centres it on the tap.
@@ -325,6 +338,15 @@ export function CropPage() {
                   aria-hidden="true"
                 />
               ))}
+              {activeCorner !== null && previewUrl && (
+                <Loupe
+                  corner={pts[activeCorner]!}
+                  pts={pts}
+                  fit={fit}
+                  stage={stage}
+                  imageUrl={previewUrl}
+                />
+              )}
             </>
           )}
           {(busy || !fit) && !error && (
@@ -358,5 +380,65 @@ export function CropPage() {
         </div>
       </div>
     </Layout>
+  );
+}
+
+/**
+ * A magnified view of the photo around the corner being dragged, with the
+ * selection's edges and a crosshair on the corner. Sits above the corner,
+ * or below it when there is no room above.
+ */
+function Loupe({
+  corner,
+  pts,
+  fit,
+  stage,
+  imageUrl,
+}: {
+  corner: Point;
+  pts: Point[];
+  fit: { x: number; y: number; w: number; h: number };
+  stage: { w: number; h: number };
+  imageUrl: string;
+}) {
+  const half = LOUPE / 2;
+  const above = corner.y - LOUPE_GAP - LOUPE >= 0;
+  const left = clamp(corner.x - half, 0, Math.max(0, stage.w - LOUPE));
+  const top = above ? corner.y - LOUPE_GAP - LOUPE : corner.y + LOUPE_GAP;
+  // Stage point -> loupe point: the corner lands in the middle.
+  const toLoupe = (p: Point) => ({
+    x: half + (p.x - corner.x) * LOUPE_ZOOM,
+    y: half + (p.y - corner.y) * LOUPE_ZOOM,
+  });
+  return (
+    <div
+      className="crop-loupe"
+      style={{ left, top, width: LOUPE, height: LOUPE }}
+      aria-hidden="true"
+    >
+      <div
+        className="crop-loupe-photo"
+        style={{
+          backgroundImage: `url(${imageUrl})`,
+          backgroundSize: `${fit.w * LOUPE_ZOOM}px ${fit.h * LOUPE_ZOOM}px`,
+          backgroundPosition: `${half - (corner.x - fit.x) * LOUPE_ZOOM}px ${
+            half - (corner.y - fit.y) * LOUPE_ZOOM
+          }px`,
+        }}
+      />
+      <svg width={LOUPE} height={LOUPE}>
+        <polygon
+          className="crop-loupe-edges"
+          points={pts
+            .map(toLoupe)
+            .map((p) => `${p.x},${p.y}`)
+            .join(" ")}
+        />
+        <path
+          className="crop-loupe-cross"
+          d={`M${half} ${half - 12}V${half + 12}M${half - 12} ${half}H${half + 12}`}
+        />
+      </svg>
+    </div>
   );
 }
