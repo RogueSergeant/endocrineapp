@@ -174,6 +174,13 @@ function estimate(
   return { angle: search(coarse - 1, coarse + 1, 0.2), paper };
 }
 
+function paperOf(source: CanvasLike, createCanvas: CanvasFactory): number {
+  const scale = Math.min(1, ANALYSIS_SIDE / Math.max(source.width, source.height));
+  const sw = Math.max(1, Math.round(source.width * scale));
+  const sh = Math.max(1, Math.round(source.height * scale));
+  return paperLuma(source, sw, sh, createCanvas);
+}
+
 /** Estimated clockwise tilt of the text, in degrees (positive = rotated clockwise). */
 export function estimateSkew(source: CanvasLike, createCanvas: CanvasFactory): number {
   return estimate(source, createCanvas).angle;
@@ -181,13 +188,18 @@ export function estimateSkew(source: CanvasLike, createCanvas: CanvasFactory): n
 
 /**
  * Returns a levelled copy of `source` (or `source` itself when it is
- * already straight enough), padded with the paper colour.
+ * already straight enough), padded with the paper colour. `knownAngle`
+ * skips the estimate, e.g. when the text detector has measured the tilt.
  */
 export function deskew<C extends CanvasLike>(
   source: C,
   createCanvas: (width: number, height: number) => C,
+  knownAngle?: number,
 ): { canvas: C; angle: number } {
-  const { angle, paper } = estimate(source, createCanvas);
+  const { angle, paper } =
+    knownAngle === undefined
+      ? estimate(source, createCanvas)
+      : { angle: knownAngle, paper: paperOf(source, createCanvas) };
   if (Math.abs(angle) < MIN_CORRECTION) return { canvas: source, angle: 0 };
   const rad = (angle * Math.PI) / 180;
   const cos = Math.abs(Math.cos(rad));

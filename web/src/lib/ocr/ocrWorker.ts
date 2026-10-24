@@ -14,6 +14,7 @@ import {
 } from "./chunkedDownload";
 import { deskew } from "./deskew";
 import { createProgress } from "./progress";
+import { textAngleFromMap } from "./textAngle";
 import type { WorkerRequest, WorkerResponse } from "./protocol";
 
 // Names in the chunk manifest written by scripts/chunk-assets.mjs.
@@ -79,9 +80,55 @@ async function downloadAll() {
   return { det: value(0), rec: value(1), dict: value(2), wasm: value(3) };
 }
 
-let servicePromise: Promise<PaddleOcrService> | null = null;
+// Mean and spread the detection model was trained with (as ppu-paddle-ocr
+// normalises its input), and a map size that keeps the extra pass quick.
+const DET_MEAN = [0.485, 0.456, 0.406] as const;
+const DET_STD = [0.229, 0.224, 0.225] as const;
+const TILT_SIDE = 960;
 
-function getService(): Promise<PaddleOcrService> {
+/**
+ * Tilt of the text, measured on the detection model's probability map
+ * (see textAngle.ts), or null when it found too little text to say.
+ */
+async function measureTilt(
+  session: ort.InferenceSession,
+  source: OffscreenCanvas,
+): Promise<number | null> {
+  const scale = Math.min(1, TILT_SIDE / Math.max(source.width, source.height));
+  const sw = Math.max(1, Math.round(source.width * scale));
+  const sh = Math.max(1, Math.round(source.height * scale));
+  // The model needs sides that are multiples of 32.
+  const w = Math.ceil(sw / 32) * 32;
+  const h = Math.ceil(sh / 32) * 32;
+  const canvas = new OffscreenCanvas(w, h);
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return null;
+  ctx.drawImage(source, 0, 0, sw, sh);
+  const { data } = ctx.getImageData(0, 0, w, h);
+  const plane = w * h;
+  const tensor = new Float32Array(3 * plane);
+  for (let i = 0, j = 0; i < plane; i++, j += 4) {
+    for (let c = 0; c < 3; c++) {
+      tensor[c * plane + i] = (data[j + c]! / 255 - DET_MEAN[c]!) / DET_STD[c]!;
+    }
+  }
+  const input = session.inputNames[0];
+  const output = session.outputNames[0];
+  if (!input || !output) return null;
+  const results = await session.run({ [input]: new ort.Tensor("float32", tensor, [1, 3, h, w]) });
+  const map = results[output]?.data;
+  return map instanceof Float32Array ? textAngleFromMap(map, w, h) : null;
+}
+
+interface Reader {
+  service: PaddleOcrService;
+  /** A second session on the detection model, for measuring tilt. */
+  detector: ort.InferenceSession;
+}
+
+let servicePromise: Promise<Reader> | null = null;
+
+function getService(): Promise<Reader> {
   if (servicePromise) return servicePromise;
   servicePromise = (async () => {
     const { det, rec, dict, wasm } = await downloadAll();
@@ -105,7 +152,11 @@ function getService(): Promise<PaddleOcrService> {
       detection: { paddingVertical: 0.15 },
     });
     await service.initialize();
-    return service;
+    const detector = await ort.InferenceSession.create(new Uint8Array(det), {
+      executionProviders: ["wasm"],
+      graphOptimizationLevel: "all",
+    });
+    return { service, detector };
   })();
   // A failed load (e.g. offline on first visit) must be retryable.
   servicePromise.catch(() => {
@@ -126,14 +177,22 @@ self.addEventListener("message", (event: MessageEvent<WorkerRequest>) => {
   if (msg.type === "recognise") {
     void (async () => {
       try {
-        const service = await getService();
+        const { service, detector } = await getService();
         const canvas = new OffscreenCanvas(msg.bitmap.width, msg.bitmap.height);
         const ctx = canvas.getContext("2d");
         if (!ctx) throw new Error("Canvas unavailable in worker");
         ctx.drawImage(msg.bitmap, 0, 0);
         msg.bitmap.close();
         const started = performance.now();
-        const { canvas: level, angle } = deskew(canvas, (w, h) => new OffscreenCanvas(w, h));
+        // The detector's angle ignores packaging graphics and works on
+        // light-on-dark text; the edge-based estimate covers crops where
+        // it finds too little text to measure.
+        const measured = await measureTilt(detector, canvas);
+        const { canvas: level, angle } = deskew(
+          canvas,
+          (w, h) => new OffscreenCanvas(w, h),
+          measured ?? undefined,
+        );
         const result = await service.recognize(level);
         post({
           type: "result",
