@@ -49,6 +49,16 @@ describe("createWordRepair", () => {
     expect(repair("ALLERGY ADVICE")).toBe("ALLERGY ADVICE");
   });
 
+  it("splits words glued where a separator was lost, then repairs each", () => {
+    const r = createWordRepair(["parfum", "alpha", "pinene", "butylparaben", "citral"]);
+    expect(r("PorfumAlpho-pinene")).toBe("Parfum Alpha-pinene");
+    expect(r("CitralButylporaben")).toBe("Citral Butylparaben");
+  });
+
+  it("leaves short mixed-case words alone", () => {
+    expect(repair("pH, McDonald")).toBe("pH, McDonald");
+  });
+
   it("works line by line", () => {
     expect(repair("W HOLEGRAIN\nPhosphatss")).toBe("WHOLEGRAIN\nPhosphates");
   });

@@ -82,9 +82,16 @@ export function createWordRepair(vocabulary: Iterable<string>): WordRepair {
   }
 
   function repairLine(line: string): string {
+    // Words run together where a comma or footnote mark was lost show as a
+    // lower-case letter straight into a capital ("Porfum*Alpho" read as
+    // "PorfumAlpho"): split there so each half is repaired and matched.
+    // Only a space goes in, as a lost space inside one name looks the same
+    // ("ButylatedHydroxyanisole"). Three letters either side, so "pH" and
+    // "McDonald" stay whole.
+    const unglued = line.replace(/([a-z]{3})(?=[A-Z][a-z]{2})/g, "$1 ");
     // Words and the text between them, alternating: [word, sep, word, ...]
     // (the first and last entries may be separators).
-    const parts = line.split(/([A-Za-z]+)/);
+    const parts = unglued.split(/([A-Za-z]+)/);
     const out: string[] = [];
     // parts[i] is a word for odd i; the separator after it is parts[i + 1].
     for (let i = 0; i < parts.length; i++) {
