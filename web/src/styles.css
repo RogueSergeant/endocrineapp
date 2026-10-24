@@ -338,15 +338,19 @@ button {
   position: absolute;
   pointer-events: none;
 }
-.crop-dim {
+.crop-svg {
   position: absolute;
-  background: rgba(0, 0, 0, 0.55);
+  inset: 0;
   pointer-events: none;
 }
+.crop-dim {
+  fill: rgba(0, 0, 0, 0.55);
+}
 .crop-rect {
-  position: absolute;
-  border: 2px solid #fff;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.4);
+  fill: transparent;
+  stroke: #fff;
+  stroke-width: 2;
+  pointer-events: all;
   cursor: move;
 }
 .crop-handle {
@@ -414,6 +418,7 @@ button {
   object-fit: contain;
 }
 .camera-actions {
+  position: relative;
   display: flex;
   justify-content: center;
   padding: 16px var(--gutter) calc(env(safe-area-inset-bottom) + 16px);
@@ -428,6 +433,22 @@ button {
 }
 .shutter:disabled {
   opacity: 0.4;
+}
+.torch-btn {
+  position: absolute;
+  left: var(--gutter);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: transparent;
+  color: #fff;
+  font-weight: 600;
+}
+.torch-btn[aria-pressed="true"] {
+  background: #fff;
+  color: #000;
 }
 
 /* Paste page */

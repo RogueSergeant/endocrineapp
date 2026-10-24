@@ -2,6 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { Layout } from "@/components/Layout";
+import { flattenedSize, isConvex, warpQuad, type Point, type Quad } from "@/lib/perspective";
 import { useOcrStatus } from "@/lib/ocr/textRecognition";
 import { scanImage, TooFewIngredientsError } from "@/lib/scan";
 import { useScanStore } from "@/lib/store/scanStore";
@@ -13,27 +14,31 @@ const MAX_SIDE = 2000;
 const MIN_RECT_PX = 40;
 const MIN_CROP_PX = 16;
 
-/** Selection rectangle in normalised image coordinates (0-1). */
-interface Rect {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
+// The selection is four independent corners (top-left, top-right,
+// bottom-right, bottom-left) in normalised image coordinates (0-1), so it
+// can follow a label photographed at an angle; the scan flattens it.
 
-type DragMode = "move" | "tl" | "tr" | "bl" | "br";
+/** Drag the whole selection, or the corner at this index. */
+type DragMode = "move" | 0 | 1 | 2 | 3;
 
 interface Drag {
   mode: DragMode;
   pointerId: number;
   startX: number;
   startY: number;
-  start: Rect;
+  start: Quad;
 }
 
-// Initial selection: middle 90% x 35% of the image, biased downward
-// (ingredient lists usually live in the bottom half of a label).
-const INITIAL_RECT: Rect = { x: 0.05, y: 0.5 - 0.35 / 2, w: 0.9, h: 0.35 };
+// Initial selection: middle 90% x 35% of the image.
+const INITIAL_CORNERS: Quad = [
+  { x: 0.05, y: 0.325 },
+  { x: 0.95, y: 0.325 },
+  { x: 0.95, y: 0.675 },
+  { x: 0.05, y: 0.675 },
+];
+
+const shift = (q: Quad, dx: number, dy: number): Quad =>
+  q.map((p) => ({ x: p.x + dx, y: p.y + dy })) as unknown as Quad;
 
 async function decodeImage(blob: Blob): Promise<HTMLCanvasElement> {
   // createImageBitmap applies EXIF orientation by default in current
@@ -62,6 +67,33 @@ function containedRect(imgW: number, imgH: number, boxW: number, boxH: number) {
 
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 
+/**
+ * The selected region as an upright rectangle: its four corners mapped
+ * onto a rectangle's, which undoes both tilt and the keystone of a photo
+ * taken at an angle. Reads only the pixels around the selection.
+ */
+function flatten(source: HTMLCanvasElement, corners: Quad): ImageData {
+  const W = source.width;
+  const H = source.height;
+  const inPx = corners.map((p) => ({ x: p.x * W, y: p.y * H }));
+  const left = clamp(Math.floor(Math.min(...inPx.map((p) => p.x))), 0, W - 1);
+  const top = clamp(Math.floor(Math.min(...inPx.map((p) => p.y))), 0, H - 1);
+  const right = clamp(Math.ceil(Math.max(...inPx.map((p) => p.x))), left + 1, W);
+  const bottom = clamp(Math.ceil(Math.max(...inPx.map((p) => p.y))), top + 1, H);
+  const ctx = source.getContext("2d");
+  if (!ctx) throw new Error("Canvas unavailable");
+  const region = ctx.getImageData(left, top, right - left, bottom - top);
+  const quad = inPx.map((p) => ({ x: p.x - left, y: p.y - top })) as unknown as Quad;
+  const size = flattenedSize(quad);
+  const out = warpQuad(
+    region,
+    quad,
+    Math.max(MIN_CROP_PX, size.width),
+    Math.max(MIN_CROP_PX, size.height),
+  );
+  return new ImageData(out.data, out.width, out.height);
+}
+
 export function CropPage() {
   const navigate = useNavigate();
   // Photos from the in-app camera retake there; others go back to the start.
@@ -72,7 +104,7 @@ export function CropPage() {
   const [source, setSource] = useState<HTMLCanvasElement | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [stage, setStage] = useState({ w: 0, h: 0 });
-  const [rect, setRect] = useState<Rect>(INITIAL_RECT);
+  const [corners, setCorners] = useState<Quad>(INITIAL_CORNERS);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<{ title: string; body: string } | null>(null);
   const drag = useRef<Drag | null>(null);
@@ -135,7 +167,7 @@ export function CropPage() {
       ? containedRect(source.width, source.height, stage.w, stage.h)
       : null;
 
-  const onPointerDown = (mode: DragMode) => (e: ReactPointerEvent<HTMLDivElement>) => {
+  const onPointerDown = (mode: DragMode) => (e: ReactPointerEvent<Element>) => {
     if (busy) return;
     e.stopPropagation();
     e.currentTarget.setPointerCapture(e.pointerId);
@@ -144,7 +176,7 @@ export function CropPage() {
       pointerId: e.pointerId,
       startX: e.clientX,
       startY: e.clientY,
-      start: rect,
+      start: corners,
     };
   };
 
@@ -153,38 +185,31 @@ export function CropPage() {
     if (!d || d.pointerId !== e.pointerId || !fit) return;
     const dx = (e.clientX - d.startX) / fit.w;
     const dy = (e.clientY - d.startY) / fit.h;
-    const minW = Math.min(1, MIN_RECT_PX / fit.w);
-    const minH = Math.min(1, MIN_RECT_PX / fit.h);
     const s = d.start;
-    const right = s.x + s.w;
-    const bottom = s.y + s.h;
-    let next: Rect;
-    // Each corner drag keeps the opposite corner fixed.
-    switch (d.mode) {
-      case "move":
-        next = { ...s, x: clamp(s.x + dx, 0, 1 - s.w), y: clamp(s.y + dy, 0, 1 - s.h) };
-        break;
-      case "tl": {
-        const x = clamp(s.x + dx, 0, right - minW);
-        const y = clamp(s.y + dy, 0, bottom - minH);
-        next = { x, y, w: right - x, h: bottom - y };
-        break;
-      }
-      case "tr": {
-        const y = clamp(s.y + dy, 0, bottom - minH);
-        next = { x: s.x, y, w: clamp(s.w + dx, minW, 1 - s.x), h: bottom - y };
-        break;
-      }
-      case "bl": {
-        const x = clamp(s.x + dx, 0, right - minW);
-        next = { x, y: s.y, w: right - x, h: clamp(s.h + dy, minH, 1 - s.y) };
-        break;
-      }
-      case "br":
-        next = { ...s, w: clamp(s.w + dx, minW, 1 - s.x), h: clamp(s.h + dy, minH, 1 - s.y) };
-        break;
+    if (d.mode === "move") {
+      // Keep every corner on the photo.
+      const xs = s.map((p) => p.x);
+      const ys = s.map((p) => p.y);
+      setCorners(
+        shift(
+          s,
+          clamp(dx, -Math.min(...xs), 1 - Math.max(...xs)),
+          clamp(dy, -Math.min(...ys), 1 - Math.max(...ys)),
+        ),
+      );
+      return;
     }
-    setRect(next);
+    const moved: Point = { x: clamp(s[d.mode].x + dx, 0, 1), y: clamp(s[d.mode].y + dy, 0, 1) };
+    const next = s.map((p, i) => (i === d.mode ? moved : p)) as unknown as Quad;
+    // Refuse a shape that folds over itself or has a side too short to grab.
+    const onScreen = next.map((p) => ({ x: p.x * fit.w, y: p.y * fit.h }));
+    const shortest = Math.min(
+      ...onScreen.map((p, i) => {
+        const q = onScreen[(i + 1) % 4]!;
+        return Math.hypot(p.x - q.x, p.y - q.y);
+      }),
+    );
+    if (isConvex(next) && shortest >= MIN_RECT_PX) setCorners(next);
   };
 
   const onPointerUp = (e: ReactPointerEvent<HTMLDivElement>) => {
@@ -197,11 +222,17 @@ export function CropPage() {
     const box = stageRef.current.getBoundingClientRect();
     const px = (e.clientX - box.left - fit.x) / fit.w;
     const py = (e.clientY - box.top - fit.y) / fit.h;
-    setRect((r) => ({
-      ...r,
-      x: clamp(px - r.w / 2, 0, 1 - r.w),
-      y: clamp(py - r.h / 2, 0, 1 - r.h),
-    }));
+    setCorners((q) => {
+      const xs = q.map((p) => p.x);
+      const ys = q.map((p) => p.y);
+      const cx = xs.reduce((a, b) => a + b) / 4;
+      const cy = ys.reduce((a, b) => a + b) / 4;
+      return shift(
+        q,
+        clamp(px - cx, -Math.min(...xs), 1 - Math.max(...xs)),
+        clamp(py - cy, -Math.min(...ys), 1 - Math.max(...ys)),
+      );
+    });
   };
 
   const runScan = useCallback(async () => {
@@ -214,13 +245,7 @@ export function CropPage() {
     setBusy(true);
     setError(null);
     try {
-      const W = source.width;
-      const H = source.height;
-      const sx = clamp(Math.round(rect.x * W), 0, W - 1);
-      const sy = clamp(Math.round(rect.y * H), 0, H - 1);
-      const sw = Math.max(MIN_CROP_PX, Math.min(W - sx, Math.round(rect.w * W)));
-      const sh = Math.max(MIN_CROP_PX, Math.min(H - sy, Math.round(rect.h * H)));
-      const crop = await createImageBitmap(source, sx, sy, sw, sh);
+      const crop = await createImageBitmap(flatten(source, corners));
       const id = await scanImage(crop, signal);
       if (signal.aborted) return;
       navigate(id ? `/results/${id}` : "/results", { replace: true });
@@ -235,18 +260,12 @@ export function CropPage() {
       running.current = false;
       if (!signal.aborted) setBusy(false);
     }
-  }, [navigate, rect, source]);
+  }, [navigate, corners, source]);
 
   if (!pendingImage) return <Navigate to="/" replace />;
 
-  const px = fit
-    ? {
-        left: fit.x + rect.x * fit.w,
-        top: fit.y + rect.y * fit.h,
-        width: rect.w * fit.w,
-        height: rect.h * fit.h,
-      }
-    : null;
+  // Corners in stage pixels.
+  const pts = fit ? corners.map((p) => ({ x: fit.x + p.x * fit.w, y: fit.y + p.y * fit.h })) : null;
 
   const loadingModels = busy && ocr.status === "loading";
   const pct = ocr.total > 0 ? Math.min(100, Math.round((ocr.loaded / ocr.total) * 100)) : 0;
@@ -254,7 +273,9 @@ export function CropPage() {
   return (
     <Layout title="Select the ingredients" bare>
       <div className="crop-page">
-        <p className="crop-hint">Drag the box over the ingredient list, then tap Read.</p>
+        <p className="crop-hint">
+          Drag the corners onto the corners of the ingredient list, then tap Read.
+        </p>
         {error && (
           <div style={{ padding: "0 16px" }}>
             <div className="alert" role="alert">
@@ -280,40 +301,27 @@ export function CropPage() {
               style={{ left: fit.x, top: fit.y, width: fit.w, height: fit.h }}
             />
           )}
-          {fit && px && (
+          {fit && pts && (
             <>
-              <div className="crop-dim" style={{ left: 0, right: 0, top: 0, height: px.top }} />
-              <div
-                className="crop-dim"
-                style={{ left: 0, right: 0, top: px.top + px.height, bottom: 0 }}
-              />
-              <div
-                className="crop-dim"
-                style={{ left: 0, width: px.left, top: px.top, height: px.height }}
-              />
-              <div
-                className="crop-dim"
-                style={{ left: px.left + px.width, right: 0, top: px.top, height: px.height }}
-              />
-              <div
-                className="crop-rect"
-                style={px}
-                onPointerDown={onPointerDown("move")}
-                data-testid="crop-rect"
-              />
-              {(
-                [
-                  ["tl", px.left, px.top],
-                  ["tr", px.left + px.width, px.top],
-                  ["bl", px.left, px.top + px.height],
-                  ["br", px.left + px.width, px.top + px.height],
-                ] as const
-              ).map(([mode, left, top]) => (
+              <svg className="crop-svg" width={stage.w} height={stage.h} aria-hidden="true">
+                <path
+                  className="crop-dim"
+                  fillRule="evenodd"
+                  d={`M0 0H${stage.w}V${stage.h}H0Z M${pts.map((p) => `${p.x} ${p.y}`).join(" L")}Z`}
+                />
+                <polygon
+                  className="crop-rect"
+                  points={pts.map((p) => `${p.x},${p.y}`).join(" ")}
+                  onPointerDown={onPointerDown("move")}
+                  data-testid="crop-rect"
+                />
+              </svg>
+              {pts.map((p, i) => (
                 <div
-                  key={mode}
+                  key={i}
                   className="crop-handle"
-                  style={{ left, top }}
-                  onPointerDown={onPointerDown(mode)}
+                  style={{ left: p.x, top: p.y }}
+                  onPointerDown={onPointerDown(i as 0 | 1 | 2 | 3)}
                   aria-hidden="true"
                 />
               ))}
