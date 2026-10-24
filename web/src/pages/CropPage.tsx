@@ -11,7 +11,9 @@ import { useScanStore } from "@/lib/store/scanStore";
 // Safari kills tabs that use too much) without helping the OCR, which
 // detects at <= 1920px anyway.
 const MAX_SIDE = 2000;
-const MIN_RECT_PX = 40;
+// Shortest side, in screen pixels, a drag may leave the selection with:
+// just enough to keep two corners from landing on top of each other.
+const MIN_RECT_PX = 12;
 const MIN_CROP_PX = 16;
 
 // The selection is four independent corners (top-left, top-right,
