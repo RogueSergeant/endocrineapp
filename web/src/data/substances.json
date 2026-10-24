@@ -5,114 +5,6 @@
   "substanceCount": 208,
   "substances": [
     {
-      "id": "e3ffcddf-a454-5b83-b623-76ad5e5cffd9",
-      "casNumber": "36861-47-9",
-      "ecNumber": "253-242-6",
-      "canonicalName": "(±)-1,7,7-trimethyl-3-[(4-methylphenyl)methylene]bicyclo[2.2.1]heptan-2- (4-MBC)",
-      "evidenceTier": 1,
-      "healthEffects": true,
-      "envEffects": false,
-      "assessments": [
-        {
-          "listId": 1,
-          "status": "Commission EDC list",
-          "regulatoryField": "Cosmetics",
-          "year": null
-        },
-        {
-          "listId": 1,
-          "status": "List III National Authority evaluation",
-          "regulatoryField": null,
-          "year": null
-        },
-        {
-          "listId": 1,
-          "status": "Health candidate list",
-          "regulatoryField": "REACH",
-          "year": null
-        }
-      ],
-      "aliases": [
-        "4-MBC",
-        "(±)-1,7,7-trimethyl-3-[(4-methylphenyl)methylene]bicyclo[2.2.1]heptan-2- (4-MBC)",
-        "(±)-1,7,7-trimethyl-3-[(4-methylphenyl)methylene]bicyclo[2.2.1]heptan-2-",
-        "4-Methylbenzylidene Camphor",
-        "Enzacamene",
-        "3-(4'-Methylbenzylidene)camphor",
-        "Bicyclo(2.2.1)heptan-2-one, 1,7,7-trimethyl-3-((4-methylphenyl)methylene)-",
-        "4-Methylbenzylidenecamphor",
-        "1,7,7-trimethyl-3-[(4-methylphenyl)methylidene]bicyclo[2.2.1]heptan-2-one",
-        "Methyl Benzylidene Camphor",
-        "3-(4'-Methyl)benzylidene-bornan-2-one",
-        "1,7,7-trimethyl-3-(p-tolylmethylene)norbornan-2-one"
-      ],
-      "inciName": null
-    },
-    {
-      "id": "37601d73-6ac9-5563-bde4-535565fa8c32",
-      "casNumber": "95342-41-9",
-      "ecNumber": null,
-      "canonicalName": "(1R,3E,4S)-1,7,7-trimethyl-3-(4- methylbenzylidene)bicyclo[2.2.1]heptan-2-one (4-MBC)",
-      "evidenceTier": 1,
-      "healthEffects": true,
-      "envEffects": false,
-      "assessments": [
-        {
-          "listId": 1,
-          "status": "Health candidate list",
-          "regulatoryField": "REACH",
-          "year": null
-        }
-      ],
-      "aliases": [
-        "4-MBC",
-        "(1R,3E,4S)-1,7,7-trimethyl-3-(4- methylbenzylidene)bicyclo[2.2.1]heptan-2-one (4-MBC)",
-        "(1R,3E,4S)-1,7,7-trimethyl-3-(4- methylbenzylidene)bicyclo[2.2.1]heptan-2-one",
-        "Enzacamene, (+)-",
-        "4-Methylbenzylidenecamphor",
-        "UNII-7576E1028E",
-        "3-(p-Methylbenzylidene)-DL-camphor",
-        "Neo Heliopan MBC",
-        "Uvinul MBC 95",
-        "4-MBC [Sunscreen]",
-        "p-Methylbenzylidenecamphor",
-        "UNII-8I3XWY40L9",
-        "Enzacamene [USAN:USP:INN]",
-        "3-(p-Methylbenzylidene)camphor",
-        "1,7,7-Trimethyl-3-(4-methylbenzylidene)bicyclo(2.2.1)heptan-2-one",
-        "(+/-)-3-(p-methylbenzylidene)camphor",
-        "3-(4'-methyl)benzylidene-bornan-2-one",
-        "3-(4-METHYLBENZYLIDENE)-CAMPHOR"
-      ],
-      "inciName": null
-    },
-    {
-      "id": "84cadc25-e7bc-5a30-9bc0-74793ecfd529",
-      "casNumber": "852541-21-0",
-      "ecNumber": null,
-      "canonicalName": "(1R,3Z,4S)-1,7,7-trimethyl-3-(4- methylbenzylidene)bicyclo[2.2.1]heptan-2-one (4-MBC)",
-      "evidenceTier": 1,
-      "healthEffects": true,
-      "envEffects": false,
-      "assessments": [
-        {
-          "listId": 1,
-          "status": "Health candidate list",
-          "regulatoryField": "REACH",
-          "year": null
-        }
-      ],
-      "aliases": [
-        "4-MBC",
-        "(1R,3Z,4S)-1,7,7-trimethyl-3-(4- methylbenzylidene)bicyclo[2.2.1]heptan-2-one (4-MBC)",
-        "(1R,3Z,4S)-1,7,7-trimethyl-3-(4- methylbenzylidene)bicyclo[2.2.1]heptan-2-one",
-        "4-Methylbenzylidene-camphor",
-        "BIDD:ER0102",
-        "(1R,3Z,4S)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one"
-      ],
-      "inciName": null
-    },
-    {
       "id": "e7868f6b-453d-5b89-bb99-3167809c7ce7",
       "casNumber": "741687-98-9",
       "ecNumber": null,
@@ -184,43 +76,6 @@
         "(1S,3Z,4R)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one (4-MBC)",
         "(1S,3Z,4R)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one",
         "3-(4-Methylbenzylidene)camphor, >=98.0% (GC)"
-      ],
-      "inciName": null
-    },
-    {
-      "id": "16e60aed-16c2-5725-b033-747e73be05de",
-      "casNumber": "1782069-81-1",
-      "ecNumber": null,
-      "canonicalName": "(3E)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one (4-MBC)",
-      "evidenceTier": 1,
-      "healthEffects": true,
-      "envEffects": false,
-      "assessments": [
-        {
-          "listId": 1,
-          "status": "Health candidate list",
-          "regulatoryField": "REACH",
-          "year": null
-        }
-      ],
-      "aliases": [
-        "4-MBC",
-        "(3E)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one (4-MBC)",
-        "(3E)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one",
-        "Enzacamene",
-        "4-Methylbenzylidene camphor",
-        "Enzacameno",
-        "METHYL BENZYLIDENE CAMPHOR",
-        "3-(4-Methylbenzylidene)camphor",
-        "(3E)-1,7,7-trimethyl-3-[(4-methylphenyl)methylidene]bicyclo[2.2.1]heptan-2-one",
-        "enzacamenum",
-        "(3E)-1,7,7-trimethyl-3-((4-methylphenyl)methylidene)bicyclo(2.2.1)heptan-2-one",
-        "4-MBC cpd",
-        "Enzacamene D-L form",
-        "4-Methylbenzylidenecamphor",
-        "3-(p-Methylbenzylidene)-DL-camphor",
-        "3-(4-METHYLBENZYLIDENE)-CAMPHOR",
-        "(E)-1,7,7-Trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one"
       ],
       "inciName": null
     },
@@ -364,88 +219,6 @@
       "inciName": null
     },
     {
-      "id": "8fc7e0b1-a29d-5363-bb6f-8cc65c5859de",
-      "casNumber": "27986-36-3",
-      "ecNumber": "248-762-5",
-      "canonicalName": "2-(nonylphenoxy)ethanol",
-      "evidenceTier": 1,
-      "healthEffects": false,
-      "envEffects": true,
-      "assessments": [
-        {
-          "listId": 1,
-          "status": "Environmental candidate list",
-          "regulatoryField": "REACH",
-          "year": null
-        },
-        {
-          "listId": 1,
-          "status": "Environmental authorisation list",
-          "regulatoryField": "REACH",
-          "year": null
-        }
-      ],
-      "aliases": [
-        "2-(nonylphenoxy)ethanol",
-        "Terics",
-        "Nonylphenol monoethoxylate",
-        "Ethanol, 2-(nonylphenoxy)-",
-        "2-(2-nonylphenoxy)ethanol",
-        "Ethanol,2-(nonylphenoxy)-",
-        "2-(o-Nonylphenoxy)ethanol",
-        "Ethanol, 2-(o-nonylphenoxy)-",
-        "Ethanol, 2-(2-nonylphenoxy)-",
-        "Nonylphenoxyglycol",
-        "teric N",
-        "Ethylene glycol nonylphenyl ether",
-        "marlophen 89",
-        "nonylphenolethoxylate",
-        "UNII-RN8NP35H6T",
-        "nonylphenol ethoxyacetic acid"
-      ],
-      "inciName": null
-    },
-    {
-      "id": "6e619edf-d017-564e-9ef6-88ca214ceb3c",
-      "casNumber": "20427-84-3",
-      "ecNumber": "243-816-4",
-      "canonicalName": "2-[2-(4-nonylphenoxy)ethoxy]ethanol",
-      "evidenceTier": 1,
-      "healthEffects": false,
-      "envEffects": true,
-      "assessments": [
-        {
-          "listId": 1,
-          "status": "Environmental authorisation list",
-          "regulatoryField": "REACH",
-          "year": null
-        },
-        {
-          "listId": 1,
-          "status": "Environmental candidate list",
-          "regulatoryField": "REACH",
-          "year": null
-        }
-      ],
-      "aliases": [
-        "2-[2-(4-nonylphenoxy)ethoxy]ethanol",
-        "4-Nonylphenol diethoxylate",
-        "Nonoxynol-2",
-        "4-Nonyl Phenol Diethoxylate",
-        "2-(2-(4-Nonylphenoxy)ethoxy)ethanol",
-        "2-[2-(4-nonylphenoxy)ethoxy]ethan-1-ol",
-        "Ethanol, 2-(2-(4-nonylphenoxy)ethoxy)-",
-        "Polyoxyethylene (12) nonylphenyl ether",
-        "Ethanol, 2-[2-(4-nonylphenoxy)ethoxy]-",
-        "DSSTox_CID_16588",
-        "DSSTox_RID_79288",
-        "DSSTox_GSID_36588",
-        "Adekatol NP",
-        "EON 2"
-      ],
-      "inciName": null
-    },
-    {
       "id": "af64ef6e-36a6-5ce5-86cb-c521313368bf",
       "casNumber": "27176-93-8",
       "ecNumber": "248-291-5",
@@ -481,47 +254,6 @@
         "2-[2-(2-nonylphenoxy)ethoxy]ethanol",
         "2-[2-(2-Nonylphenoxy)ethoxy]ethan-1-ol",
         "RRLGETDMEIMLQU-UHFFFAOYSA-N"
-      ],
-      "inciName": null
-    },
-    {
-      "id": "4d8f948a-8d76-50d8-a98e-917941c5ca13",
-      "casNumber": "7311-27-5",
-      "ecNumber": "230-770-5",
-      "canonicalName": "2-[2-[2-[2-(4-nonylphenoxy)ethoxy]ethoxy]ethoxy]ethanol",
-      "evidenceTier": 1,
-      "healthEffects": false,
-      "envEffects": true,
-      "assessments": [
-        {
-          "listId": 1,
-          "status": "Environmental authorisation list",
-          "regulatoryField": "REACH",
-          "year": null
-        },
-        {
-          "listId": 1,
-          "status": "Environmental candidate list",
-          "regulatoryField": "REACH",
-          "year": null
-        }
-      ],
-      "aliases": [
-        "2-[2-[2-[2-(4-nonylphenoxy)ethoxy]ethoxy]ethoxy]ethanol",
-        "Ethanol, 2-[2-[2-[2-(4-nonylphenoxy)ethoxy]ethoxy]ethoxy]-",
-        "Tetraethylene glycol mono(p-nonylphenyl) ether",
-        "2-(2-(2-(2-(4-Nonylphenoxy)ethoxy)ethoxy)ethoxy)ethanol",
-        "Ethanol, 2-(2-(2-(2-(4-nonylphenoxy)ethoxy)ethoxy)ethoxy)-",
-        "Ethanol, 2-(2-(2-(2-(p-nonylphenoxy)ethoxy)ethoxy)ethoxy)-",
-        "Ethanol, 2-2-2-2-(4-nonylphenoxy)ethoxyethoxyethoxy-",
-        "4-nonylphenol tetraethoxylate",
-        "Nonoxynol-4",
-        "2-(2-{2-[2-(4-nonylphenoxy)ethoxy]ethoxy}ethoxy)ethan-1-ol",
-        "2-(2-(2-(2-(4-Nonylphenoxy)ethoxy)ethoxy)ethoxy)ethan-1-ol",
-        "NPEO4",
-        "Nonylphenol-4-ethoxylate",
-        "PEG-4 Nonyl phenyl ether",
-        "UTXPMECBRCEYCI-UHFFFAOYSA-N"
       ],
       "inciName": null
     },
@@ -1133,46 +865,6 @@
       "inciName": null
     },
     {
-      "id": "deabdb33-03b8-5bed-b9cd-9113e08b2215",
-      "casNumber": "140-66-9",
-      "ecNumber": "205-426-2",
-      "canonicalName": "4-(1,1,3,3-tetramethylbutyl)phenol",
-      "evidenceTier": 1,
-      "healthEffects": false,
-      "envEffects": true,
-      "assessments": [
-        {
-          "listId": 1,
-          "status": "Environmental authorisation list",
-          "regulatoryField": "REACH",
-          "year": null
-        },
-        {
-          "listId": 1,
-          "status": "Environmental candidate list",
-          "regulatoryField": "REACH",
-          "year": null
-        }
-      ],
-      "aliases": [
-        "4-(1,1,3,3-tetramethylbutyl)phenol",
-        "4-tert-Octylphenol",
-        "4-(2,4,4-trimethylpentan-2-yl)phenol",
-        "p-tert-Octylphenol",
-        "4-t-Octylphenol",
-        "Phenol, 4-(1,1,3,3-tetramethylbutyl)-",
-        "p-Terc.oktylfenol",
-        "p-(1,1,3,3-Tetramethylbutyl)phenol",
-        "para-tert-Octylphenol",
-        "Phenol, p-(tert-octyl)-",
-        "Phenol, p-(1,1,3,3-tetramethylbutyl)-",
-        "p-(1',1',3',3'-Tetramethylbutyl)fenol",
-        "p-(1,1,3,3-tetramethylbutyl)-phenol",
-        "4-tertiary-octylphenol"
-      ],
-      "inciName": null
-    },
-    {
       "id": "e28b52a8-e9e1-5041-905f-a74426bb5cff",
       "casNumber": "521947-27-3",
       "ecNumber": null,
@@ -1686,7 +1378,7 @@
       "id": "e8cb7541-9eec-5fdd-ad4c-c36b219ce18a",
       "casNumber": "1987-50-4",
       "ecNumber": "217-862-0",
-      "canonicalName": "4-heptylphenol",
+      "canonicalName": "4-Heptylphenol",
       "evidenceTier": 1,
       "healthEffects": false,
       "envEffects": true,
@@ -1720,7 +1412,7 @@
       "id": "b8433cd5-619a-5aed-aeee-6913abe28aab",
       "casNumber": "27459-10-5",
       "ecNumber": "608-055-8",
-      "canonicalName": "4-isododecylphenol",
+      "canonicalName": "4-Isododecylphenol",
       "evidenceTier": 1,
       "healthEffects": true,
       "envEffects": true,
@@ -1740,6 +1432,232 @@
       ],
       "aliases": [
         "4-isododecylphenol"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "16e60aed-16c2-5725-b033-747e73be05de",
+      "casNumber": "1782069-81-1",
+      "ecNumber": null,
+      "canonicalName": "4-Methylbenzylidene camphor (4-MBC)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Health candidate list",
+          "regulatoryField": "REACH",
+          "year": null
+        }
+      ],
+      "aliases": [
+        "4-MBC",
+        "(3E)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one (4-MBC)",
+        "(3E)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one",
+        "Enzacamene",
+        "4-Methylbenzylidene camphor",
+        "Enzacameno",
+        "METHYL BENZYLIDENE CAMPHOR",
+        "3-(4-Methylbenzylidene)camphor",
+        "(3E)-1,7,7-trimethyl-3-[(4-methylphenyl)methylidene]bicyclo[2.2.1]heptan-2-one",
+        "enzacamenum",
+        "(3E)-1,7,7-trimethyl-3-((4-methylphenyl)methylidene)bicyclo(2.2.1)heptan-2-one",
+        "4-MBC cpd",
+        "Enzacamene D-L form",
+        "4-Methylbenzylidenecamphor",
+        "3-(p-Methylbenzylidene)-DL-camphor",
+        "3-(4-METHYLBENZYLIDENE)-CAMPHOR",
+        "(E)-1,7,7-Trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "e3ffcddf-a454-5b83-b623-76ad5e5cffd9",
+      "casNumber": "36861-47-9",
+      "ecNumber": "253-242-6",
+      "canonicalName": "4-Methylbenzylidene Camphor (4-MBC)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Commission EDC list",
+          "regulatoryField": "Cosmetics",
+          "year": null
+        },
+        {
+          "listId": 1,
+          "status": "List III National Authority evaluation",
+          "regulatoryField": null,
+          "year": null
+        },
+        {
+          "listId": 1,
+          "status": "Health candidate list",
+          "regulatoryField": "REACH",
+          "year": null
+        }
+      ],
+      "aliases": [
+        "4-MBC",
+        "(±)-1,7,7-trimethyl-3-[(4-methylphenyl)methylene]bicyclo[2.2.1]heptan-2- (4-MBC)",
+        "(±)-1,7,7-trimethyl-3-[(4-methylphenyl)methylene]bicyclo[2.2.1]heptan-2-",
+        "4-Methylbenzylidene Camphor",
+        "Enzacamene",
+        "3-(4'-Methylbenzylidene)camphor",
+        "Bicyclo(2.2.1)heptan-2-one, 1,7,7-trimethyl-3-((4-methylphenyl)methylene)-",
+        "4-Methylbenzylidenecamphor",
+        "1,7,7-trimethyl-3-[(4-methylphenyl)methylidene]bicyclo[2.2.1]heptan-2-one",
+        "Methyl Benzylidene Camphor",
+        "3-(4'-Methyl)benzylidene-bornan-2-one",
+        "1,7,7-trimethyl-3-(p-tolylmethylene)norbornan-2-one"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "84cadc25-e7bc-5a30-9bc0-74793ecfd529",
+      "casNumber": "852541-21-0",
+      "ecNumber": null,
+      "canonicalName": "4-Methylbenzylidene-camphor (4-MBC)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Health candidate list",
+          "regulatoryField": "REACH",
+          "year": null
+        }
+      ],
+      "aliases": [
+        "4-MBC",
+        "(1R,3Z,4S)-1,7,7-trimethyl-3-(4- methylbenzylidene)bicyclo[2.2.1]heptan-2-one (4-MBC)",
+        "(1R,3Z,4S)-1,7,7-trimethyl-3-(4- methylbenzylidene)bicyclo[2.2.1]heptan-2-one",
+        "4-Methylbenzylidene-camphor",
+        "BIDD:ER0102",
+        "(1R,3Z,4S)-1,7,7-trimethyl-3-(4-methylbenzylidene)bicyclo[2.2.1]heptan-2-one"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "37601d73-6ac9-5563-bde4-535565fa8c32",
+      "casNumber": "95342-41-9",
+      "ecNumber": null,
+      "canonicalName": "4-Methylbenzylidenecamphor (4-MBC)",
+      "evidenceTier": 1,
+      "healthEffects": true,
+      "envEffects": false,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Health candidate list",
+          "regulatoryField": "REACH",
+          "year": null
+        }
+      ],
+      "aliases": [
+        "4-MBC",
+        "(1R,3E,4S)-1,7,7-trimethyl-3-(4- methylbenzylidene)bicyclo[2.2.1]heptan-2-one (4-MBC)",
+        "(1R,3E,4S)-1,7,7-trimethyl-3-(4- methylbenzylidene)bicyclo[2.2.1]heptan-2-one",
+        "Enzacamene, (+)-",
+        "4-Methylbenzylidenecamphor",
+        "UNII-7576E1028E",
+        "3-(p-Methylbenzylidene)-DL-camphor",
+        "Neo Heliopan MBC",
+        "Uvinul MBC 95",
+        "4-MBC [Sunscreen]",
+        "p-Methylbenzylidenecamphor",
+        "UNII-8I3XWY40L9",
+        "Enzacamene [USAN:USP:INN]",
+        "3-(p-Methylbenzylidene)camphor",
+        "1,7,7-Trimethyl-3-(4-methylbenzylidene)bicyclo(2.2.1)heptan-2-one",
+        "(+/-)-3-(p-methylbenzylidene)camphor",
+        "3-(4'-methyl)benzylidene-bornan-2-one",
+        "3-(4-METHYLBENZYLIDENE)-CAMPHOR"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "6e619edf-d017-564e-9ef6-88ca214ceb3c",
+      "casNumber": "20427-84-3",
+      "ecNumber": "243-816-4",
+      "canonicalName": "4-Nonylphenol diethoxylate",
+      "evidenceTier": 1,
+      "healthEffects": false,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Environmental authorisation list",
+          "regulatoryField": "REACH",
+          "year": null
+        },
+        {
+          "listId": 1,
+          "status": "Environmental candidate list",
+          "regulatoryField": "REACH",
+          "year": null
+        }
+      ],
+      "aliases": [
+        "2-[2-(4-nonylphenoxy)ethoxy]ethanol",
+        "4-Nonylphenol diethoxylate",
+        "Nonoxynol-2",
+        "4-Nonyl Phenol Diethoxylate",
+        "2-(2-(4-Nonylphenoxy)ethoxy)ethanol",
+        "2-[2-(4-nonylphenoxy)ethoxy]ethan-1-ol",
+        "Ethanol, 2-(2-(4-nonylphenoxy)ethoxy)-",
+        "Polyoxyethylene (12) nonylphenyl ether",
+        "Ethanol, 2-[2-(4-nonylphenoxy)ethoxy]-",
+        "DSSTox_CID_16588",
+        "DSSTox_RID_79288",
+        "DSSTox_GSID_36588",
+        "Adekatol NP",
+        "EON 2"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "4d8f948a-8d76-50d8-a98e-917941c5ca13",
+      "casNumber": "7311-27-5",
+      "ecNumber": "230-770-5",
+      "canonicalName": "4-Nonylphenol tetraethoxylate",
+      "evidenceTier": 1,
+      "healthEffects": false,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Environmental authorisation list",
+          "regulatoryField": "REACH",
+          "year": null
+        },
+        {
+          "listId": 1,
+          "status": "Environmental candidate list",
+          "regulatoryField": "REACH",
+          "year": null
+        }
+      ],
+      "aliases": [
+        "2-[2-[2-[2-(4-nonylphenoxy)ethoxy]ethoxy]ethoxy]ethanol",
+        "Ethanol, 2-[2-[2-[2-(4-nonylphenoxy)ethoxy]ethoxy]ethoxy]-",
+        "Tetraethylene glycol mono(p-nonylphenyl) ether",
+        "2-(2-(2-(2-(4-Nonylphenoxy)ethoxy)ethoxy)ethoxy)ethanol",
+        "Ethanol, 2-(2-(2-(2-(4-nonylphenoxy)ethoxy)ethoxy)ethoxy)-",
+        "Ethanol, 2-(2-(2-(2-(p-nonylphenoxy)ethoxy)ethoxy)ethoxy)-",
+        "Ethanol, 2-2-2-2-(4-nonylphenoxy)ethoxyethoxyethoxy-",
+        "4-nonylphenol tetraethoxylate",
+        "Nonoxynol-4",
+        "2-(2-{2-[2-(4-nonylphenoxy)ethoxy]ethoxy}ethoxy)ethan-1-ol",
+        "2-(2-(2-(2-(4-Nonylphenoxy)ethoxy)ethoxy)ethoxy)ethan-1-ol",
+        "NPEO4",
+        "Nonylphenol-4-ethoxylate",
+        "PEG-4 Nonyl phenyl ether",
+        "UTXPMECBRCEYCI-UHFFFAOYSA-N"
       ],
       "inciName": null
     },
@@ -1847,7 +1765,7 @@
       "id": "307b9be3-550b-5fbc-89ab-5debc5ab0cc3",
       "casNumber": "98-54-4",
       "ecNumber": "202-679-0",
-      "canonicalName": "4-tert-butylphenol",
+      "canonicalName": "4-Tert-butylphenol",
       "evidenceTier": 1,
       "healthEffects": false,
       "envEffects": true,
@@ -1883,6 +1801,46 @@
         "Ucar butylphenol 4-T flake",
         "para-tertiary-butylphenol",
         "4-tertiary-butylphenol"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "deabdb33-03b8-5bed-b9cd-9113e08b2215",
+      "casNumber": "140-66-9",
+      "ecNumber": "205-426-2",
+      "canonicalName": "4-Tert-Octylphenol",
+      "evidenceTier": 1,
+      "healthEffects": false,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Environmental authorisation list",
+          "regulatoryField": "REACH",
+          "year": null
+        },
+        {
+          "listId": 1,
+          "status": "Environmental candidate list",
+          "regulatoryField": "REACH",
+          "year": null
+        }
+      ],
+      "aliases": [
+        "4-(1,1,3,3-tetramethylbutyl)phenol",
+        "4-tert-Octylphenol",
+        "4-(2,4,4-trimethylpentan-2-yl)phenol",
+        "p-tert-Octylphenol",
+        "4-t-Octylphenol",
+        "Phenol, 4-(1,1,3,3-tetramethylbutyl)-",
+        "p-Terc.oktylfenol",
+        "p-(1,1,3,3-Tetramethylbutyl)phenol",
+        "para-tert-Octylphenol",
+        "Phenol, p-(tert-octyl)-",
+        "Phenol, p-(1,1,3,3-tetramethylbutyl)-",
+        "p-(1',1',3',3'-Tetramethylbutyl)fenol",
+        "p-(1,1,3,3-tetramethylbutyl)-phenol",
+        "4-tertiary-octylphenol"
       ],
       "inciName": null
     },
@@ -3018,6 +2976,48 @@
       "inciName": null
     },
     {
+      "id": "8fc7e0b1-a29d-5363-bb6f-8cc65c5859de",
+      "casNumber": "27986-36-3",
+      "ecNumber": "248-762-5",
+      "canonicalName": "Nonylphenoxyglycol",
+      "evidenceTier": 1,
+      "healthEffects": false,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Environmental candidate list",
+          "regulatoryField": "REACH",
+          "year": null
+        },
+        {
+          "listId": 1,
+          "status": "Environmental authorisation list",
+          "regulatoryField": "REACH",
+          "year": null
+        }
+      ],
+      "aliases": [
+        "2-(nonylphenoxy)ethanol",
+        "Terics",
+        "Nonylphenol monoethoxylate",
+        "Ethanol, 2-(nonylphenoxy)-",
+        "2-(2-nonylphenoxy)ethanol",
+        "Ethanol,2-(nonylphenoxy)-",
+        "2-(o-Nonylphenoxy)ethanol",
+        "Ethanol, 2-(o-nonylphenoxy)-",
+        "Ethanol, 2-(2-nonylphenoxy)-",
+        "Nonylphenoxyglycol",
+        "teric N",
+        "Ethylene glycol nonylphenyl ether",
+        "marlophen 89",
+        "nonylphenolethoxylate",
+        "UNII-RN8NP35H6T",
+        "nonylphenol ethoxyacetic acid"
+      ],
+      "inciName": null
+    },
+    {
       "id": "0af29242-ba79-5db9-a9a9-ceaf781b5f3f",
       "casNumber": "17404-66-9",
       "ecNumber": "241-427-4",
@@ -3248,42 +3248,6 @@
       ],
       "aliases": [
         "Phenol, 4-nonyl-, branched"
-      ],
-      "inciName": null
-    },
-    {
-      "id": "f25bc59a-9486-5e8d-bc75-6d59715f8588",
-      "casNumber": "3050-88-2",
-      "ecNumber": "608-492-4",
-      "canonicalName": "Phenol, 4-nonyl-, phosphite (3:1)",
-      "evidenceTier": 1,
-      "healthEffects": false,
-      "envEffects": true,
-      "assessments": [
-        {
-          "listId": 1,
-          "status": "Environmental candidate list",
-          "regulatoryField": "REACH",
-          "year": null
-        }
-      ],
-      "aliases": [
-        "Phenol, 4-nonyl-, phosphite (3:1)",
-        "Antioxidant TNP",
-        "Irgafos TNPP",
-        "Naugard TNPP",
-        "SUMILIZER TNP",
-        "p-Nonylphenol, phosphite (3:1)",
-        "DOVERPHOS 4",
-        "Tris(p-nonylphenyl) phosphite",
-        "Phenol, nonyl-, 1,1',1''-phosphite",
-        "Tris[p-nonylphenyl] phosphite",
-        "Trisnonylphenylphosphit",
-        "Phenol,nonyl-,phosphite (3:1)",
-        "TRIS(NONYLPHENYL)PHOSPHITE [INCI]",
-        "Phenol, nonyl-, phosphite (3:1)",
-        "tris(nonylphenyl) phosphite",
-        "TRIS(NONYLPHENYL)PHOSPHITE"
       ],
       "inciName": null
     },
@@ -3717,6 +3681,42 @@
       "inciName": null
     },
     {
+      "id": "f25bc59a-9486-5e8d-bc75-6d59715f8588",
+      "casNumber": "3050-88-2",
+      "ecNumber": "608-492-4",
+      "canonicalName": "Trisnonylphenylphosphit",
+      "evidenceTier": 1,
+      "healthEffects": false,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 1,
+          "status": "Environmental candidate list",
+          "regulatoryField": "REACH",
+          "year": null
+        }
+      ],
+      "aliases": [
+        "Phenol, 4-nonyl-, phosphite (3:1)",
+        "Antioxidant TNP",
+        "Irgafos TNPP",
+        "Naugard TNPP",
+        "SUMILIZER TNP",
+        "p-Nonylphenol, phosphite (3:1)",
+        "DOVERPHOS 4",
+        "Tris(p-nonylphenyl) phosphite",
+        "Phenol, nonyl-, 1,1',1''-phosphite",
+        "Tris[p-nonylphenyl] phosphite",
+        "Trisnonylphenylphosphit",
+        "Phenol,nonyl-,phosphite (3:1)",
+        "TRIS(NONYLPHENYL)PHOSPHITE [INCI]",
+        "Phenol, nonyl-, phosphite (3:1)",
+        "tris(nonylphenyl) phosphite",
+        "TRIS(NONYLPHENYL)PHOSPHITE"
+      ],
+      "inciName": null
+    },
+    {
       "id": "0f6c9de1-9cad-5bc1-8463-8d80f6b43fd1",
       "casNumber": "27689-12-9",
       "ecNumber": "248-607-1",
@@ -3839,45 +3839,6 @@
       "inciName": null
     },
     {
-      "id": "93a2c042-2080-5999-8029-452e56af1b21",
-      "casNumber": "1222-05-5",
-      "ecNumber": "214-946-9",
-      "canonicalName": "1,3,4,6,7,8- hexahydro-4,6,6,7,8,8- hexamethylindeno[5 ,6-c]pyran (HHCB)",
-      "evidenceTier": 2,
-      "healthEffects": true,
-      "envEffects": true,
-      "assessments": [
-        {
-          "listId": 2,
-          "status": "Corap List",
-          "regulatoryField": "REACH",
-          "year": 2022
-        }
-      ],
-      "aliases": [
-        "HHCB",
-        "1,3,4,6,7,8- hexahydro-4,6,6,7,8,8- hexamethylindeno[5 ,6-c]pyran (HHCB)",
-        "1,3,4,6,7,8- hexahydro-4,6,6,7,8,8- hexamethylindeno[5 ,6-c]pyran",
-        "Galaxolide",
-        "Abbalide",
-        "Galoxolide",
-        "Pearlide",
-        "Galaxolide White",
-        "hexamethylindanopyran",
-        "Cyclopenta[g]-2-benzopyran, 1,3,4,6,7,8-hexahydro-4,6,6,7,8,8-hexamethyl-",
-        "Hexahydrohexamethyl cyclopentabenzopyran",
-        "1,3,4,6,7,8-Hexahydro-4,6,6,7,8,8-hexamethyl-cyclopenta-gamma-2-benzopyran",
-        "Hexahydro-4,6,6,7,8,8-hexamethylcyclopenta-gamma-2-benzopyran",
-        "1,3,4,6,7,8-Hexahydro-4,6,6,7,8,8-hexamethylindeno(5,6-c)pyran",
-        "Cyclopenta(g)-2-benzopyran, 1,3,4,6,7,8-hexahydro-4,6,6,7,8,8-hexamethyl-",
-        "1,3,4,6,7,8-hexahydro-4,6,6,7,8,8-hexamethylindeno[5,6-c]pyran",
-        "hexahydro-hexamethylcyclopenta-benzopyran",
-        "4,6,6,7,8,8-Hexamethyl-1,3,4,6,7,8-hexahydrocyclopenta[g]isochromene",
-        "1,3,4,6,7,8-Hexahydro-4,6,6,7,8,8-hexamethylcyclopenta[g]-2-benzopyran"
-      ],
-      "inciName": null
-    },
-    {
       "id": "4199e4b1-e8bd-503b-b861-31cdff4e8912",
       "casNumber": "32492-61-8",
       "ecNumber": "500-082-2",
@@ -3916,126 +3877,6 @@
       ],
       "aliases": [
         "2-Propenoic acid, methyl ester, reaction products with mixed O,O-bis(branched and linear pentyl and iso-Bu) phosphorodithioates"
-      ],
-      "inciName": null
-    },
-    {
-      "id": "346335ec-06b7-5969-a19e-e288ae61dfed",
-      "casNumber": null,
-      "ecNumber": "246-563-8, 204-442-7",
-      "canonicalName": "2-tert-butyl-4-methoxyphenol (BHA)",
-      "evidenceTier": 2,
-      "healthEffects": true,
-      "envEffects": true,
-      "assessments": [
-        {
-          "listId": 2,
-          "status": "Corap List",
-          "regulatoryField": "REACH",
-          "year": 2015
-        },
-        {
-          "listId": 2,
-          "status": "Commission EDC list",
-          "regulatoryField": "Cosmetics",
-          "year": 2019
-        },
-        {
-          "listId": 2,
-          "status": "List III National Authority evaluation",
-          "regulatoryField": null,
-          "year": 2022
-        },
-        {
-          "listId": 2,
-          "status": "Concluded ED in SEV",
-          "regulatoryField": "REACH",
-          "year": 2024
-        },
-        {
-          "listId": 2,
-          "status": "Classification proposed",
-          "regulatoryField": "CLH",
-          "year": 2025
-        },
-        {
-          "listId": 3,
-          "status": "Corap List",
-          "regulatoryField": "REACH",
-          "year": 2015
-        },
-        {
-          "listId": 3,
-          "status": "Commission EDC list",
-          "regulatoryField": "Cosmetics",
-          "year": 2019
-        },
-        {
-          "listId": 3,
-          "status": "List III National Authority evaluation",
-          "regulatoryField": null,
-          "year": 2022
-        },
-        {
-          "listId": 3,
-          "status": "Concluded ED in SEV",
-          "regulatoryField": "REACH",
-          "year": 2024
-        },
-        {
-          "listId": 3,
-          "status": "Classification proposed",
-          "regulatoryField": "CLH",
-          "year": 2025
-        }
-      ],
-      "aliases": [
-        "BHA",
-        "2-tert-butyl-4-methoxyphenol (BHA)",
-        "2-tert-butyl-4-methoxyphenol",
-        "Butylated Hydroxyanisole",
-        "Butylhydroxyanisole",
-        "E320",
-        "E 320"
-      ],
-      "inciName": null
-    },
-    {
-      "id": "1bef7b67-921d-5f93-90ab-6d0770e37b96",
-      "casNumber": "79-94-7",
-      "ecNumber": "201-236-9",
-      "canonicalName": "2,2,6,6-tetrabromo-4,4-isopropylidenediphenol",
-      "evidenceTier": 2,
-      "healthEffects": true,
-      "envEffects": true,
-      "assessments": [
-        {
-          "listId": 2,
-          "status": "Corap List",
-          "regulatoryField": "REACH",
-          "year": 2015
-        }
-      ],
-      "aliases": [
-        "2,2,6,6-tetrabromo-4,4-isopropylidenediphenol",
-        "Tetrabromobisphenol A",
-        "3,3',5,5'-Tetrabromobisphenol A",
-        "4,4'-(propane-2,2-diyl)bis(2,6-dibromophenol)",
-        "Bromdian",
-        "2,2-Bis(3,5-dibromo-4-hydroxyphenyl)propane",
-        "4,4'-Isopropylidenebis(2,6-dibromophenol)",
-        "TBBPA",
-        "Tetrabromodian",
-        "Firemaster BP 4A",
-        "Fire Guard 2000",
-        "Great Lakes BA-59P",
-        "Saytex RB 100PC",
-        "Tetrabromodiphenylopropane",
-        "2,6-dibromo-4-[2-(3,5-dibromo-4-hydroxyphenyl)propan-2-yl]phenol",
-        "2,2',6,6'-TETRABROMOBISPHENOL A",
-        "4,4'-(1-Methylethylidene)bis(2,6-dibromophenol)",
-        "BA 59",
-        "3,5,3',5'-Tetrabromobisphenol A"
       ],
       "inciName": null
     },
@@ -4156,7 +3997,7 @@
       "id": "ed1042ad-045c-50a5-b74e-d3339543a192",
       "casNumber": "104-78-9",
       "ecNumber": "203-236-4",
-      "canonicalName": "3-aminopropyldiethylamine",
+      "canonicalName": "3-Aminopropyldiethylamine",
       "evidenceTier": 2,
       "healthEffects": true,
       "envEffects": true,
@@ -4177,7 +4018,7 @@
       "id": "5808fd16-c2fd-561f-aeb6-89beb4b75eb9",
       "casNumber": "109-55-7",
       "ecNumber": "203-680-9",
-      "canonicalName": "3-aminopropyldimethylamine",
+      "canonicalName": "3-Aminopropyldimethylamine",
       "evidenceTier": 2,
       "healthEffects": true,
       "envEffects": false,
@@ -4195,34 +4036,10 @@
       "inciName": null
     },
     {
-      "id": "7e69da5b-8da6-532c-8221-f5bb6ad5c038",
-      "casNumber": "55406-53-6",
-      "ecNumber": "259-627-5",
-      "canonicalName": "3-iodo-2-propynylbutylcarbamate (IPBC)",
-      "evidenceTier": 2,
-      "healthEffects": false,
-      "envEffects": true,
-      "assessments": [
-        {
-          "listId": 2,
-          "status": "Concluded ED in BPC opinion",
-          "regulatoryField": "BPR",
-          "year": 2025
-        }
-      ],
-      "aliases": [
-        "IPBC",
-        "3-iodo-2-propynylbutylcarbamate (IPBC)",
-        "3-iodo-2-propynylbutylcarbamate",
-        "Iodopropynyl Butylcarbamate"
-      ],
-      "inciName": null
-    },
-    {
       "id": "3a5d443f-0343-5581-8ee2-6e8bbaf8488d",
       "casNumber": "1453-58-3",
       "ecNumber": "215-925-7",
-      "canonicalName": "3-methylpyrazole",
+      "canonicalName": "3-Methylpyrazole",
       "evidenceTier": 2,
       "healthEffects": false,
       "envEffects": true,
@@ -4247,74 +4064,6 @@
         "PYRAZOLE, 3-METHYL-",
         "methylpyrazole",
         "UNII-W7KU1RRO6U"
-      ],
-      "inciName": null
-    },
-    {
-      "id": "d7693c20-f656-5382-99ad-42a9e992989b",
-      "casNumber": "17527-29-6",
-      "ecNumber": "241-527-8",
-      "canonicalName": "3,3,4,4,5,5,6,6,7,7,8,8,8-tridecafluorooctyl acrylate",
-      "evidenceTier": 2,
-      "healthEffects": false,
-      "envEffects": true,
-      "assessments": [
-        {
-          "listId": 2,
-          "status": "Corap List",
-          "regulatoryField": "REACH",
-          "year": 2016
-        }
-      ],
-      "aliases": [
-        "3,3,4,4,5,5,6,6,7,7,8,8,8-tridecafluorooctyl acrylate",
-        "1h,1h,2h,2h-perfluorooctyl acrylate",
-        "perfluorohexylethyl acrylate",
-        "2-Propenoic acid, 3,3,4,4,5,5,6,6,7,7,8,8,8-tridecafluorooctyl ester",
-        "2-(Perfluorohexyl)ethyl acrylate",
-        "1,1,2,2-Tetrahydroperfluorooctyl acrylate",
-        "CHEMINOX FAAC 6",
-        "ACTYFLON G 06C",
-        "ACRYLIC ACID, 3,3,4,4,5,5,6,6,7,7,8,8,8-TRIDECAFLUOROOCTYL ESTER",
-        "3,3,4,4,5,5,6,6,7,7,8,8,8-tridecafluorooctyl prop-2-enoate",
-        "1H,1H,2H,2H-Tridecafluoro-n-octyl Acrylate",
-        "(perfluorohexyl)ethyl acrylate",
-        "1H,1H,2H,2H-Tridecafluoro-n-octyl Acrylate (stabilized with HQ + MEHQ)",
-        "Acrylic Acid 1H,1H,2H,2H-Tridecafluoro-n-octyl Ester"
-      ],
-      "inciName": null
-    },
-    {
-      "id": "27245ec1-d361-5c04-a0cb-9202789fd02c",
-      "casNumber": "2144-53-8",
-      "ecNumber": "218-407-9",
-      "canonicalName": "3,3,4,4,5,5,6,6,7,7,8,8,8-tridecafluorooctyl methacrylate",
-      "evidenceTier": 2,
-      "healthEffects": false,
-      "envEffects": true,
-      "assessments": [
-        {
-          "listId": 2,
-          "status": "Corap List",
-          "regulatoryField": "REACH",
-          "year": 2016
-        }
-      ],
-      "aliases": [
-        "3,3,4,4,5,5,6,6,7,7,8,8,8-tridecafluorooctyl methacrylate",
-        "Tridecafluorohexylethyl methacrylate",
-        "CAPSTONE 62MA",
-        "CHEMINOX FAMAC 6",
-        "ACTYFLON G 06B",
-        "FAMAC 6",
-        "UNII-A3INR94K4A",
-        "FLUOWET MA 600",
-        "3,3,4,4,5,5,6,6,7,7,8,8,8-TRIDECAFLUOROOCTYLMETHACRYLATE-",
-        "PERFLUOROHEXYLETHYL METHACRYLATE",
-        "2-(perfluorohexyl)ethyl methacrylate",
-        "1H,1H,2H,2H-Perfluorooctyl methacrylate",
-        "3,3,4,4,5,5,6,6,7,7,8,8,8-tridecafluorooctyl 2-methylprop-2-enoate",
-        "Perfluorohexyl ethyl methacrylate"
       ],
       "inciName": null
     },
@@ -4736,6 +4485,87 @@
       "inciName": null
     },
     {
+      "id": "346335ec-06b7-5969-a19e-e288ae61dfed",
+      "casNumber": null,
+      "ecNumber": "246-563-8, 204-442-7",
+      "canonicalName": "Butylated Hydroxyanisole (BHA)",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Corap List",
+          "regulatoryField": "REACH",
+          "year": 2015
+        },
+        {
+          "listId": 2,
+          "status": "Commission EDC list",
+          "regulatoryField": "Cosmetics",
+          "year": 2019
+        },
+        {
+          "listId": 2,
+          "status": "List III National Authority evaluation",
+          "regulatoryField": null,
+          "year": 2022
+        },
+        {
+          "listId": 2,
+          "status": "Concluded ED in SEV",
+          "regulatoryField": "REACH",
+          "year": 2024
+        },
+        {
+          "listId": 2,
+          "status": "Classification proposed",
+          "regulatoryField": "CLH",
+          "year": 2025
+        },
+        {
+          "listId": 3,
+          "status": "Corap List",
+          "regulatoryField": "REACH",
+          "year": 2015
+        },
+        {
+          "listId": 3,
+          "status": "Commission EDC list",
+          "regulatoryField": "Cosmetics",
+          "year": 2019
+        },
+        {
+          "listId": 3,
+          "status": "List III National Authority evaluation",
+          "regulatoryField": null,
+          "year": 2022
+        },
+        {
+          "listId": 3,
+          "status": "Concluded ED in SEV",
+          "regulatoryField": "REACH",
+          "year": 2024
+        },
+        {
+          "listId": 3,
+          "status": "Classification proposed",
+          "regulatoryField": "CLH",
+          "year": 2025
+        }
+      ],
+      "aliases": [
+        "BHA",
+        "2-tert-butyl-4-methoxyphenol (BHA)",
+        "2-tert-butyl-4-methoxyphenol",
+        "Butylated Hydroxyanisole",
+        "Butylhydroxyanisole",
+        "E320",
+        "E 320"
+      ],
+      "inciName": null
+    },
+    {
       "id": "3563cc67-6f08-5b45-bb1f-00943b9c3938",
       "casNumber": "128-37-0",
       "ecNumber": "204-881-4",
@@ -4900,6 +4730,47 @@
       ],
       "aliases": [
         "Cyclomethicone"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "d5215a13-9fb8-5aa2-af08-235e037f1c6f",
+      "casNumber": "52315-07-8",
+      "ecNumber": "257-842-9",
+      "canonicalName": "Cypermethrin",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Classification proposed",
+          "regulatoryField": "CLH",
+          "year": 2025
+        }
+      ],
+      "aliases": [
+        "α-cyano-3-phenoxybenzyl 3-(2,2-dichlorovinyl)-2,2-dimethylcyclopropanecarboxylate (Cypermethrin)",
+        "Cypermethrin",
+        "Supercypermethrin",
+        "Barricade",
+        "Ripcord",
+        "Ammo",
+        "Cypermethrine",
+        "Agrothrin",
+        "Basathrin",
+        "Cyperkill",
+        "Cymbush",
+        "Sherpa",
+        "Ustaad",
+        "Ardap",
+        "Cymperator",
+        "Cypercopal",
+        "Hilcyperin",
+        "Neramethrin",
+        "Creokhin",
+        "Cyperco",
+        "Cyperil"
       ],
       "inciName": null
     },
@@ -5138,6 +5009,69 @@
       "inciName": null
     },
     {
+      "id": "93a2c042-2080-5999-8029-452e56af1b21",
+      "casNumber": "1222-05-5",
+      "ecNumber": "214-946-9",
+      "canonicalName": "Hexamethylindanopyran (HHCB)",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Corap List",
+          "regulatoryField": "REACH",
+          "year": 2022
+        }
+      ],
+      "aliases": [
+        "HHCB",
+        "1,3,4,6,7,8- hexahydro-4,6,6,7,8,8- hexamethylindeno[5 ,6-c]pyran (HHCB)",
+        "1,3,4,6,7,8- hexahydro-4,6,6,7,8,8- hexamethylindeno[5 ,6-c]pyran",
+        "Galaxolide",
+        "Abbalide",
+        "Galoxolide",
+        "Pearlide",
+        "Galaxolide White",
+        "hexamethylindanopyran",
+        "Cyclopenta[g]-2-benzopyran, 1,3,4,6,7,8-hexahydro-4,6,6,7,8,8-hexamethyl-",
+        "Hexahydrohexamethyl cyclopentabenzopyran",
+        "1,3,4,6,7,8-Hexahydro-4,6,6,7,8,8-hexamethyl-cyclopenta-gamma-2-benzopyran",
+        "Hexahydro-4,6,6,7,8,8-hexamethylcyclopenta-gamma-2-benzopyran",
+        "1,3,4,6,7,8-Hexahydro-4,6,6,7,8,8-hexamethylindeno(5,6-c)pyran",
+        "Cyclopenta(g)-2-benzopyran, 1,3,4,6,7,8-hexahydro-4,6,6,7,8,8-hexamethyl-",
+        "1,3,4,6,7,8-hexahydro-4,6,6,7,8,8-hexamethylindeno[5,6-c]pyran",
+        "hexahydro-hexamethylcyclopenta-benzopyran",
+        "4,6,6,7,8,8-Hexamethyl-1,3,4,6,7,8-hexahydrocyclopenta[g]isochromene",
+        "1,3,4,6,7,8-Hexahydro-4,6,6,7,8,8-hexamethylcyclopenta[g]-2-benzopyran"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "7e69da5b-8da6-532c-8221-f5bb6ad5c038",
+      "casNumber": "55406-53-6",
+      "ecNumber": "259-627-5",
+      "canonicalName": "Iodopropynyl Butylcarbamate (IPBC)",
+      "evidenceTier": 2,
+      "healthEffects": false,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Concluded ED in BPC opinion",
+          "regulatoryField": "BPR",
+          "year": 2025
+        }
+      ],
+      "aliases": [
+        "IPBC",
+        "3-iodo-2-propynylbutylcarbamate (IPBC)",
+        "3-iodo-2-propynylbutylcarbamate",
+        "Iodopropynyl Butylcarbamate"
+      ],
+      "inciName": null
+    },
+    {
       "id": "5d8874fb-5791-56f4-b94d-b86da77cd62a",
       "casNumber": "71617-10-2",
       "ecNumber": "275-702-5",
@@ -5164,7 +5098,7 @@
       "id": "18ba247f-d909-583b-ad53-d2b49321aee7",
       "casNumber": "99-76-3",
       "ecNumber": "202-785-7",
-      "canonicalName": "Methyl 4-hydroxybenzoate (Methylparaben)",
+      "canonicalName": "Methylparaben",
       "evidenceTier": 2,
       "healthEffects": true,
       "envEffects": true,
@@ -5298,6 +5232,40 @@
         "Oxybenzone (BP-3)",
         "Oxybenzone",
         "Benzophenone-3"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "d7693c20-f656-5382-99ad-42a9e992989b",
+      "casNumber": "17527-29-6",
+      "ecNumber": "241-527-8",
+      "canonicalName": "Perfluorohexylethyl acrylate",
+      "evidenceTier": 2,
+      "healthEffects": false,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Corap List",
+          "regulatoryField": "REACH",
+          "year": 2016
+        }
+      ],
+      "aliases": [
+        "3,3,4,4,5,5,6,6,7,7,8,8,8-tridecafluorooctyl acrylate",
+        "1h,1h,2h,2h-perfluorooctyl acrylate",
+        "perfluorohexylethyl acrylate",
+        "2-Propenoic acid, 3,3,4,4,5,5,6,6,7,7,8,8,8-tridecafluorooctyl ester",
+        "2-(Perfluorohexyl)ethyl acrylate",
+        "1,1,2,2-Tetrahydroperfluorooctyl acrylate",
+        "CHEMINOX FAAC 6",
+        "ACTYFLON G 06C",
+        "ACRYLIC ACID, 3,3,4,4,5,5,6,6,7,7,8,8,8-TRIDECAFLUOROOCTYL ESTER",
+        "3,3,4,4,5,5,6,6,7,7,8,8,8-tridecafluorooctyl prop-2-enoate",
+        "1H,1H,2H,2H-Tridecafluoro-n-octyl Acrylate",
+        "(perfluorohexyl)ethyl acrylate",
+        "1H,1H,2H,2H-Tridecafluoro-n-octyl Acrylate (stabilized with HQ + MEHQ)",
+        "Acrylic Acid 1H,1H,2H,2H-Tridecafluoro-n-octyl Ester"
       ],
       "inciName": null
     },
@@ -5824,6 +5792,45 @@
       "inciName": null
     },
     {
+      "id": "1bef7b67-921d-5f93-90ab-6d0770e37b96",
+      "casNumber": "79-94-7",
+      "ecNumber": "201-236-9",
+      "canonicalName": "Tetrabromobisphenol A",
+      "evidenceTier": 2,
+      "healthEffects": true,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Corap List",
+          "regulatoryField": "REACH",
+          "year": 2015
+        }
+      ],
+      "aliases": [
+        "2,2,6,6-tetrabromo-4,4-isopropylidenediphenol",
+        "Tetrabromobisphenol A",
+        "3,3',5,5'-Tetrabromobisphenol A",
+        "4,4'-(propane-2,2-diyl)bis(2,6-dibromophenol)",
+        "Bromdian",
+        "2,2-Bis(3,5-dibromo-4-hydroxyphenyl)propane",
+        "4,4'-Isopropylidenebis(2,6-dibromophenol)",
+        "TBBPA",
+        "Tetrabromodian",
+        "Firemaster BP 4A",
+        "Fire Guard 2000",
+        "Great Lakes BA-59P",
+        "Saytex RB 100PC",
+        "Tetrabromodiphenylopropane",
+        "2,6-dibromo-4-[2-(3,5-dibromo-4-hydroxyphenyl)propan-2-yl]phenol",
+        "2,2',6,6'-TETRABROMOBISPHENOL A",
+        "4,4'-(1-Methylethylidene)bis(2,6-dibromophenol)",
+        "BA 59",
+        "3,5,3',5'-Tetrabromobisphenol A"
+      ],
+      "inciName": null
+    },
+    {
       "id": "c21edd79-bc7f-53a5-8c26-972165e93e00",
       "casNumber": "148-79-8",
       "ecNumber": "205-725-8",
@@ -5908,6 +5915,40 @@
       ],
       "aliases": [
         "Triclosan"
+      ],
+      "inciName": null
+    },
+    {
+      "id": "27245ec1-d361-5c04-a0cb-9202789fd02c",
+      "casNumber": "2144-53-8",
+      "ecNumber": "218-407-9",
+      "canonicalName": "Tridecafluorohexylethyl methacrylate",
+      "evidenceTier": 2,
+      "healthEffects": false,
+      "envEffects": true,
+      "assessments": [
+        {
+          "listId": 2,
+          "status": "Corap List",
+          "regulatoryField": "REACH",
+          "year": 2016
+        }
+      ],
+      "aliases": [
+        "3,3,4,4,5,5,6,6,7,7,8,8,8-tridecafluorooctyl methacrylate",
+        "Tridecafluorohexylethyl methacrylate",
+        "CAPSTONE 62MA",
+        "CHEMINOX FAMAC 6",
+        "ACTYFLON G 06B",
+        "FAMAC 6",
+        "UNII-A3INR94K4A",
+        "FLUOWET MA 600",
+        "3,3,4,4,5,5,6,6,7,7,8,8,8-TRIDECAFLUOROOCTYLMETHACRYLATE-",
+        "PERFLUOROHEXYLETHYL METHACRYLATE",
+        "2-(perfluorohexyl)ethyl methacrylate",
+        "1H,1H,2H,2H-Perfluorooctyl methacrylate",
+        "3,3,4,4,5,5,6,6,7,7,8,8,8-tridecafluorooctyl 2-methylprop-2-enoate",
+        "Perfluorohexyl ethyl methacrylate"
       ],
       "inciName": null
     },
@@ -6069,47 +6110,6 @@
       ],
       "aliases": [
         "Ziram"
-      ],
-      "inciName": null
-    },
-    {
-      "id": "d5215a13-9fb8-5aa2-af08-235e037f1c6f",
-      "casNumber": "52315-07-8",
-      "ecNumber": "257-842-9",
-      "canonicalName": "α-cyano-3-phenoxybenzyl 3-(2,2-dichlorovinyl)-2,2-dimethylcyclopropanecarboxylate (Cypermethrin)",
-      "evidenceTier": 2,
-      "healthEffects": true,
-      "envEffects": true,
-      "assessments": [
-        {
-          "listId": 2,
-          "status": "Classification proposed",
-          "regulatoryField": "CLH",
-          "year": 2025
-        }
-      ],
-      "aliases": [
-        "α-cyano-3-phenoxybenzyl 3-(2,2-dichlorovinyl)-2,2-dimethylcyclopropanecarboxylate (Cypermethrin)",
-        "Cypermethrin",
-        "Supercypermethrin",
-        "Barricade",
-        "Ripcord",
-        "Ammo",
-        "Cypermethrine",
-        "Agrothrin",
-        "Basathrin",
-        "Cyperkill",
-        "Cymbush",
-        "Sherpa",
-        "Ustaad",
-        "Ardap",
-        "Cymperator",
-        "Cypercopal",
-        "Hilcyperin",
-        "Neramethrin",
-        "Creokhin",
-        "Cyperco",
-        "Cyperil"
       ],
       "inciName": null
     },

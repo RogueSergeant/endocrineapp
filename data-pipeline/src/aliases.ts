@@ -130,3 +130,86 @@ export function dedupeAliases(aliases: string[]): string[] {
   }
   return out;
 }
+
+// Locants ("4-", "1,3,4-") or brackets: the marks of a systematic name.
+const LOCANT_RE = /\d[,-]|[[\](){}]/;
+// A display name worth replacing: brackets, three or more locant digits,
+// or sheer length. Short systematic names ("4-tert-butylphenol") read fine.
+const isComplex = (name: string) =>
+  /[[\](){}]/.test(name) || (name.match(/\d/g)?.length ?? 0) >= 3 || name.length > 40;
+// A plain name: up to four words of letters, optionally with a leading
+// locant or a trailing number or capital ("4-Methylbenzylidene Camphor",
+// "Butylated Hydroxyanisole", "Benzophenone-1", "Bisphenol A").
+const PLAIN_NAME_RE =
+  /^(?:\d{1,2}-)?[A-Za-z][a-z]{2,}(?:[ -](?:[A-Za-z][a-z]{2,}|[A-Z])){0,3}(?:-\d{1,2})?$/;
+const TRAILING_ABBREV_RE = /\s\(([A-Z0-9][A-Z0-9-]{1,})\)\s*$/;
+// A plain name must share at least this long a run of letters with the
+// systematic one to count as describing the same chemical.
+const MIN_SHARED = 5;
+const MIN_SHARE = 0.5;
+
+const lettersOf = (s: string) => s.toLowerCase().replace(/[^a-z]/g, "");
+
+/**
+ * How much of `name` is `systematic`'s chemistry: the share of its letters
+ * that sit in runs of 4+ letters also found in the systematic name, and the
+ * longest such run.
+ */
+function chemistryShared(name: string, systematic: string): { share: number; longest: number } {
+  const x = lettersOf(name);
+  const y = lettersOf(systematic);
+  let covered = 0;
+  let longest = 0;
+  for (let i = 0; i < x.length; ) {
+    let len = 0;
+    while (i + len < x.length && y.includes(x.slice(i, i + len + 1))) len++;
+    if (len >= 4) {
+      covered += len;
+      longest = Math.max(longest, len);
+      i += len;
+    } else {
+      i++;
+    }
+  }
+  return { share: x.length > 0 ? covered / x.length : 0, longest };
+}
+
+/**
+ * The name to show for a substance. A complex systematic display name
+ * ("1,3,4,6,7,8-hexahydro-4,6,6,7,8,8-hexamethylindeno[5,6-c]pyran
+ * (HHCB)") gives way to a plain one, keeping the abbreviation:
+ *
+ * - the first plain name in `own`, the names from the source lists and
+ *   the curated label names ("Tetrabromobisphenol A", "Butylated
+ *   Hydroxyanisole (BHA)"), which regulators and labels actually use;
+ * - failing that, the first plain name in `others` (PubChem's synonyms,
+ *   preferred names first) that is mostly the systematic name's chemistry
+ *   ("Tetrabromobisphenol A", "Hexamethylindanopyran (HHCB)"). Sharing
+ *   chemistry is what tells a descriptive name from a trade name
+ *   ("Bromdian"); with none close enough, the systematic name stays.
+ */
+export function preferCommonName(
+  canonical: string,
+  own: readonly string[],
+  others: readonly string[] = [],
+): string {
+  const abbrev = canonical.match(TRAILING_ABBREV_RE)?.[1] ?? null;
+  const core = abbrev ? canonical.slice(0, canonical.lastIndexOf("(")).trim() : canonical;
+  if (!LOCANT_RE.test(core)) return canonical;
+  const plain = (a: string) => PLAIN_NAME_RE.test(a.trim()) && !isComplex(a.trim());
+  // The source lists' and curated label names replace any systematic name;
+  // PubChem's, less trustworthy, only a complex one.
+  let chosen = own.find(plain)?.trim() ?? null;
+  if (!chosen && !isComplex(core)) return canonical;
+  // PubChem lists its preferred names first: the first plain one that is
+  // mostly the systematic name's chemistry, so trade names don't qualify.
+  chosen ??=
+    others.find((a) => {
+      if (!plain(a)) return false;
+      const { share, longest } = chemistryShared(a, core);
+      return longest >= MIN_SHARED && share >= MIN_SHARE;
+    })?.trim() ?? null;
+  if (!chosen) return canonical;
+  const name = chosen.replace(/^(\d{1,2}-)?([a-z])/, (_, loc: string | undefined, c: string) => (loc ?? "") + c.toUpperCase());
+  return abbrev ? `${name} (${abbrev})` : name;
+}

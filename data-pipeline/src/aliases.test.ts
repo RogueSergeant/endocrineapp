@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   ABBREVIATION_RE,
+  preferCommonName,
   readabilityRank,
   bracketedNames,
   dedupeAliases,
@@ -131,4 +132,41 @@ describe("readabilityRank", () => {
     "%s is a short all-caps token (2)",
     (s) => expect(readabilityRank(s)).toBe(2),
   );
+});
+
+describe("preferCommonName", () => {
+  const hhcb = "1,3,4,6,7,8-hexahydro-4,6,6,7,8,8-hexamethylindeno[5,6-c]pyran (HHCB)";
+
+  it("uses a source or curated plain name, keeping the abbreviation", () => {
+    expect(
+      preferCommonName("2-tert-butyl-4-methoxyphenol (BHA)", ["BHA", "Butylated Hydroxyanisole"]),
+    ).toBe("Butylated Hydroxyanisole (BHA)");
+  });
+
+  it("falls back to the first PubChem name made of the same chemistry, not a trade name", () => {
+    expect(preferCommonName(hhcb, ["HHCB"], ["Galaxolide", "Abbalide", "hexamethylindanopyran"])).toBe(
+      "Hexamethylindanopyran (HHCB)",
+    );
+    expect(
+      preferCommonName("2,2,6,6-tetrabromo-4,4-isopropylidenediphenol", [], [
+        "Tetrabromobisphenol A",
+        "Bromdian",
+      ]),
+    ).toBe("Tetrabromobisphenol A");
+  });
+
+  it("keeps the systematic name when no plain name shares its chemistry", () => {
+    expect(preferCommonName(hhcb, ["HHCB"], ["Galaxolide", "Abbalide"])).toBe(hhcb);
+  });
+
+  it("leaves readable names alone", () => {
+    expect(preferCommonName("Triclosan", [], ["Irgasan"])).toBe("Triclosan");
+    expect(preferCommonName("butylated hydroxytoluene (BHT)", [], ["Ionol"])).toBe(
+      "butylated hydroxytoluene (BHT)",
+    );
+  });
+
+  it("only takes a PubChem name for a complex systematic name", () => {
+    expect(preferCommonName("4-tert-butylphenol", [], ["Butylphen"])).toBe("4-tert-butylphenol");
+  });
 });

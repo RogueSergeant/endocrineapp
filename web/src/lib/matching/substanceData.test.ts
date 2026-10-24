@@ -43,7 +43,7 @@ describe("bundled substance data", () => {
   it.each(["Butylated Hydroxyanisole", "BHA", "E320", "E-320"])(
     "matches %s to BHA, which the source lists without a CAS number",
     (word) => {
-      expect(matchOne(word).map((m) => m.name)).toEqual(["2-tert-butyl-4-methoxyphenol (BHA)"]);
+      expect(matchOne(word).map((m) => m.name)).toEqual(["Butylated Hydroxyanisole (BHA)"]);
     },
   );
 
@@ -80,7 +80,11 @@ describe("bundled substance data", () => {
     const label =
       "INGREDIENTS: AQUA, HOMOSALATE, BENZOPHENONE-3, BUTYL METHOXYDIBENZOYLMETHANE, " +
       "CYCLOPENTASILOXANE, GLYCERIN, PROPYLPARABEN, METHYLPARABEN, BHT, PARFUM.";
-    const matches = matchIngredients(parseIngredients(label), substanceDb.index, substanceDb.lookup);
+    const matches = matchIngredients(
+      parseIngredients(label),
+      substanceDb.index,
+      substanceDb.lookup,
+    );
     expect(matches.map((m) => m.substance.casNumber).sort()).toEqual(
       ["131-57-7", "70356-09-1", "541-02-6", "94-13-3", "99-76-3", "128-37-0"].sort(),
     );

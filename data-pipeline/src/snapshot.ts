@@ -13,7 +13,7 @@
  * cleaned again so filter changes apply to them too.
  */
 import { readFile, writeFile } from "node:fs/promises";
-import { dedupeAliases } from "./aliases.ts";
+import { dedupeAliases, preferCommonName } from "./aliases.ts";
 import type { CosingHit } from "./enrichCosing.ts";
 import { cleanSynonyms } from "./enrichPubchem.ts";
 import type { Substance } from "./types.ts";
@@ -106,6 +106,8 @@ export function applyEnrichment(
   cosing: ReadonlyMap<string, CosingHit> | null = null,
 ): EnrichmentResult {
   const next: Snapshot = { ...snapshot };
+  // Each substance's own names (source lists and curated), before PubChem's.
+  const own = new Map(substances.map((s) => [s, [...s.aliases]]));
   let fromSnapshot = 0;
   let synonymsAdded = 0;
   for (const s of substances) {
@@ -137,6 +139,12 @@ export function applyEnrichment(
     } else {
       delete next[s.casNumber];
     }
+  }
+  // With every alias known, swap systematic display names for common ones.
+  for (const s of substances) {
+    const mine = own.get(s) ?? [];
+    const added = s.aliases.filter((a) => !mine.includes(a));
+    s.canonicalName = preferCommonName(s.canonicalName, mine, added);
   }
   return { snapshot: next, fromSnapshot, synonymsAdded };
 }
