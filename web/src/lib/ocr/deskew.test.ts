@@ -55,4 +55,11 @@ describe("deskew", () => {
     expect(canvas.width).toBeGreaterThan(src.width);
     expect(Math.abs(estimateSkew(canvas, factory))).toBeLessThanOrEqual(0.3);
   });
+
+  it("pads the rotated corners with the paper colour", () => {
+    const { canvas } = deskew(fakeLabel(6), factory);
+    const [r, g, b] = canvas.getContext("2d")!.getImageData(0, 0, 1, 1).data;
+    // Paper #f4efe6 has luminance 239; the padding is that grey.
+    for (const c of [r, g, b]) expect(Math.abs(c! - 239)).toBeLessThanOrEqual(2);
+  });
 });

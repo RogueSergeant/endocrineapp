@@ -24,6 +24,7 @@ type Context2D = Pick<
   | "setTransform"
   | "translate"
   | "fillStyle"
+  | "imageSmoothingEnabled"
   | "imageSmoothingQuality"
 >;
 
@@ -40,7 +41,7 @@ function ctx2d(c: CanvasLike): Context2D {
   return ctx;
 }
 
-/** Median luminance of a canvas, used as the "paper" colour. */
+/** Median luminance of pixel data, used as the "paper" colour. */
 function backgroundLuma(data: Uint8ClampedArray): number {
   const hist = new Uint32Array(256);
   for (let i = 0; i < data.length; i += 4) {
@@ -55,7 +56,14 @@ function backgroundLuma(data: Uint8ClampedArray): number {
   return 255;
 }
 
-function profileScore(small: CanvasLike, work: CanvasLike, angleDeg: number, fill: string): number {
+/** `luma` is a reusable buffer of work.width * work.height, so a search allocates it once. */
+function profileScore(
+  small: CanvasLike,
+  work: CanvasLike,
+  luma: Float32Array,
+  angleDeg: number,
+  fill: string,
+): number {
   const ctx = ctx2d(work);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.fillStyle = fill;
@@ -69,8 +77,7 @@ function profileScore(small: CanvasLike, work: CanvasLike, angleDeg: number, fil
   // while large flat regions such as the table behind a bottle add none.
   const w = work.width;
   const h = work.height;
-  const luma = new Float32Array(w * h);
-  for (let p = 0, i = 0; p < luma.length; p++, i += 4) {
+  for (let p = 0, i = 0; p < w * h; p++, i += 4) {
     luma[p] = (data[i]! * 299 + data[i + 1]! * 587 + data[i + 2]! * 114) / 1000;
   }
   let score = 0;
@@ -85,25 +92,39 @@ function profileScore(small: CanvasLike, work: CanvasLike, angleDeg: number, fil
   return score;
 }
 
-/** Estimated clockwise tilt of the text, in degrees (positive = rotated clockwise). */
-export function estimateSkew(source: CanvasLike, createCanvas: CanvasFactory): number {
+/**
+ * Paper luminance from a nearest-neighbour sample of the source. A smoothed
+ * downscale blends text into the paper and reads too dark, and reading the
+ * full-resolution image costs megabytes; sampling keeps real pixel values.
+ */
+function paperLuma(source: CanvasLike, sw: number, sh: number, createCanvas: CanvasFactory) {
+  const sample = createCanvas(sw, sh);
+  const ctx = ctx2d(sample);
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(source as unknown as CanvasImageSource, 0, 0, sw, sh);
+  return backgroundLuma(ctx.getImageData(0, 0, sw, sh).data);
+}
+
+/** Tilt plus the paper luminance, measured on downscaled copies. */
+function estimate(source: CanvasLike, createCanvas: CanvasFactory): { angle: number; paper: number } {
   const scale = Math.min(1, ANALYSIS_SIDE / Math.max(source.width, source.height));
   const sw = Math.max(1, Math.round(source.width * scale));
   const sh = Math.max(1, Math.round(source.height * scale));
   const small = createCanvas(sw, sh);
   const sctx = ctx2d(small);
   sctx.drawImage(source as unknown as CanvasImageSource, 0, 0, sw, sh);
-  const paper = backgroundLuma(sctx.getImageData(0, 0, sw, sh).data);
+  const paper = paperLuma(source, sw, sh, createCanvas);
   const fill = `rgb(${paper},${paper},${paper})`;
   // Square work canvas large enough for any rotation of `small`.
   const side = Math.ceil(Math.hypot(sw, sh));
   const work = createCanvas(side, side);
+  const luma = new Float32Array(side * side);
 
   const search = (from: number, to: number, step: number) => {
     let best = 0;
     let bestScore = -1;
     for (let a = from; a <= to + 1e-9; a += step) {
-      const s = profileScore(small, work, a, fill);
+      const s = profileScore(small, work, luma, a, fill);
       if (s > bestScore) {
         bestScore = s;
         best = a;
@@ -113,7 +134,12 @@ export function estimateSkew(source: CanvasLike, createCanvas: CanvasFactory): n
   };
 
   const coarse = search(-MAX_ANGLE, MAX_ANGLE, 1);
-  return search(coarse - 1, coarse + 1, 0.2);
+  return { angle: search(coarse - 1, coarse + 1, 0.2), paper };
+}
+
+/** Estimated clockwise tilt of the text, in degrees (positive = rotated clockwise). */
+export function estimateSkew(source: CanvasLike, createCanvas: CanvasFactory): number {
+  return estimate(source, createCanvas).angle;
 }
 
 /**
@@ -124,7 +150,7 @@ export function deskew<C extends CanvasLike>(
   source: C,
   createCanvas: (width: number, height: number) => C,
 ): { canvas: C; angle: number } {
-  const angle = estimateSkew(source, createCanvas);
+  const { angle, paper } = estimate(source, createCanvas);
   if (Math.abs(angle) < MIN_CORRECTION) return { canvas: source, angle: 0 };
   const rad = (angle * Math.PI) / 180;
   const cos = Math.abs(Math.cos(rad));
@@ -133,7 +159,6 @@ export function deskew<C extends CanvasLike>(
   const h = Math.ceil(source.width * sin + source.height * cos);
   const out = createCanvas(w, h);
   const ctx = ctx2d(out);
-  const paper = backgroundLuma(ctx2d(source).getImageData(0, 0, source.width, source.height).data);
   ctx.fillStyle = `rgb(${paper},${paper},${paper})`;
   ctx.fillRect(0, 0, w, h);
   ctx.imageSmoothingQuality = "high";
