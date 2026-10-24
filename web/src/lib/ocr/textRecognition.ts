@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { cleanOcrOutput } from "./cleanOcrOutput";
+import { repairOcrWords } from "./ocrVocabulary";
 import type { WorkerRequest, WorkerResponse } from "./protocol";
 
 export interface RecognitionResult {
@@ -169,7 +170,11 @@ export async function recogniseText(bitmap: ImageBitmap): Promise<RecognitionRes
     });
     send(w, { type: "recognise", id, bitmap }, [bitmap]);
   });
-  return { rawText: result.text, text: cleanOcrOutput(result.text), ms: result.ms };
+  return {
+    rawText: result.text,
+    text: repairOcrWords(cleanOcrOutput(result.text)),
+    ms: result.ms,
+  };
 }
 
 function waitUntilReady(): Promise<void> {
