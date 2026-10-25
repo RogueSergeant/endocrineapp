@@ -14,9 +14,12 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint src --ext .ts,.tsx --max-warnings=0",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "deploy:dev": "wrangler deploy --env dev"
   },
   "dependencies": {
+    "@fontsource-variable/atkinson-hyperlegible-next": "^5.3.0",
+    "@fontsource/atkinson-hyperlegible-mono": "^5.3.0",
     "idb": "^8.0.4",
     "onnxruntime-web": "1.30.0",
     "ppu-paddle-ocr": "6.6.1",

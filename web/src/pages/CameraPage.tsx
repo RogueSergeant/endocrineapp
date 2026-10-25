@@ -5,7 +5,8 @@ import {
   type ChangeEvent,
   type PointerEvent as ReactPointerEvent,
 } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Icon } from "@/components/Icon";
 import { Layout } from "@/components/Layout";
 import { PhotosWaiting } from "@/components/PhotosWaiting";
 import { sharpness } from "@/lib/sharpness";
@@ -47,29 +48,43 @@ function applyCamera(track: MediaStreamTrack, c: CameraConstraint): Promise<void
     .catch(() => undefined);
 }
 
-type CameraError = { title: string; body: string };
+type CameraError = { title: string; body: string; retry: boolean };
+
+const NOT_SUPPORTED: CameraError = {
+  title: "This browser can't open the camera here.",
+  body: "Choose a photo or paste the ingredients instead.",
+  retry: false,
+};
+const DIDNT_START: CameraError = {
+  title: "The camera didn't start.",
+  body: "Another app or browser tab may be using it. Close it and try again.",
+  retry: true,
+};
 
 function describeError(err: unknown): CameraError {
   const name = err instanceof DOMException ? err.name : "";
   if (name === "NotAllowedError" || name === "SecurityError") {
     return {
-      title: "Camera access is blocked",
-      body: "Allow camera access for this site in your browser settings, or use your camera app below.",
+      title: "EndoScan can't use the camera.",
+      body: "Allow camera access in your browser settings, or choose a photo instead.",
+      retry: false,
     };
   }
   if (name === "NotFoundError" || name === "OverconstrainedError") {
-    return { title: "No camera found", body: "Use your camera app or choose a photo instead." };
+    return {
+      title: "No camera found on this device.",
+      body: "Choose a photo or paste the ingredients instead.",
+      retry: false,
+    };
   }
   if (name === "NotReadableError") {
     return {
-      title: "The camera is busy",
-      body: "Another app may be using it. Close it and try again, or use your camera app below.",
+      title: "Another app is using the camera.",
+      body: "Close it and try again, or choose a photo.",
+      retry: true,
     };
   }
-  return {
-    title: "Couldn't open the camera",
-    body: "Use your camera app or choose a photo instead.",
-  };
+  return DIDNT_START;
 }
 
 // Frames to choose from when taking the photo from the preview, and the
@@ -228,10 +243,7 @@ export function CameraPage() {
     const stop = (stream: MediaStream | null) => stream?.getTracks().forEach((t) => t.stop());
     const getUserMedia = navigator.mediaDevices?.getUserMedia?.bind(navigator.mediaDevices);
     if (!getUserMedia) {
-      setError({
-        title: "This browser can't show the camera here",
-        body: "Use your camera app or choose a photo instead.",
-      });
+      setError(NOT_SUPPORTED);
       return;
     }
 
@@ -279,10 +291,7 @@ export function CameraPage() {
         video.srcObject = null;
         if (cancelled) return;
       }
-      setError({
-        title: "The camera didn't start",
-        body: "It may be in use by another app or browser tab. Close those and try again, or use your camera app below.",
-      });
+      setError(DIDNT_START);
     })();
 
     return () => {
@@ -293,11 +302,14 @@ export function CameraPage() {
     };
   }, [attempt, visible, paused]);
 
+  // "Keep waiting" puts the spinner back over the slow-camera options.
+  const [waiting, setWaiting] = useState(false);
   // Still no picture after a while: offer other ways to take the photo.
   const [slow, setSlow] = useState(false);
   useEffect(() => {
     if (live) return;
     setSlow(false);
+    setWaiting(false);
     const timer = setTimeout(() => setSlow(true), START_TIMEOUT_MS);
     return () => clearTimeout(timer);
   }, [live, attempt, visible, paused]);
@@ -383,105 +395,173 @@ export function CameraPage() {
     if (file) openInCrop(file);
   };
 
+  const choosePhotos = (primary: boolean, label = "Choose photos") => (
+    <label className="es-file es-file--block">
+      <input type="file" accept="image/*" onChange={onFile} aria-label={label} />
+      <span className={`es-btn ${primary ? "es-btn--primary" : "es-btn--on-media"} es-btn--block`}>
+        <Icon name="images" />
+        {label}
+      </span>
+    </label>
+  );
+  // The phone's own camera app: for browsers where the camera in the page fails.
+  const cameraApp = (
+    <label className="es-file es-link">
+      <input
+        type="file"
+        accept="image/*"
+        capture="environment"
+        onChange={onFile}
+        aria-label="Use the camera app"
+      />
+      Use the camera app
+    </label>
+  );
+  const privacy = (
+    <p className="es-privacy">
+      <Icon name="lock" small />
+      Read on this phone. Your photo is never uploaded.
+    </p>
+  );
+
   if (error) {
     return (
-      <Layout title="Take photo">
-        <div className="alert">
-          <strong>{error.title}</strong>
-          {error.body}
+      <Layout media context="Camera">
+        <div className="es-viewfinder es-viewfinder--message">
+          <div className="es-overlay" role="alert">
+            <Icon name="cameraOff" className="es-overlay__icon" />
+            <p className="es-overlay__title">{error.title}</p>
+            {error.body && <p className="es-overlay__text">{error.body}</p>}
+            <div className="es-overlay__actions">
+              {error.retry && (
+                <button
+                  type="button"
+                  className="es-btn es-btn--primary es-btn--block"
+                  onClick={tryAgain}
+                >
+                  <Icon name="retry" />
+                  Try again
+                </button>
+              )}
+              {choosePhotos(!error.retry)}
+              {!error.retry && (
+                <Link className="es-btn es-btn--on-media es-btn--block" to="/paste">
+                  <Icon name="paste" />
+                  Paste ingredients
+                </Link>
+              )}
+              <div className="es-overlay__links">{cameraApp}</div>
+            </div>
+          </div>
         </div>
-        <div className="stack">
-          <button type="button" className="btn btn-secondary" onClick={tryAgain}>
-            Try again
-          </button>
-          <label className="btn btn-primary btn-large">
-            Use camera app
-            <input
-              className="visually-hidden"
-              type="file"
-              accept="image/*"
-              capture="environment"
-              onChange={onFile}
-            />
-          </label>
-          <label className="btn btn-secondary">
-            Choose from photos
-            <input className="visually-hidden" type="file" accept="image/*" onChange={onFile} />
-          </label>
-        </div>
+        {privacy}
       </Layout>
     );
   }
 
+  const opening = !live && !paused;
+  const showSlow = opening && slow && !waiting;
   return (
-    <Layout title="Take photo" bare>
-      <div className="camera-page">
-        <p className="crop-hint">Fill the frame with the ingredient list, then tap the button.</p>
-        <PhotosWaiting className="on-dark" />
-        <div className="camera-stage">
-          <video ref={videoRef} playsInline muted autoPlay onPointerDown={onPreviewTap} />
-          {paused && (
-            <div className="busy-overlay">
-              Camera paused
-              <button type="button" className="btn btn-primary" onClick={() => setPaused(false)}>
+    <Layout
+      media
+      context="Fit the ingredients inside the frame"
+      actions={
+        caps.torch && (
+          <button
+            type="button"
+            className="es-torch"
+            aria-pressed={torch}
+            aria-label="Torch"
+            onClick={onToggleTorch}
+          >
+            <Icon name={torch ? "torchOn" : "torchOff"} />
+          </button>
+        )
+      }
+    >
+      <PhotosWaiting onCamera />
+      <div className="es-viewfinder">
+        <video ref={videoRef} playsInline muted autoPlay onPointerDown={onPreviewTap} />
+        {live && <div className="es-guide" aria-hidden="true" />}
+        {paused && (
+          <div className="es-overlay" role="status">
+            <Icon name="pause" className="es-overlay__icon" />
+            <p className="es-overlay__title">Camera paused to save battery.</p>
+            <div className="es-overlay__actions">
+              <button
+                type="button"
+                className="es-btn es-btn--primary es-btn--block"
+                onClick={() => setPaused(false)}
+              >
                 Resume
               </button>
             </div>
-          )}
-          {!live && !paused && (
-            <div className="busy-overlay">
-              Opening the camera…
-              {slow && (
-                <div className="camera-slow">
-                  <p className="small">
-                    Taking a while? Another app, or another tab with this page open, may be using
-                    the camera. Close it, then come back.
-                  </p>
-                  <label className="btn btn-secondary">
-                    Use camera app
-                    <input
-                      className="visually-hidden"
-                      type="file"
-                      accept="image/*"
-                      capture="environment"
-                      onChange={onFile}
-                    />
-                  </label>
-                  <label className="btn btn-secondary">
-                    Choose from photos
-                    <input
-                      className="visually-hidden"
-                      type="file"
-                      accept="image/*"
-                      onChange={onFile}
-                    />
-                  </label>
-                  {details && <p className="camera-details">Details: {details}</p>}
-                </div>
-              )}
+          </div>
+        )}
+        {opening && !showSlow && (
+          <div className="es-overlay" role="status">
+            <span className="es-spinner es-spinner--lg">
+              <span className="es-spinner__ring" />
+              <span className="es-spinner__label--reduced">Working</span>
+            </span>
+            <p className="es-overlay__title">Opening the camera</p>
+          </div>
+        )}
+        {showSlow && (
+          <div className="es-overlay" role="status" style={{ background: "var(--media-raised)" }}>
+            <Icon name="warning" className="es-overlay__icon" />
+            <p className="es-overlay__title">The camera is taking a while.</p>
+            <p className="es-overlay__text">
+              Another app, or another tab with this page open, may be using it.
+            </p>
+            <div className="es-overlay__actions">
+              {choosePhotos(true, "Choose photos instead")}
+              <div className="es-overlay__links">
+                <Link className="es-link" to="/paste">
+                  Paste ingredients
+                </Link>
+                <button type="button" className="es-link" onClick={() => setWaiting(true)}>
+                  Keep waiting
+                </button>
+                {cameraApp}
+              </div>
             </div>
-          )}
-        </div>
-        <div className="camera-actions">
-          {caps.torch && (
-            <button
-              type="button"
-              className="torch-btn"
-              aria-pressed={torch}
-              onClick={onToggleTorch}
-            >
-              {torch ? "Light on" : "Light"}
-            </button>
-          )}
-          <button
-            type="button"
-            className="shutter"
-            aria-label="Take photo"
-            onClick={() => void onShutter()}
-            disabled={!live || busy}
-          />
-        </div>
+            {details && (
+              <details>
+                <summary>Details</summary>
+                {details}
+              </details>
+            )}
+          </div>
+        )}
       </div>
+      <div className="es-shutter-row">
+        <label className="es-file">
+          <input type="file" accept="image/*" onChange={onFile} aria-label="Choose photos" />
+          <span className="es-btn es-btn--icon" style={{ color: "var(--on-media)" }}>
+            <Icon name="images" />
+          </span>
+        </label>
+        <button
+          type="button"
+          className="es-shutter"
+          aria-label="Take photo"
+          data-state={busy ? "capturing" : "ready"}
+          onClick={() => void onShutter()}
+          // Not disabled while capturing, so it stays bright as it presses in.
+          disabled={!live}
+          aria-busy={busy}
+        />
+        <Link
+          className="es-btn es-btn--icon"
+          to="/paste"
+          aria-label="Paste ingredients"
+          style={{ color: "var(--on-media)" }}
+        >
+          <Icon name="paste" />
+        </Link>
+      </div>
+      {privacy}
     </Layout>
   );
 }

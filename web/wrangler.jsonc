@@ -14,5 +14,14 @@
   "observability": {
     "enabled": true,
     "traces": { "enabled": true }
+  },
+  // A separate Worker for reviewing changes before they go live:
+  // `npm run deploy:dev` publishes to endoscan-dev.alfieroberts.co.uk and
+  // leaves the main site alone.
+  "env": {
+    "dev": {
+      "name": "endoscan-dev",
+      "routes": [{ "pattern": "endoscan-dev.alfieroberts.co.uk", "custom_domain": true }]
+    }
   }
 }

@@ -1,71 +1,134 @@
+import { useCallback, useEffect, useState } from "react";
+import { ConfirmSheet, Toast, useToast } from "@/components/Feedback";
+import { Icon } from "@/components/Icon";
 import { Layout } from "@/components/Layout";
-import { Section } from "@/components/Section";
+import { useOcrStatus } from "@/lib/ocr/textRecognition";
 import { forgetAllScans } from "@/lib/scan";
 import { substanceDb } from "@/lib/store/scanStore";
+import { sourceMonth } from "./ResultsPage";
+
+const READER_STATUS = {
+  idle: "Loads when you scan",
+  loading: "Getting ready",
+  ready: "Ready",
+  error: "Didn't load",
+} as const;
+
+/** What this site stores on the phone (history, text reader and app files). */
+function useStorageUsed(): string | null {
+  const [used, setUsed] = useState<string | null>(null);
+  useEffect(() => {
+    void navigator.storage
+      ?.estimate?.()
+      .then(({ usage }) => {
+        if (usage !== undefined) setUsed(`${(usage / 1024 / 1024).toFixed(1)} MB`);
+      })
+      .catch(() => undefined);
+  }, []);
+  return used;
+}
 
 export function SettingsPage() {
-  const handleDeleteAll = async () => {
-    if (
-      !window.confirm(
-        "Delete all scans? This permanently removes your scan history from this device.",
-      )
-    ) {
-      return;
-    }
+  const reader = useOcrStatus((s) => s.status);
+  const storage = useStorageUsed();
+  const [confirming, setConfirming] = useState(false);
+  const toast = useToast();
+
+  const cancel = useCallback(() => setConfirming(false), []);
+  const deleteAll = async () => {
+    setConfirming(false);
     try {
       await forgetAllScans();
-      window.alert("All scans deleted.");
+      toast.show("History deleted");
     } catch (err) {
-      window.alert(`Failed: ${(err as Error).message}`);
+      toast.show(`Couldn't delete: ${(err as Error).message}`);
     }
   };
 
   return (
-    <Layout title="Settings">
-      <Section label="App">
-        <Row k="Version" v={__APP_VERSION__} />
-        <Row k="Build" v={__APP_BUILD__} />
-        <Row k="Substance DB" v={substanceDb.version} />
-        <Row k="Source updated" v={substanceDb.sourceLastUpdated} />
-        <Row k="Substances tracked" v={String(substanceDb.substanceCount)} />
-      </Section>
+    <Layout context="EndoScan">
+      <h1 className="es-page-title">Settings</h1>
+      <div className="es-sheet es-sheet__pad es-stack" style={{ gap: 32 }}>
+        <section className="es-block" aria-labelledby="about-h">
+          <h2 className="es-section-label" id="about-h">
+            About this app
+          </h2>
+          <dl className="es-rows">
+            <Row k="Version" v={`${__APP_VERSION__} (${__APP_BUILD__})`} />
+            <Row
+              k="Lists"
+              v={`edlists.org, ${sourceMonth()} update, ${substanceDb.substanceCount} substances`}
+            />
+            <Row k="Text reader" v={READER_STATUS[reader]} />
+            {storage && <Row k="Storage used" v={storage} />}
+          </dl>
+        </section>
 
-      <Section label="Data">
-        <button type="button" className="btn btn-danger" onClick={() => void handleDeleteAll()}>
-          Delete all my scan history
-        </button>
-      </Section>
+        <section className="es-block" aria-labelledby="data-h">
+          <h2 className="es-section-label" id="data-h">
+            Your data
+          </h2>
+          <p className="es-settings-text">
+            Photos are read on this phone and never uploaded. Your scans are stored in this browser
+            on this phone, and clearing the site&apos;s data removes them. Nothing is sent to a
+            server.
+          </p>
+          <button
+            type="button"
+            className="es-btn es-btn--destructive"
+            style={{ alignSelf: "flex-start", marginTop: 8 }}
+            onClick={() => setConfirming(true)}
+          >
+            <Icon name="trash" />
+            Delete all history
+          </button>
+        </section>
 
-      <Section label="Attribution">
-        <p className="small" style={{ marginTop: 0 }}>
-          Substance lists from edlists.org (Lists I, II, III). INCI mapping from the EU CosIng
-          database. Synonym enrichment from PubChem. Text recognition by PaddleOCR (Apache-2.0).
-        </p>
-        <a
-          href="https://edlists.org"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn btn-primary"
-        >
-          Visit edlists.org
-        </a>
-      </Section>
-
-      <Section label="Privacy">
-        <p className="small" style={{ margin: 0 }}>
-          Photos are read on your device and never uploaded. Your scan history is stored only in
-          this browser; clearing site data removes it. This site is not medical advice.
-        </p>
-      </Section>
+        <section className="es-block" aria-labelledby="src-h">
+          <h2 className="es-section-label" id="src-h">
+            Sources and credits
+          </h2>
+          <ul className="es-credits">
+            <li>
+              Substance data: the endocrine disruptor lists at{" "}
+              <a
+                className="es-link"
+                href="https://edlists.org"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                edlists.org
+              </a>
+              , run by the Danish Environmental Protection Agency for participating national
+              authorities. INCI names from the EU CosIng database; synonyms from PubChem.
+            </li>
+            <li>Text recognition runs on your device, using PaddleOCR (Apache-2.0).</li>
+            <li className="es-meta">
+              Icons: Lucide (ISC). Type: Atkinson Hyperlegible (SIL Open Font Licence).
+            </li>
+          </ul>
+          <p className="es-meta">EndoScan isn&apos;t medical advice.</p>
+        </section>
+      </div>
+      {confirming && (
+        <ConfirmSheet
+          title="Delete all history?"
+          text="Every saved scan will be removed from this phone."
+          confirmLabel="Delete all"
+          onConfirm={() => void deleteAll()}
+          onCancel={cancel}
+        />
+      )}
+      {toast.text && <Toast>{toast.text}</Toast>}
     </Layout>
   );
 }
 
 function Row({ k, v }: { k: string; v: string }) {
   return (
-    <div className="kv-row">
-      <span>{k}</span>
-      <span>{v}</span>
+    <div className="es-rows__row">
+      <dt>{k}</dt>
+      <dd>{v}</dd>
     </div>
   );
 }

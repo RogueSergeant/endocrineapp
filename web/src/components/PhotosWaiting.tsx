@@ -1,20 +1,45 @@
+import { Link } from "react-router-dom";
 import { useScanStore } from "@/lib/store/scanStore";
+import { Banner } from "./Feedback";
 
 /**
  * Shown while earlier photos of a wrapped-round list wait for the next one,
  * so a half-finished multi-photo scan is never invisible.
  */
-export function PhotosWaiting({ className }: { className?: string }) {
+export function PhotosWaiting({ onCamera = false }: { onCamera?: boolean }) {
   const count = useScanStore((s) => s.earlierPhotos.length);
   const clear = useScanStore((s) => s.clearEarlierPhotos);
   if (count === 0) return null;
+  const photos = `${count} photo${count === 1 ? "" : "s"}`;
+  if (onCamera) {
+    return (
+      <Banner
+        kind="info"
+        title={`${photos} of this list read.`}
+        actions={
+          <button type="button" className="es-link" onClick={clear}>
+            Start over
+          </button>
+        }
+      >
+        Take the next part, overlapping the last photo a little.
+      </Banner>
+    );
+  }
   return (
-    <div className={`photos-waiting ${className ?? ""}`} role="status">
-      {count} photo{count === 1 ? "" : "s"} of this list read. Take the next part, overlapping the
-      last photo a little.{" "}
-      <button type="button" className="link-btn" onClick={clear}>
-        Start over
-      </button>
-    </div>
+    <Banner
+      kind="info"
+      title={`You have a scan in progress: ${photos}.`}
+      actions={
+        <>
+          <Link className="es-link" to="/camera">
+            Continue
+          </Link>
+          <button type="button" className="es-link" onClick={clear}>
+            Discard
+          </button>
+        </>
+      }
+    />
   );
 }

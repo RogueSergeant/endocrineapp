@@ -1,16 +1,13 @@
+import { useSyncExternalStore } from "react";
+
 // The service worker serves the precached page, so a new deploy is only
 // picked up on the visit after the one that downloaded it. Once the new
-// worker takes over (skipWaiting + clientsClaim), reload onto it, but not
-// while the user is mid-scan: on those screens wait until they are back
-// on the scan page.
-
-const BUSY_PATHS = ["/camera", "/crop", "/paste"];
+// worker takes over (skipWaiting + clientsClaim) the home page offers a
+// reload onto it. It never reloads by itself: the user may be mid-scan,
+// and the next launch loads the new version anyway.
 
 let updateReady = false;
-
-function reloadNow() {
-  window.location.reload();
-}
+const listeners = new Set<() => void>();
 
 export function registerServiceWorker(): void {
   if (!("serviceWorker" in navigator)) return;
@@ -20,14 +17,24 @@ export function registerServiceWorker(): void {
   navigator.serviceWorker.addEventListener("controllerchange", () => {
     if (!hadController || updateReady) return;
     updateReady = true;
-    if (!BUSY_PATHS.some((p) => window.location.pathname.startsWith(p))) reloadNow();
+    listeners.forEach((l) => l());
   });
   window.addEventListener("load", () => {
     void navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(() => undefined);
   });
 }
 
-/** Called on the scan page: apply an update that arrived mid-scan. */
-export function reloadIfUpdated(): void {
-  if (updateReady) reloadNow();
+/** Whether a newer version has been installed and is waiting for a reload. */
+export function useUpdateReady(): boolean {
+  return useSyncExternalStore(
+    (l) => {
+      listeners.add(l);
+      return () => listeners.delete(l);
+    },
+    () => updateReady,
+  );
+}
+
+export function reloadOntoUpdate(): void {
+  window.location.reload();
 }

@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import type { PointerEvent as ReactPointerEvent } from "react";
+import type { KeyboardEvent as ReactKeyboardEvent, PointerEvent as ReactPointerEvent } from "react";
+import { Banner } from "@/components/Feedback";
+import { Icon } from "@/components/Icon";
 import { Layout } from "@/components/Layout";
+import { DownloadProgress } from "@/pages/ScanPage";
 import { flattenedSize, isConvex, warpQuad, type Point, type Quad } from "@/lib/perspective";
 import { useOcrStatus } from "@/lib/ocr/textRecognition";
 import { addPhotoOfList, scanImage, TooFewIngredientsError } from "@/lib/scan";
@@ -45,12 +48,35 @@ const INITIAL_CORNERS: Quad = [
 // Magnifier shown above a corner while it is dragged, since the finger
 // covers the very spot being lined up: its size, magnification, and how
 // far it sits from the corner (clear of a fingertip).
-const LOUPE = 120;
+const LOUPE = 112;
 const LOUPE_ZOOM = 3;
 const LOUPE_GAP = 70;
 
 const shift = (q: Quad, dx: number, dy: number): Quad =>
   q.map((p) => ({ x: p.x + dx, y: p.y + dy })) as unknown as Quad;
+
+/**
+ * The selection with one corner moved by (dx, dy), or null for a shape that
+ * folds over itself or has a side too short to grab.
+ */
+function movedCorner(
+  q: Quad,
+  i: 0 | 1 | 2 | 3,
+  dx: number,
+  dy: number,
+  fit: { w: number; h: number },
+): Quad | null {
+  const moved: Point = { x: clamp(q[i].x + dx, 0, 1), y: clamp(q[i].y + dy, 0, 1) };
+  const next = q.map((p, j) => (j === i ? moved : p)) as unknown as Quad;
+  const onScreen = next.map((p) => ({ x: p.x * fit.w, y: p.y * fit.h }));
+  const shortest = Math.min(
+    ...onScreen.map((p, j) => {
+      const r = onScreen[(j + 1) % 4]!;
+      return Math.hypot(p.x - r.x, p.y - r.y);
+    }),
+  );
+  return isConvex(next) && shortest >= MIN_RECT_PX ? next : null;
+}
 
 async function decodeImage(blob: Blob): Promise<HTMLCanvasElement> {
   // createImageBitmap applies EXIF orientation by default in current
@@ -198,10 +224,7 @@ export function CropPage() {
       },
       () => {
         if (!cancelled) {
-          setError({
-            title: "Couldn't open that photo",
-            body: "Try taking it again, or choose a different image.",
-          });
+          setError({ title: "That photo couldn't be opened.", body: "Try another photo." });
         }
       },
     );
@@ -259,17 +282,24 @@ export function CropPage() {
       );
       return;
     }
-    const moved: Point = { x: clamp(s[d.mode].x + dx, 0, 1), y: clamp(s[d.mode].y + dy, 0, 1) };
-    const next = s.map((p, i) => (i === d.mode ? moved : p)) as unknown as Quad;
-    // Refuse a shape that folds over itself or has a side too short to grab.
-    const onScreen = next.map((p) => ({ x: p.x * fit.w, y: p.y * fit.h }));
-    const shortest = Math.min(
-      ...onScreen.map((p, i) => {
-        const q = onScreen[(i + 1) % 4]!;
-        return Math.hypot(p.x - q.x, p.y - q.y);
-      }),
-    );
-    if (isConvex(next) && shortest >= MIN_RECT_PX) setCorners(next);
+    const next = movedCorner(s, d.mode, dx, dy, fit);
+    if (next) setCorners(next);
+  };
+
+  // Arrow keys move a focused corner: 1% a press, 5% with Shift.
+  const onHandleKey = (i: 0 | 1 | 2 | 3) => (e: ReactKeyboardEvent<HTMLSpanElement>) => {
+    const step = e.shiftKey ? 0.05 : 0.01;
+    const dir: Record<string, [number, number]> = {
+      ArrowLeft: [-step, 0],
+      ArrowRight: [step, 0],
+      ArrowUp: [0, -step],
+      ArrowDown: [0, step],
+    };
+    const d = dir[e.key];
+    if (!d || busy || !fit) return;
+    e.preventDefault();
+    const next = movedCorner(corners, i, d[0], d[1], fit);
+    if (next) setCorners(next);
   };
 
   const onPointerUp = (e: ReactPointerEvent<HTMLDivElement>) => {
@@ -325,9 +355,15 @@ export function CropPage() {
     } catch (err) {
       if (signal.aborted) return;
       if (err instanceof TooFewIngredientsError) {
-        setError({ title: "Couldn't read that", body: err.message });
+        setError({
+          title: "We couldn't find enough ingredients in that area.",
+          body: "Move the corners closer to the ingredients, or retake the photo in better light.",
+        });
       } else {
-        setError({ title: "Scan failed", body: (err as Error).message });
+        setError({
+          title: "Something went wrong reading the photo.",
+          body: (err as Error).message,
+        });
       }
     } finally {
       running.current = false;
@@ -349,26 +385,21 @@ export function CropPage() {
   const loadingModels = busy && ocr.status === "loading";
   const pct = ocr.total > 0 ? Math.min(100, Math.round((ocr.loaded / ocr.total) * 100)) : 0;
 
+  const CORNER_NAMES = ["Top left", "Top right", "Bottom right", "Bottom left"];
+  const photoNo = earlier + 1;
+
   return (
-    <Layout title="Select the ingredients" bare>
-      <div className="crop-page">
-        <p className="crop-hint">
+    <Layout media context={`Photo ${photoNo} of ${photoNo}`} back backTo={retakeTo}>
+      <div className="es-crop es-crop-wrap">
+        <p className="es-crop__hint">
           {earlier > 0
-            ? `Photo ${earlier + 1}: drag the corners onto the next part of the list.`
-            : "Drag the corners onto the corners of the ingredient list, then tap Read."}
+            ? "Drag the corners around the next part of the list."
+            : "Drag the corners around the ingredients."}
         </p>
-        {error && (
-          <div style={{ padding: "0 16px" }}>
-            <div className="alert" role="alert">
-              <strong>{error.title}</strong>
-              {error.body}
-            </div>
-          </div>
-        )}
         {/* Move/up/cancel live only here: captured pointer events from the
             selection and its handles bubble up to the stage. */}
         <div
-          className="crop-stage"
+          className="es-crop__stage"
           ref={stageRef}
           onPointerDown={onStageTap}
           onPointerMove={onPointerMove}
@@ -384,28 +415,38 @@ export function CropPage() {
           )}
           {fit && pts && (
             <>
-              <svg className="crop-svg" width={stage.w} height={stage.h} aria-hidden="true">
+              <svg className="es-crop__svg" width={stage.w} height={stage.h} aria-hidden="true">
                 <path
-                  className="crop-dim"
-                  fillRule="evenodd"
+                  className="es-crop__shade"
                   d={`M0 0H${stage.w}V${stage.h}H0Z M${pts.map((p) => `${p.x} ${p.y}`).join(" L")}Z`}
                 />
                 <polygon
-                  className="crop-rect"
+                  className="es-crop__keyline"
+                  points={pts.map((p) => `${p.x},${p.y}`).join(" ")}
+                />
+                <polygon
+                  className="es-crop__edge es-crop__edge--grab"
                   points={pts.map((p) => `${p.x},${p.y}`).join(" ")}
                   onPointerDown={onPointerDown("move")}
                   data-testid="crop-rect"
                 />
               </svg>
-              {pts.map((p, i) => (
-                <div
-                  key={i}
-                  className="crop-handle"
-                  style={{ left: p.x, top: p.y }}
-                  onPointerDown={onPointerDown(i as 0 | 1 | 2 | 3)}
-                  aria-hidden="true"
-                />
-              ))}
+              {!busy &&
+                pts.map((p, i) => (
+                  <span
+                    key={i}
+                    className="es-crop__handle"
+                    style={{ left: p.x, top: p.y }}
+                    onPointerDown={onPointerDown(i as 0 | 1 | 2 | 3)}
+                    onKeyDown={onHandleKey(i as 0 | 1 | 2 | 3)}
+                    data-active={activeCorner === i ? "true" : undefined}
+                    tabIndex={0}
+                    role="slider"
+                    aria-label={`${CORNER_NAMES[i]} corner`}
+                    aria-valuetext={`${Math.round(corners[i]!.x * 100)}% across, ${Math.round(corners[i]!.y * 100)}% down`}
+                    aria-valuenow={Math.round(corners[i]!.x * 100)}
+                  />
+                ))}
               {activeCorner !== null && previewUrl && (
                 <Loupe
                   corner={pts[activeCorner]!}
@@ -417,47 +458,73 @@ export function CropPage() {
               )}
             </>
           )}
-          {(busy || !fit) && !error && (
-            <div className="busy-overlay" role="status">
-              <div className="spinner" />
-              {!fit
-                ? "Opening photo…"
-                : loadingModels
-                  ? `Downloading the text reader: ${pct}%`
-                  : adding.current
-                    ? "Reading this photo…"
-                    : "Reading ingredients…"}
+          {!fit && !error && (
+            <div className="es-overlay" role="status">
+              <span className="es-spinner es-spinner--lg">
+                <span className="es-spinner__ring" />
+              </span>
+              <p className="es-overlay__title">Opening the photo</p>
             </div>
           )}
         </div>
-        <div className="crop-actions">
+        {error && (
+          <Banner kind="alert" title={error.title}>
+            {error.body}
+          </Banner>
+        )}
+        <div className="es-crop__actions">
           <button
             type="button"
-            className="link-btn crop-add"
+            className="es-link"
             onClick={addAnotherPhoto}
             disabled={busy || !source}
           >
-            {earlier > 0
-              ? "Still more of the list? Add another photo"
-              : "List wraps round the pack? Add another photo"}
+            <Icon name="imagePlus" small />
+            {earlier > 0 ? "Still more of the list? Add another photo" : "Add another photo"}
           </button>
           <button
             type="button"
-            className="btn btn-secondary"
+            className="es-btn es-btn--on-media"
             onClick={() => navigate(retakeTo, { replace: true })}
             disabled={busy}
           >
+            <Icon name="retake" />
             Retake
           </button>
           <button
             type="button"
-            className="btn btn-primary"
+            className="es-btn es-btn--primary"
             onClick={() => void runScan()}
             disabled={busy || !source}
           >
-            {earlier > 0 ? `Read all ${earlier + 1} photos` : "Read ingredients"}
+            <Icon name="scan" />
+            {earlier > 0 ? `Read all ${earlier + 1} photos` : "Read"}
           </button>
         </div>
+        {busy && (
+          <div className="es-overlay" role="status">
+            {loadingModels ? (
+              <DownloadProgress pct={pct} />
+            ) : (
+              <>
+                <span className="es-spinner es-spinner--lg">
+                  <span className="es-spinner__ring" />
+                  <span className="es-spinner__label--reduced">Working</span>
+                </span>
+                <p className="es-overlay__title">
+                  {adding.current ? "Reading this photo" : "Reading the ingredients"}
+                </p>
+              </>
+            )}
+            <p
+              className="es-overlay__text"
+              style={{ display: "flex", alignItems: "center", gap: 8 }}
+            >
+              <Icon name="lock" small />
+              This happens on your phone.
+            </p>
+          </div>
+        )}
       </div>
     </Layout>
   );
@@ -492,12 +559,12 @@ function Loupe({
   });
   return (
     <div
-      className="crop-loupe"
+      className="es-magnifier"
       style={{ left, top, width: LOUPE, height: LOUPE }}
       aria-hidden="true"
     >
       <div
-        className="crop-loupe-photo"
+        className="es-magnifier__photo"
         style={{
           backgroundImage: `url(${imageUrl})`,
           backgroundSize: `${fit.w * LOUPE_ZOOM}px ${fit.h * LOUPE_ZOOM}px`,
@@ -508,17 +575,14 @@ function Loupe({
       />
       <svg width={LOUPE} height={LOUPE}>
         <polygon
-          className="crop-loupe-edges"
+          className="es-magnifier__edges"
           points={pts
             .map(toLoupe)
             .map((p) => `${p.x},${p.y}`)
             .join(" ")}
         />
-        <path
-          className="crop-loupe-cross"
-          d={`M${half} ${half - 12}V${half + 12}M${half - 12} ${half}H${half + 12}`}
-        />
       </svg>
+      <div className="es-magnifier__cross" />
     </div>
   );
 }

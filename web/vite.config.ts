@@ -53,15 +53,15 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
-      // Registered in src/lib/appUpdate.ts, which also reloads onto updates.
+      // Registered in src/lib/appUpdate.ts, which also offers the reload onto updates.
       injectRegister: false,
       manifest: {
-        name: "ED Scanner",
-        short_name: "ED Scanner",
+        name: "EndoScan",
+        short_name: "EndoScan",
         description:
-          "Scan cosmetic ingredient lists for endocrine disruptors. Runs entirely on your phone.",
-        theme_color: "#0F766E",
-        background_color: "#FAFAF9",
+          "The endocrine disruptor checker: see which ingredients on a cosmetic label are on the EU endocrine disruptor lists. Runs entirely on your phone.",
+        theme_color: "#F5F3EC",
+        background_color: "#F5F3EC",
         display: "standalone",
         start_url: "/",
         icons: [
@@ -73,7 +73,7 @@ export default defineConfig({
         // Precache the app shell and substance data. The OCR models and WASM
         // runtime are left out: the OCR worker downloads them in resumable
         // chunks and caches them itself (src/lib/ocr/chunkedDownload.ts).
-        globPatterns: ["**/*.{js,css,html,svg,png,webmanifest}"],
+        globPatterns: ["**/*.{js,css,html,svg,png,webmanifest,woff2}"],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         navigateFallback: "/index.html",
         clientsClaim: true,

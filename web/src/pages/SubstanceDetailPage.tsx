@@ -1,9 +1,11 @@
-import { useParams } from "react-router-dom";
-import { EvidenceTierBadge } from "@/components/EvidenceTierBadge";
+import { useNavigate, useParams } from "react-router-dom";
+import { EvidenceTierBadge, TIER_EXPLANATION } from "@/components/EvidenceTierBadge";
+import { Icon } from "@/components/Icon";
 import { Layout } from "@/components/Layout";
-import { Section } from "@/components/Section";
+import { breakable } from "@/components/SubstanceMatchCard";
 import { getSubstanceById } from "@/lib/store/scanStore";
 import type { ListId } from "@/types";
+import { sourceMonth } from "./ResultsPage";
 
 // Where each list lives on edlists.org, for a substance without its own page.
 const LIST_PAGE: Record<ListId, string> = {
@@ -12,85 +14,142 @@ const LIST_PAGE: Record<ListId, string> = {
   3: "https://edlists.org/the-ed-lists/list-iii-substances-identified-as-endocrine-disruptors-by-participating-national-authorities",
 };
 
-const TIER_EXPLANATION: Record<ListId, string> = {
-  1: "Legally identified as an endocrine disruptor at EU level.",
-  2: "Currently under investigation by an EU regulatory process.",
-  3: "Evaluated as endocrine-disrupting by a single national authority.",
-};
-
 export function SubstanceDetailPage() {
   const { substanceId } = useParams();
+  const navigate = useNavigate();
   const substance = substanceId ? getSubstanceById(substanceId) : undefined;
 
   if (!substance) {
     return (
-      <Layout title="Substance">
-        <p className="muted">
-          This substance isn&apos;t in the current database. It may have been removed or renamed
-          in a data update.
-        </p>
+      <Layout context="Results">
+        <div className="es-sheet">
+          <div className="es-empty">
+            <Icon name="question" />
+            <h1 className="es-empty__title">We couldn&apos;t find that substance.</h1>
+            <p className="es-empty__text">
+              It may have been removed from the lists in the latest update.
+            </p>
+            <button type="button" className="es-btn es-btn--secondary" onClick={() => navigate(-1)}>
+              Back to results
+            </button>
+          </div>
+        </div>
       </Layout>
     );
   }
 
   // The site ignores search parameters, so link the substance's own page.
   const edlistsUrl = substance.edlistsUrl ?? LIST_PAGE[substance.evidenceTier];
+  const ids = [
+    substance.casNumber && { k: "CAS", v: substance.casNumber, mono: true },
+    substance.ecNumber && { k: "EC", v: substance.ecNumber, mono: true },
+    substance.inciName && { k: "INCI", v: substance.inciName, mono: false },
+  ].filter((r): r is { k: string; v: string; mono: boolean } => Boolean(r));
 
   return (
-    <Layout title={substance.canonicalName}>
-      <h2 className="summary" style={{ overflowWrap: "anywhere" }}>
-        {substance.canonicalName}
-      </h2>
-      <div style={{ marginBottom: 8 }}>
-        <EvidenceTierBadge tier={substance.evidenceTier} />
-      </div>
-      <p className="muted small">{TIER_EXPLANATION[substance.evidenceTier]}</p>
-
-      <Section label="Identifiers">
-        {substance.casNumber && <div className="small">CAS: {substance.casNumber}</div>}
-        {substance.ecNumber && <div className="small">EC: {substance.ecNumber}</div>}
-        {substance.inciName && <div className="small">INCI: {substance.inciName}</div>}
-        {!substance.casNumber && !substance.ecNumber && !substance.inciName && (
-          <div className="small muted">None recorded.</div>
-        )}
-      </Section>
-
-      <Section label="Aliases">
-        <div className="small" style={{ overflowWrap: "anywhere" }}>
-          {substance.aliases.length > 0 ? substance.aliases.join(", ") : "None recorded."}
+    <Layout context="Results">
+      <section className="es-detail-head" aria-labelledby="sub-h">
+        <h1 className="es-page-title" id="sub-h">
+          {breakable(substance.canonicalName)}
+        </h1>
+        <div className="es-entry__tags">
+          <EvidenceTierBadge tier={substance.evidenceTier} />
         </div>
-      </Section>
+        <p>{TIER_EXPLANATION[substance.evidenceTier]}</p>
+      </section>
 
-      <Section label="Effects">
-        <ul className="small" style={{ margin: 0, paddingLeft: 20 }}>
-          <li>{substance.healthEffects ? "Health effects flagged" : "No health flag"}</li>
-          <li>
-            {substance.envEffects ? "Environmental effects flagged" : "No environmental flag"}
-          </li>
-        </ul>
-      </Section>
+      <div className="es-sheet es-sheet__pad es-stack" style={{ gap: 24 }}>
+        <section className="es-block" aria-labelledby="id-h">
+          <h2 className="es-section-label" id="id-h">
+            Identifiers
+          </h2>
+          {ids.length === 0 ? (
+            <p className="es-meta">None recorded.</p>
+          ) : (
+            <dl className="es-rows">
+              {ids.map((r) => (
+                <div className="es-rows__row" key={r.k}>
+                  <dt>{r.k}</dt>
+                  <dd className={r.mono ? "es-identifier" : undefined}>{r.v}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+        </section>
 
-      <Section label="Assessments">
-        {substance.assessments.length === 0 ? (
-          <div className="small">No assessment metadata.</div>
-        ) : (
-          substance.assessments.map((a, i) => (
-            <div key={i} style={{ marginBottom: 8 }}>
-              <div className="small">
-                List {a.listId} · {a.status}
-              </div>
-              <div className="small muted">
-                {[a.regulatoryField, a.year ? String(a.year) : null].filter(Boolean).join(" · ") ||
-                  "No further detail"}
-              </div>
-            </div>
-          ))
+        {substance.aliases.length > 0 && (
+          <section className="es-block" aria-labelledby="aka-h">
+            <h2 className="es-section-label" id="aka-h">
+              Also known as
+            </h2>
+            <ul className="es-rows es-rows--aliases">
+              {substance.aliases.map((a) => (
+                <li className="es-rows__row" key={a}>
+                  {breakable(a)}
+                </li>
+              ))}
+            </ul>
+          </section>
         )}
-      </Section>
 
-      <a href={edlistsUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
-        Open on edlists.org
-      </a>
+        <section className="es-block" aria-labelledby="fx-h">
+          <h2 className="es-section-label" id="fx-h">
+            Effects identified
+          </h2>
+          <dl className="es-rows">
+            <div className="es-rows__row">
+              <dt>Human health</dt>
+              <dd>
+                <Flag icon="health" on={substance.healthEffects} />
+              </dd>
+            </div>
+            <div className="es-rows__row">
+              <dt>Environment</dt>
+              <dd>
+                <Flag icon="leaf" on={substance.envEffects} />
+              </dd>
+            </div>
+          </dl>
+        </section>
+
+        {substance.assessments.length > 0 && (
+          <section className="es-block" aria-labelledby="as-h">
+            <h2 className="es-section-label" id="as-h">
+              Assessments
+            </h2>
+            <dl className="es-rows">
+              {substance.assessments.map((a, i) => (
+                <div className="es-rows__row" key={i}>
+                  <dt>{a.regulatoryField ?? "Assessment"}</dt>
+                  <dd>{[a.status, a.year ? String(a.year) : null].filter(Boolean).join(", ")}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        )}
+
+        <a
+          className="es-link"
+          href={edlistsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ alignSelf: "flex-start" }}
+        >
+          See the listing on edlists.org
+          <Icon name="external" small />
+        </a>
+      </div>
+
+      <p className="es-meta">Lists: edlists.org, {sourceMonth()} update.</p>
     </Layout>
+  );
+}
+
+function Flag({ icon, on }: { icon: "health" | "leaf"; on: boolean }) {
+  return (
+    <span className={on ? "es-flag" : "es-flag es-flag--no"}>
+      <Icon name={icon} />
+      <span className="es-flag__value">{on ? "Yes" : "Not identified"}</span>
+    </span>
   );
 }
