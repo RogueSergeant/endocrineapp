@@ -519,8 +519,22 @@ button {
 .es-example__label {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   gap: var(--space-3);
+  min-height: var(--tap-min);
+  font-weight: 650;
+  color: var(--cobalt);
+  cursor: pointer;
+  list-style: none;
+}
+.es-example__label::-webkit-details-marker {
+  display: none;
+}
+.es-example__label .es-icon {
+  transition: transform 160ms ease;
+}
+.es-example[open] > .es-example__label .es-icon {
+  transform: rotate(180deg);
 }
 .es-ways {
   display: flex;

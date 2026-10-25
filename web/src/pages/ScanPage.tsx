@@ -57,13 +57,12 @@ export function ScanPage() {
       <PhotosWaiting />
       <OcrProgress />
 
-      <section className="es-example" aria-labelledby="ex-h">
-        <div className="es-example__label">
-          <h2 className="es-section-label" id="ex-h">
-            How a result looks
-          </h2>
-          <span className="es-meta">Example</span>
-        </div>
+      {/* Closed at first, so the buttons fit on the first screen. */}
+      <details className="es-example">
+        <summary className="es-example__label">
+          <span>How a result looks</span>
+          <Icon name="chevronDown" />
+        </summary>
         <p className="es-inci" aria-label="Example ingredients with matches marked">
           AQUA, GLYCERIN,{" "}
           <mark className="es-m1" aria-label="List I match">
@@ -80,7 +79,7 @@ export function ScanPage() {
           , PARFUM.
         </p>
         <TierKey />
-      </section>
+      </details>
 
       <section className="es-ways es-bottom" aria-label="Check a label">
         <Link className="es-btn es-btn--primary es-btn--large es-btn--block" to="/camera">
