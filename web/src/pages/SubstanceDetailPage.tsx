@@ -1,5 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { EvidenceTierBadge, TIER_EXPLANATION } from "@/components/EvidenceTierBadge";
+import {
+  ENV_EXPLANATION,
+  EvidenceTierBadge,
+  envOnly,
+  TIER_EXPLANATION,
+} from "@/components/EvidenceTierBadge";
 import { Icon } from "@/components/Icon";
 import { Layout } from "@/components/Layout";
 import { breakable } from "@/components/SubstanceMatchCard";
@@ -53,9 +58,12 @@ export function SubstanceDetailPage() {
           {breakable(substance.canonicalName)}
         </h1>
         <div className="es-entry__tags">
-          <EvidenceTierBadge tier={substance.evidenceTier} />
+          <EvidenceTierBadge tier={substance.evidenceTier} env={envOnly(substance)} />
         </div>
-        <p>{TIER_EXPLANATION[substance.evidenceTier]}</p>
+        {envOnly(substance) && <p>{ENV_EXPLANATION}</p>}
+        <p className={envOnly(substance) ? "es-meta" : undefined}>
+          {TIER_EXPLANATION[substance.evidenceTier]}
+        </p>
       </section>
 
       <div className="es-sheet es-sheet__pad es-stack" style={{ gap: 24 }}>
@@ -85,7 +93,8 @@ export function SubstanceDetailPage() {
             <ul className="es-rows es-rows--aliases">
               {substance.aliases.map((a) => (
                 <li className="es-rows__row" key={a}>
-                  {breakable(a)}
+                  {/* One grid item: bare text and <wbr>s would each take a row. */}
+                  <span>{breakable(a)}</span>
                 </li>
               ))}
             </ul>

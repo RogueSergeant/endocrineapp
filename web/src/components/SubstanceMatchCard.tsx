@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import type { Match, MatchType } from "@/types";
-import { EvidenceTierBadge } from "./EvidenceTierBadge";
+import { EvidenceTierBadge, envOnly } from "./EvidenceTierBadge";
 import { Icon, type IconName } from "./Icon";
 
 const MATCH_TYPE: Record<MatchType, { label: string; icon: IconName }> = {
@@ -68,7 +68,7 @@ export function SubstanceMatchCard({ match }: { match: Match }) {
       <div className="es-entry__main">
         <h3 className="es-card-title">{breakable(match.substance.canonicalName)}</h3>
         <div className="es-entry__tags">
-          <EvidenceTierBadge tier={match.substance.evidenceTier} />
+          <EvidenceTierBadge tier={match.substance.evidenceTier} env={envOnly(match.substance)} />
           <span
             className={match.matchType === "possible" ? "es-mtype es-mtype--possible" : "es-mtype"}
           >

@@ -1,7 +1,11 @@
 import { Fragment, useEffect, useState, type ReactNode } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
+  ENV_EXPLANATION,
+  ENV_HEADING,
+  ENV_LABEL,
   EvidenceTierBadge,
+  envOnly,
   TIER_EXPLANATION,
   TIER_HEADING,
   TIER_LABEL,
@@ -166,10 +170,17 @@ export function ResultsPage() {
 
   const confirmed = view.matches.filter((m) => m.matchType !== "possible");
   const possible = view.matches.filter((m) => m.matchType === "possible");
+  // Listed for environmental effects only: still shown, but kept out of the
+  // headline count and the tier groups, which are about human health.
+  const env = confirmed.filter((m) => envOnly(m.substance));
+  const health = confirmed.filter((m) => !envOnly(m.substance));
   const read = view.parsedIngredients.length;
   const byTier = { 1: 0, 2: 0, 3: 0 } as Record<ListId, number>;
-  confirmed.forEach((m) => byTier[m.substance.evidenceTier]++);
+  health.forEach((m) => byTier[m.substance.evidenceTier]++);
   const nothing = confirmed.length === 0 && possible.length === 0;
+  const envSentence =
+    env.length > 0 &&
+    `${health.length > 0 ? `${env.length} more` : env.length} ${env.length === 1 ? "is" : "are"} listed for ${env.length === 1 ? "its" : "their"} effects on the environment only.`;
 
   const fixWord = () => navigate("/paste", { state: { text: view.parsedIngredients.join(", ") } });
 
@@ -190,17 +201,20 @@ export function ResultsPage() {
       <div className="es-sheet es-sheet--flush">
         <section className="es-summary es-sheet__summary" aria-labelledby="rs">
           <h1 className="es-page-title" id="rs">
-            {confirmed.length > 0
-              ? `${count(confirmed.length, "ingredient", "ingredients")} on the endocrine disruptor lists`
-              : nothing
-                ? "None of the ingredients we read are on the endocrine disruptor lists"
-                : "No ingredients confirmed on the endocrine disruptor lists"}
+            {health.length > 0
+              ? `${count(health.length, "ingredient", "ingredients")} on the endocrine disruptor lists`
+              : env.length > 0
+                ? "No ingredients listed for effects on human health"
+                : nothing
+                  ? "None of the ingredients we read are on the endocrine disruptor lists"
+                  : "No ingredients confirmed on the endocrine disruptor lists"}
           </h1>
           {!nothing && (
             <>
               <p className="es-lead">
                 {[
                   tierSentence(byTier),
+                  envSentence,
                   `We read ${count(read, "ingredient", "ingredients")}.`,
                   possible.length > 0 &&
                     `There ${possible.length === 1 ? "is" : "are"} ${confirmed.length > 0 ? "also " : ""}${count(possible.length, "possible match", "possible matches")} to check.`,
@@ -208,7 +222,7 @@ export function ResultsPage() {
                   .filter(Boolean)
                   .join(" ")}
               </p>
-              <SummaryBar byTier={byTier} possible={possible.length} read={read} />
+              <SummaryBar byTier={byTier} env={env.length} possible={possible.length} read={read} />
             </>
           )}
         </section>
@@ -224,7 +238,7 @@ export function ResultsPage() {
             </div>
             <p className="es-group__note">{TIER_EXPLANATION[t]}</p>
             <ul className="es-group__list">
-              {confirmed
+              {health
                 .filter((m) => m.substance.evidenceTier === t)
                 .map((m) => (
                   <li key={m.substance.id}>
@@ -234,6 +248,26 @@ export function ResultsPage() {
             </ul>
           </section>
         ))}
+
+        {env.length > 0 && (
+          <section className="es-group es-group--env" aria-labelledby="ge">
+            <div className="es-group__head">
+              <Icon name="leaf" />
+              <h2 className="es-group__heading" id="ge">
+                {ENV_HEADING}
+              </h2>
+              <span className="es-group__count">{env.length}</span>
+            </div>
+            <p className="es-group__note">{ENV_EXPLANATION}</p>
+            <ul className="es-group__list">
+              {env.map((m) => (
+                <li key={m.substance.id}>
+                  <SubstanceMatchCard match={m} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         {possible.length > 0 && (
           <section className="es-group es-group--possible" aria-labelledby="gp">
@@ -283,7 +317,7 @@ export function ResultsPage() {
           <div className="es-expand__body es-stack">
             <div>
               <MarkedIngredients ingredients={view.parsedIngredients} matches={view.matches} />
-              {!nothing && <TierKey short possible={possible.length > 0} />}
+              {!nothing && <TierKey short env={env.length > 0} possible={possible.length > 0} />}
             </div>
             <button
               type="button"
@@ -316,20 +350,23 @@ export function ResultsPage() {
 
 function SummaryBar({
   byTier,
+  env,
   possible,
   read,
 }: {
   byTier: Record<ListId, number>;
+  env: number;
   possible: number;
   read: number;
 }) {
-  const listed = byTier[1] + byTier[2] + byTier[3];
+  const listed = byTier[1] + byTier[2] + byTier[3] + env;
   const rest = Math.max(0, read - listed - possible);
   const label = [
     `Of ${count(read, "ingredient", "ingredients")} read:`,
     ...TIERS.filter((t) => byTier[t] > 0).map(
       (t) => `${byTier[t]} on List ${["I", "II", "III"][t - 1]}`,
     ),
+    env > 0 && `${env} listed for the environment only`,
     possible > 0 && count(possible, "possible match", "possible matches"),
     `${rest} not on the lists`,
   ]
@@ -344,6 +381,7 @@ function SummaryBar({
               <span key={t} className={`es-summary__seg--t${t}`} style={{ flex: byTier[t] }} />
             ),
         )}
+        {env > 0 && <span className="es-summary__seg--env" style={{ flex: env }} />}
         {possible > 0 && <span className="es-summary__seg--possible" style={{ flex: possible }} />}
         {rest > 0 && <span style={{ flex: rest }} />}
       </div>
@@ -354,6 +392,17 @@ function SummaryBar({
             {TIER_LABEL[t]}
           </li>
         ))}
+        {env > 0 && (
+          <li>
+            <span
+              className="es-badge es-badge--env es-badge--compact es-badge--sm"
+              aria-hidden="true"
+            >
+              <Icon name="leaf" small />
+            </span>
+            {ENV_LABEL}
+          </li>
+        )}
         {possible > 0 && (
           <li>
             <span className="es-key" style={{ margin: 0 }}>
@@ -378,12 +427,20 @@ function MarkedIngredients({ ingredients, matches }: { ingredients: string[]; ma
       i = ingredients.findIndex((ing) => ing.trim().toLowerCase() === text);
     }
     if (i < 0 || marks.has(i)) continue;
-    marks.set(i, m.matchType === "possible" ? "es-m-possible" : `es-m${m.substance.evidenceTier}`);
+    marks.set(
+      i,
+      m.matchType === "possible"
+        ? "es-m-possible"
+        : envOnly(m.substance)
+          ? "es-m-env"
+          : `es-m${m.substance.evidenceTier}`,
+    );
   }
   const label: Record<string, string> = {
     "es-m1": "List I match",
     "es-m2": "List II match",
     "es-m3": "List III match",
+    "es-m-env": "Environment-only match",
     "es-m-possible": "Possible match",
   };
   return (

@@ -117,9 +117,11 @@ export function ScanPage() {
 /** How matches are marked in an ingredient list. */
 export function TierKey({
   short = false,
+  env = true,
   possible = false,
 }: {
   short?: boolean;
+  env?: boolean;
   possible?: boolean;
 }) {
   return (
@@ -136,6 +138,12 @@ export function TierKey({
         <i className="k3" />
         {short ? "List III" : "List III, national"}
       </li>
+      {env && (
+        <li>
+          <i className="ke" />
+          {short ? "Environment" : "Environment only"}
+        </li>
+      )}
       {possible && (
         <li>
           <i className="kp" />

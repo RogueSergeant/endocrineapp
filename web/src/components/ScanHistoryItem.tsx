@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import type { ListId, ScanDoc } from "@/types";
-import { EvidenceTierBadge } from "./EvidenceTierBadge";
+import { getSubstanceById } from "@/lib/store/scanStore";
+import type { ListId, ScanDoc, StoredMatch } from "@/types";
+import { EvidenceTierBadge, envOnly } from "./EvidenceTierBadge";
 import { Icon } from "./Icon";
 
 const DATE = new Intl.DateTimeFormat("en-GB", {
@@ -18,13 +19,24 @@ export function ScanHistoryItem({ scan, onDelete }: { scan: ScanDoc; onDelete: (
   // Counted as on the results page: possible matches aren't listed ingredients.
   const confirmed = scan.matches.filter((m) => m.matchType !== "possible");
   const possible = scan.matches.length - confirmed.length;
-  const tiers = ([1, 2, 3] as ListId[]).filter((t) => confirmed.some((m) => m.evidenceTier === t));
+  // Environment-only listings are looked up in the current data, as the
+  // results page does; they don't count towards the headline.
+  const isEnv = (m: StoredMatch) => {
+    const s = getSubstanceById(m.substanceId);
+    return s ? envOnly(s) : false;
+  };
+  const env = confirmed.filter(isEnv);
+  const health = confirmed.filter((m) => !isEnv(m));
+  const tiers = ([1, 2, 3] as ListId[]).filter((t) => health.some((m) => m.evidenceTier === t));
+  const envTier = env[0]?.evidenceTier;
   const title =
-    confirmed.length > 0
-      ? plural(confirmed.length, "listed ingredient", "listed ingredients")
-      : possible > 0
-        ? plural(possible, "possible match", "possible matches")
-        : "No listed ingredients";
+    health.length > 0
+      ? plural(health.length, "listed ingredient", "listed ingredients")
+      : env.length > 0
+        ? `${plural(env.length, "ingredient", "ingredients")} listed for the environment`
+        : possible > 0
+          ? plural(possible, "possible match", "possible matches")
+          : "No listed ingredients";
   return (
     <li className="es-history__item">
       <Link className="es-history__link" to={`/results/${scan.id}`}>
@@ -32,11 +44,12 @@ export function ScanHistoryItem({ scan, onDelete }: { scan: ScanDoc; onDelete: (
         <span className="es-history__meta">
           <time dateTime={new Date(scan.createdAt).toISOString()}>{when}</time>·{" "}
           {plural(scan.parsedIngredients.length, "ingredient", "ingredients")}
-          {tiers.length > 0 && (
+          {(tiers.length > 0 || envTier) && (
             <span className="es-row" style={{ gap: 4 }}>
               {tiers.map((t) => (
                 <EvidenceTierBadge key={t} tier={t} compact small />
               ))}
+              {envTier && <EvidenceTierBadge tier={envTier} env compact small />}
             </span>
           )}
         </span>

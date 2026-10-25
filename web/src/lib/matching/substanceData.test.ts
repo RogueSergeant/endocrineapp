@@ -5,6 +5,7 @@ import { matchIngredients } from "./matcher";
 import { looseMatches } from "./possible";
 import { isKnownWord, repairOcrWords } from "@/lib/ocr/ocrVocabulary";
 import { substanceDb } from "@/lib/store/scanStore";
+import { envOnly } from "@/components/EvidenceTierBadge";
 
 function matchOne(word: string) {
   const matches = matchIngredients([word], substanceDb.index, substanceDb.lookup);
@@ -108,5 +109,23 @@ describe("bundled substance data", () => {
     expect(matches.map((m) => m.substance.casNumber).sort()).toEqual(
       ["131-57-7", "70356-09-1", "541-02-6", "94-13-3", "99-76-3", "128-37-0"].sort(),
     );
+  });
+});
+
+describe("environment-only listings", () => {
+  const byCas = (cas: string) => substanceDb.substances.find((s) => s.casNumber === cas)!;
+
+  it("treats IPBC as listed for the environment only", () => {
+    // ECHA BPC opinion 2025: not an ED for humans, ED for non-target organisms.
+    expect(envOnly(byCas("55406-53-6"))).toBe(true);
+  });
+
+  it.each([
+    ["Butylparaben", "94-26-8"],
+    ["Methylparaben", "99-76-3"],
+    ["Benzophenone-3", "131-57-7"],
+    ["Triclosan", "3380-34-5"],
+  ])("keeps %s as a human-health listing", (_, cas) => {
+    expect(envOnly(byCas(cas))).toBe(false);
   });
 });

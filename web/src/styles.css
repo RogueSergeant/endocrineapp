@@ -59,6 +59,12 @@
   --tier-3-soft: #fbf2f7;
   --tier-3-text: #7c4467;
   --tier-3-border: #9a5a83;
+  /* Environment-only listings: still flagged, in a calmer green. */
+  --env: #dfe9d9;
+  --on-env: #1f3a24;
+  --env-soft: #eef4ea;
+  --env-text: #3d6243;
+  --env-border: #4f7a55;
   --error: #b3261e;
   --error-soft: #fbe4e1;
   --destructive: #b3261e;
@@ -111,6 +117,11 @@
     --tier-3-soft: #261320;
     --tier-3-text: #d6a6c3;
     --tier-3-border: #b07a9c;
+    --env: #22362a;
+    --on-env: #cfe6d3;
+    --env-soft: #17231b;
+    --env-text: #9cc7a4;
+    --env-border: #6f9c78;
     --error: #ff8a5c;
     --error-soft: #3d170c;
     --destructive: #ff8a5c;
@@ -357,6 +368,8 @@ button {
 .es-badge--t1 { background: var(--tier-1); color: var(--on-tier-1); }
 .es-badge--t2 { background: var(--tier-2); color: var(--on-tier-2); }
 .es-badge--t3 { background: var(--tier-3); color: var(--on-tier-3); box-shadow: inset 0 0 0 1px var(--tier-3-border); }
+.es-badge--env { background: var(--env); color: var(--on-env); box-shadow: inset 0 0 0 1px var(--env-border); }
+.es-badge--env .es-icon { width: 16px; height: 16px; }
 .es-badge--compact { min-width: 34px; justify-content: center; padding: 0 6px; }
 .es-badge--sm { height: 22px; }
 
@@ -371,6 +384,7 @@ button {
 .es-summary__seg--t1 { background: var(--tier-1); }
 .es-summary__seg--t2 { background: var(--tier-2); }
 .es-summary__seg--t3 { background: var(--tier-3); box-shadow: inset 0 0 0 1px var(--tier-3-border); }
+.es-summary__seg--env { background: var(--env-border); }
 .es-summary__seg--possible { background: repeating-linear-gradient(90deg, var(--line-strong) 0 3px, transparent 3px 6px); }
 .es-summary__legend { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); margin: 0; padding: 0; list-style: none; }
 .es-summary__legend li { display: inline-flex; align-items: center; gap: var(--space-2); font-size: 14px; line-height: 20px; }
@@ -386,6 +400,8 @@ button {
 .es-group--t2 .es-group__count { color: var(--tier-2-text); }
 .es-group--t3 .es-group__head { background: var(--tier-3-soft); }
 .es-group--t3 .es-group__count { color: var(--tier-3-text); }
+.es-group--env .es-group__head { background: var(--env-soft); }
+.es-group--env .es-group__count { color: var(--env-text); }
 .es-group--possible .es-group__head, .es-group--none .es-group__head { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .es-group--possible .es-group__list { margin: var(--space-3) var(--space-4) 0; border: 1px dashed var(--line-strong); border-radius: var(--radius-md); }
 .es-group__list { list-style: none; margin: 0; padding: 0; }
@@ -405,6 +421,7 @@ button {
 .es-inci .es-m1 { background: var(--tier-1-soft); text-decoration: underline solid var(--tier-1-border) 3px; }
 .es-inci .es-m2 { background: var(--tier-2-soft); text-decoration: underline dashed var(--tier-2-border) 2px; }
 .es-inci .es-m3 { background: var(--tier-3-soft); text-decoration: underline dotted var(--tier-3-border) 2px; }
+.es-inci .es-m-env { background: var(--env-soft); text-decoration: underline double var(--env-border) 3px; }
 .es-inci .es-m-possible { background: transparent; outline: 1px dashed var(--line-strong); outline-offset: 1px; text-decoration: none; }
 .es-key { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); margin: var(--space-2) 0 0; padding: 0; list-style: none; font-size: 13px; line-height: 18px; color: var(--ink-muted); }
 .es-key li { display: inline-flex; align-items: center; gap: var(--space-2); }
@@ -412,6 +429,7 @@ button {
 .es-key .k1 { border-bottom: 3px solid var(--tier-1-border); }
 .es-key .k2 { border-bottom: 2px dashed var(--tier-2-border); }
 .es-key .k3 { border-bottom: 2px dotted var(--tier-3-border); }
+.es-key .ke { border-bottom: 3px double var(--env-border); }
 .es-key .kp { height: 12px; width: 18px; border: 1px dashed var(--line-strong); border-radius: 2px; }
 
 .es-footer { display: flex; flex-direction: column; gap: var(--space-1); padding: var(--space-4); border-top: 1px solid var(--line); font-size: 13px; line-height: 18px; color: var(--ink-muted); }
