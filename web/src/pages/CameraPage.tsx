@@ -149,6 +149,8 @@ const CAMERA_REQUESTS: MediaTrackConstraints[] = [
   { facingMode: { ideal: "environment" }, width: { ideal: 3840 }, height: { ideal: 2160 } },
   { facingMode: { ideal: "environment" } },
 ];
+// The camera is released after this long without a tap.
+const IDLE_RELEASE_MS = 30_000;
 // How long a granted camera gets to show a picture before the next request
 // is tried; and how long the page waits before offering other ways to take
 // the photo. Either can stall without an error when another app or tab
@@ -187,8 +189,39 @@ export function CameraPage() {
 
   // Bumped by "Try again" to start the camera afresh.
   const [attempt, setAttempt] = useState(0);
+  // The camera is held only while the page is on screen. A camera page
+  // left open in a background tab otherwise keeps the camera, and every
+  // later request for it (in any tab) waits for ever without an error.
+  const [visible, setVisible] = useState(() => document.visibilityState === "visible");
+  useEffect(() => {
+    const onChange = () => setVisible(document.visibilityState === "visible");
+    document.addEventListener("visibilitychange", onChange);
+    return () => document.removeEventListener("visibilitychange", onChange);
+  }, []);
+
+  // Released after a spell untouched too, for a page left open on screen.
+  const [paused, setPaused] = useState(false);
+  useEffect(() => {
+    if (paused || !visible) return;
+    let timer = setTimeout(() => setPaused(true), IDLE_RELEASE_MS);
+    const restart = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => setPaused(true), IDLE_RELEASE_MS);
+    };
+    window.addEventListener("pointerdown", restart);
+    window.addEventListener("keydown", restart);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("pointerdown", restart);
+      window.removeEventListener("keydown", restart);
+    };
+  }, [paused, visible, attempt]);
 
   useEffect(() => {
+    if (!visible || paused) {
+      setLive(false);
+      return;
+    }
     let cancelled = false;
     // The stream being started, so it can be stopped on the way out.
     let pending: MediaStream | null = null;
@@ -258,7 +291,7 @@ export function CameraPage() {
       stop(streamRef.current);
       streamRef.current = null;
     };
-  }, [attempt]);
+  }, [attempt, visible, paused]);
 
   // Still no picture after a while: offer other ways to take the photo.
   const [slow, setSlow] = useState(false);
@@ -267,7 +300,37 @@ export function CameraPage() {
     setSlow(false);
     const timer = setTimeout(() => setSlow(true), START_TIMEOUT_MS);
     return () => clearTimeout(timer);
-  }, [live, attempt]);
+  }, [live, attempt, visible, paused]);
+
+  // What the browser reports while the camera won't start, so a
+  // screenshot shows why.
+  const [details, setDetails] = useState<string | null>(null);
+  useEffect(() => {
+    if (!slow) return;
+    let cancelled = false;
+    void (async () => {
+      const parts: string[] = [];
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        parts.push(`cameras: ${devices.filter((d) => d.kind === "videoinput").length}`);
+      } catch {
+        parts.push("cameras: unknown");
+      }
+      try {
+        const status = await navigator.permissions.query({ name: "camera" as PermissionName });
+        parts.push(`permission: ${status.state}`);
+      } catch {
+        parts.push("permission: not reported");
+      }
+      parts.push(`page: ${document.visibilityState}`, `secure: ${window.isSecureContext}`);
+      const ua = navigator.userAgent.match(/(Firefox|Chrome|Version|SamsungBrowser)\/[\d.]+/g);
+      if (ua) parts.push(ua.join(" "));
+      if (!cancelled) setDetails(parts.join(" · "));
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [slow]);
 
   const tryAgain = () => {
     setError(null);
@@ -357,12 +420,23 @@ export function CameraPage() {
         <PhotosWaiting className="on-dark" />
         <div className="camera-stage">
           <video ref={videoRef} playsInline muted autoPlay onPointerDown={onPreviewTap} />
-          {!live && (
+          {paused && (
+            <div className="busy-overlay">
+              Camera paused
+              <button type="button" className="btn btn-primary" onClick={() => setPaused(false)}>
+                Resume
+              </button>
+            </div>
+          )}
+          {!live && !paused && (
             <div className="busy-overlay">
               Opening the camera…
               {slow && (
                 <div className="camera-slow">
-                  <p className="small">Taking a while? Another app or tab may be using it.</p>
+                  <p className="small">
+                    Taking a while? Another app, or another tab with this page open, may be using
+                    the camera. Close it, then come back.
+                  </p>
                   <label className="btn btn-secondary">
                     Use camera app
                     <input
@@ -382,6 +456,7 @@ export function CameraPage() {
                       onChange={onFile}
                     />
                   </label>
+                  {details && <p className="camera-details">Details: {details}</p>}
                 </div>
               )}
             </div>

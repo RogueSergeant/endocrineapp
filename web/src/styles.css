@@ -504,6 +504,12 @@ button {
 .camera-slow .btn {
   width: 100%;
 }
+.camera-details {
+  margin: 0;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  overflow-wrap: anywhere;
+}
 .torch-btn {
   position: absolute;
   left: var(--gutter);
