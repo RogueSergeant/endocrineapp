@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { cleanOcrOutput } from "./cleanOcrOutput";
 import { repairOcrWords } from "./ocrVocabulary";
+import type { Quad } from "@/lib/perspective";
 import type { Spot, WorkerRequest, WorkerResponse } from "./protocol";
 
 export interface RecognitionResult {
@@ -60,6 +61,8 @@ interface Pending {
 let worker: Worker | null = null;
 let nextId = 1;
 const pending = new Map<number, Pending>();
+// Detect requests waiting for their region; each settles with null on failure.
+const regions = new Map<number, (corners: Quad | null) => void>();
 let loadWatchdog: ReturnType<typeof setTimeout> | null = null;
 
 function clearLoadWatchdog() {
@@ -108,8 +111,12 @@ function getWorker(): Worker {
         clearLoadWatchdog();
         useOcrStatus.setState({ status: "error", error: msg.message });
         break;
+      case "region":
+        regions.get(msg.id)?.(msg.corners);
+        break;
       case "result":
       case "error": {
+        if (msg.type === "error") regions.get(msg.id)?.(null);
         const p = pending.get(msg.id);
         if (!p) break;
         pending.delete(msg.id);
@@ -133,6 +140,47 @@ function resetWorker(reason: Error) {
   worker = null;
   for (const p of pending.values()) p.reject(reason);
   pending.clear();
+  for (const settle of [...regions.values()]) settle(null);
+}
+
+/**
+ * How long the crop page waits for a suggested selection, including any
+ * wait for models that are still loading. After that it keeps its default.
+ */
+export const DETECT_BUDGET_MS = 3000;
+
+/**
+ * Where the ingredient list probably is in a photo, as corners normalised
+ * to 0-1, or null if none was found in time. Takes ownership of `bitmap`.
+ * Never starts the model download and never resets the worker: it is only
+ * a suggestion, and the scan that follows must not pay for it.
+ */
+export function detectListRegion(bitmap: ImageBitmap): Promise<Quad | null> {
+  const { status } = useOcrStatus.getState();
+  if (status !== "ready" && status !== "loading") {
+    bitmap.close();
+    return Promise.resolve(null);
+  }
+  const id = nextId++;
+  return new Promise((resolve) => {
+    let sent = false;
+    const settle = (corners: Quad | null) => {
+      if (!regions.delete(id)) return;
+      clearTimeout(timer);
+      if (!sent) bitmap.close();
+      resolve(corners);
+    };
+    const timer = setTimeout(() => settle(null), DETECT_BUDGET_MS);
+    regions.set(id, settle);
+    waitUntilReady().then(
+      () => {
+        if (!regions.has(id)) return;
+        sent = true;
+        send(getWorker(), { type: "detect", id, bitmap }, [bitmap]);
+      },
+      () => settle(null),
+    );
+  });
 }
 
 /**

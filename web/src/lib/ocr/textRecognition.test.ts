@@ -207,3 +207,65 @@ describe("recogniseText", () => {
     await expect(result).resolves.toMatchObject({ rawText: "Aqua" });
   });
 });
+
+describe("detectListRegion", () => {
+  const corners = [
+    { x: 0.1, y: 0.2 },
+    { x: 0.9, y: 0.2 },
+    { x: 0.9, y: 0.6 },
+    { x: 0.1, y: 0.6 },
+  ] as const;
+  const photo = () => ({ close: vi.fn() }) as unknown as ImageBitmap;
+  const lastDetectId = () => {
+    const req = [...worker().sent].reverse().find((m) => m.type === "detect");
+    if (!req || req.type !== "detect") throw new Error("no detect request");
+    return req.id;
+  };
+
+  it("returns the worker's corners once the models are ready", async () => {
+    client.preloadOcr();
+    worker().reply({ type: "ready" });
+    const result = client.detectListRegion(photo());
+    await vi.advanceTimersByTimeAsync(0);
+    worker().reply({ type: "region", id: lastDetectId(), corners, ms: 5 });
+    await expect(result).resolves.toEqual(corners);
+  });
+
+  it("doesn't start the download, and gives up straight away without it", async () => {
+    const bitmap = photo();
+    await expect(client.detectListRegion(bitmap)).resolves.toBeNull();
+    expect(FakeWorker.instances).toHaveLength(0);
+    expect(bitmap.close).toHaveBeenCalled();
+  });
+
+  it("gives up after its budget without resetting the worker", async () => {
+    client.preloadOcr();
+    worker().reply({ type: "ready" });
+    const result = client.detectListRegion(photo());
+    await vi.advanceTimersByTimeAsync(client.DETECT_BUDGET_MS);
+    await expect(result).resolves.toBeNull();
+    expect(worker().terminated).toBe(false);
+    expect(status().status).toBe("ready");
+  });
+
+  it("counts a model download against the same budget, and never sends the photo", async () => {
+    client.preloadOcr();
+    const bitmap = photo();
+    const result = client.detectListRegion(bitmap);
+    await vi.advanceTimersByTimeAsync(client.DETECT_BUDGET_MS);
+    await expect(result).resolves.toBeNull();
+    expect(bitmap.close).toHaveBeenCalled();
+    worker().reply({ type: "ready" });
+    await vi.advanceTimersByTimeAsync(0);
+    expect(worker().sent.some((m) => m.type === "detect")).toBe(false);
+  });
+
+  it("settles with null on a worker error", async () => {
+    client.preloadOcr();
+    worker().reply({ type: "ready" });
+    const result = client.detectListRegion(photo());
+    await vi.advanceTimersByTimeAsync(0);
+    worker().reply({ type: "error", id: lastDetectId(), message: "boom" });
+    await expect(result).resolves.toBeNull();
+  });
+});

@@ -17,8 +17,10 @@ import { createProgress } from "./progress";
 import { traceCentreline } from "./lineTrace";
 import { createSpotter, decodeGreedy } from "./spotting";
 import { textAngleFromMap } from "./textAngle";
+import { findTextRegions, isListHeading, rankWithHeadings } from "./textRegion";
 import substancesIndex from "@/data/substances-index.json";
 import { GENERIC_ALIAS_DENYLIST } from "@/lib/matching/matcher";
+import type { Quad } from "@/lib/perspective";
 import type { Spot, WorkerRequest, WorkerResponse } from "./protocol";
 
 // Names in the chunk manifest written by scripts/chunk-assets.mjs.
@@ -391,6 +393,54 @@ async function spotNames(
   );
 }
 
+// How many of the best-shaped blocks get their first line read, looking
+// for an "Ingredients" heading.
+const HEADING_CANDIDATES = 3;
+
+/**
+ * Where the ingredient list probably is in `source`: the corners of the
+ * best block of text, normalised to 0-1, or null if there is none.
+ */
+async function findListCorners(reader: Reader, source: OffscreenCanvas): Promise<Quad | null> {
+  const det = await detectionMap(reader.detector, source);
+  if (!det) return null;
+  // The map is padded to a multiple of 32; the photo fills only part of it.
+  const w = source.width * det.scale;
+  const h = source.height * det.scale;
+  const regions = findTextRegions(det.map, det.width, det.height);
+  if (regions.length === 0) return null;
+  const headed = await Promise.all(
+    regions.slice(0, HEADING_CANDIDATES).map(async ({ topLine }) => {
+      const box = {
+        x: topLine.x / det.scale,
+        y: topLine.y / det.scale,
+        width: topLine.width / det.scale,
+        height: topLine.height / det.scale,
+      };
+      if (box.width < 4 || box.height < 4) return false;
+      const out = await recogniseBox(reader, source, box).catch(() => null);
+      if (!out) return false;
+      const classes = alignClasses(reader.dictionary, out.numClasses);
+      return isListHeading(decodeGreedy(out.data, out.frames, classes).text);
+    }),
+  );
+  const [best] = rankWithHeadings(regions, headed);
+  if (!best) return null;
+  return best.corners.map((p) => ({
+    x: Math.min(1, Math.max(0, p.x / w)),
+    y: Math.min(1, Math.max(0, p.y / h)),
+  })) as unknown as Quad;
+}
+
+// One job at a time: onnxruntime-web can't run a session twice at once,
+// and a detect from the crop page may still be going when Read is tapped.
+let queue: Promise<unknown> = Promise.resolve();
+function exclusive<T>(job: () => Promise<T>): Promise<T> {
+  const run = queue.then(job, job);
+  queue = run.catch(() => undefined);
+  return run;
+}
+
 let servicePromise: Promise<Reader> | null = null;
 
 function getService(): Promise<Reader> {
@@ -444,8 +494,26 @@ self.addEventListener("message", (event: MessageEvent<WorkerRequest>) => {
     );
     return;
   }
+  if (msg.type === "detect") {
+    void exclusive(async () => {
+      try {
+        const reader = await getService();
+        const canvas = new OffscreenCanvas(msg.bitmap.width, msg.bitmap.height);
+        const ctx = canvas.getContext("2d");
+        if (!ctx) throw new Error("Canvas unavailable in worker");
+        ctx.drawImage(msg.bitmap, 0, 0);
+        msg.bitmap.close();
+        const started = performance.now();
+        const corners = await findListCorners(reader, canvas);
+        post({ type: "region", id: msg.id, corners, ms: Math.round(performance.now() - started) });
+      } catch (err) {
+        post({ type: "error", id: msg.id, message: errorMessage(err) });
+      }
+    });
+    return;
+  }
   if (msg.type === "recognise") {
-    void (async () => {
+    void exclusive(async () => {
       try {
         const reader = await getService();
         const { service, detector } = reader;
@@ -488,7 +556,7 @@ self.addEventListener("message", (event: MessageEvent<WorkerRequest>) => {
       } catch (err) {
         post({ type: "error", id: msg.id, message: errorMessage(err) });
       }
-    })();
+    });
   }
 });
 

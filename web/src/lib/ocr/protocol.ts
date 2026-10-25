@@ -1,4 +1,5 @@
 // Messages between the page and ocrWorker.ts.
+import type { Quad } from "@/lib/perspective";
 
 /** A substance name the keyword spotter found in one line of the photo. */
 export interface Spot {
@@ -13,7 +14,10 @@ export interface Spot {
 }
 
 export type WorkerRequest =
-  { type: "init" } | { type: "recognise"; id: number; bitmap: ImageBitmap };
+  | { type: "init" }
+  | { type: "recognise"; id: number; bitmap: ImageBitmap }
+  // Where the ingredient list probably is in a whole photo.
+  | { type: "detect"; id: number; bitmap: ImageBitmap };
 
 export type WorkerResponse =
   | { type: "progress"; loaded: number; total: number }
@@ -30,4 +34,6 @@ export type WorkerResponse =
       spots: Spot[];
       ms: number;
     }
+  /** Corners normalised to 0-1 across and down the photo, or null if no list was found. */
+  | { type: "region"; id: number; corners: Quad | null; ms: number }
   | { type: "error"; id: number; message: string };

@@ -6,7 +6,7 @@ import { Icon } from "@/components/Icon";
 import { Layout } from "@/components/Layout";
 import { DownloadProgress } from "@/pages/ScanPage";
 import { flattenedSize, isConvex, warpQuad, type Point, type Quad } from "@/lib/perspective";
-import { useOcrStatus } from "@/lib/ocr/textRecognition";
+import { detectListRegion, useOcrStatus } from "@/lib/ocr/textRecognition";
 import { addPhotoOfList, scanImage, TooFewIngredientsError } from "@/lib/scan";
 import { useScanStore } from "@/lib/store/scanStore";
 
@@ -21,6 +21,9 @@ const MAX_REGION_SIDE = 2400;
 // just enough to keep two corners from landing on top of each other.
 const MIN_RECT_PX = 12;
 const MIN_CROP_PX = 16;
+// The photo is shrunk to this before looking for the list, which is all
+// the detector looks at anyway.
+const DETECT_SIDE = 960;
 
 // The selection is four independent corners (top-left, top-right,
 // bottom-right, bottom-left) in normalised image coordinates (0-1), so it
@@ -76,6 +79,27 @@ function movedCorner(
     }),
   );
   return isConvex(next) && shortest >= MIN_RECT_PX ? next : null;
+}
+
+/**
+ * Where the ingredient list probably is, to start the selection there, or
+ * null to keep the default (no models yet, no list found, or a shape the
+ * user couldn't drag).
+ */
+async function suggestCorners(source: HTMLCanvasElement): Promise<Quad | null> {
+  const scale = Math.min(1, DETECT_SIDE / Math.max(source.width, source.height));
+  const bitmap = await createImageBitmap(source, {
+    resizeWidth: Math.max(1, Math.round(source.width * scale)),
+    resizeHeight: Math.max(1, Math.round(source.height * scale)),
+    resizeQuality: "medium",
+  });
+  const q = await detectListRegion(bitmap);
+  if (!q || !isConvex(q)) return null;
+  const sides = q.map((p, j) => {
+    const r = q[(j + 1) % 4]!;
+    return Math.hypot((p.x - r.x) * source.width, (p.y - r.y) * source.height);
+  });
+  return Math.min(...sides) * scale >= MIN_RECT_PX * 2 ? q : null;
 }
 
 async function decodeImage(blob: Blob): Promise<HTMLCanvasElement> {
@@ -185,6 +209,11 @@ export function CropPage() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [stage, setStage] = useState({ w: 0, h: 0 });
   const [corners, setCorners] = useState<Quad>(INITIAL_CORNERS);
+  // Whether the corners start where the ingredient list was found.
+  const [suggested, setSuggested] = useState(false);
+  // Set once the user moves the selection: a suggestion arriving after
+  // that is dropped rather than moving it out from under them.
+  const touched = useRef(false);
   const [busy, setBusy] = useState(false);
   // The corner being dragged, for the magnifier.
   const [activeCorner, setActiveCorner] = useState<0 | 1 | 2 | 3 | null>(null);
@@ -234,6 +263,22 @@ export function CropPage() {
     };
   }, [pendingImage]);
 
+  useEffect(() => {
+    if (!source) return;
+    let cancelled = false;
+    suggestCorners(source).then(
+      (q) => {
+        if (cancelled || !q || touched.current || running.current) return;
+        setCorners(q);
+        setSuggested(true);
+      },
+      () => undefined,
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [source]);
+
   useLayoutEffect(() => {
     const el = stageRef.current;
     if (!el) return;
@@ -252,6 +297,7 @@ export function CropPage() {
   const onPointerDown = (mode: DragMode) => (e: ReactPointerEvent<Element>) => {
     if (busy) return;
     e.stopPropagation();
+    touched.current = true;
     e.currentTarget.setPointerCapture(e.pointerId);
     drag.current = {
       mode,
@@ -298,6 +344,7 @@ export function CropPage() {
     const d = dir[e.key];
     if (!d || busy || !fit) return;
     e.preventDefault();
+    touched.current = true;
     const next = movedCorner(corners, i, d[0], d[1], fit);
     if (next) setCorners(next);
   };
@@ -312,6 +359,7 @@ export function CropPage() {
   // Tapping outside the selection re-centres it on the tap.
   const onStageTap = (e: ReactPointerEvent<HTMLDivElement>) => {
     if (busy || !fit || !stageRef.current) return;
+    touched.current = true;
     const box = stageRef.current.getBoundingClientRect();
     const px = (e.clientX - box.left - fit.x) / fit.w;
     const py = (e.clientY - box.top - fit.y) / fit.h;
@@ -392,9 +440,11 @@ export function CropPage() {
     <Layout media context={`Photo ${photoNo} of ${photoNo}`} back backTo={retakeTo}>
       <div className="es-crop es-crop-wrap">
         <p className="es-crop__hint">
-          {earlier > 0
-            ? "Drag the corners around the next part of the list."
-            : "Drag the corners around the ingredients."}
+          {suggested
+            ? "Check the corners sit around the ingredients."
+            : earlier > 0
+              ? "Drag the corners around the next part of the list."
+              : "Drag the corners around the ingredients."}
         </p>
         {/* Move/up/cancel live only here: captured pointer events from the
             selection and its handles bubble up to the stage. */}
