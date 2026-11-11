@@ -28,6 +28,10 @@ endocrineapp/
    [onnxruntime-web](https://onnxruntime.ai/) via
    [ppu-paddle-ocr](https://github.com/PT-Perkasa-Pilar-Utama/ppu-paddle-ocr).
    It takes about 1.5 s on a laptop; expect a few seconds on a phone.
+   On a tub or bottle, where the lines bow, each line is instead traced
+   along the detector's map and unrolled into a flat strip before it is
+   read (`web/src/lib/ocr/curvedLines.ts`): upright boxes round a curved
+   line take in the lines either side.
 5. **Match**: the ingredient parser and matcher in
    `web/src/lib/matching/` compare each ingredient against ~200 listed
    substances (exact, CAS number, or OCR-tolerant fuzzy match).

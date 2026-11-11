@@ -12,6 +12,7 @@ import {
   openChunkStore,
   pruneStore,
 } from "./chunkedDownload";
+import { linesAreCurved, straightenLine, traceLines } from "./curvedLines";
 import { deskew } from "./deskew";
 import { createProgress } from "./progress";
 import { traceCentreline } from "./lineTrace";
@@ -100,12 +101,13 @@ interface DetectionMap {
   scale: number;
 }
 
-/** The detection model's text probability map of `source`, at most TILT_SIDE wide. */
+/** The detection model's text probability map of `source`, at most `side` wide. */
 async function detectionMap(
   session: ort.InferenceSession,
   source: OffscreenCanvas,
+  side = TILT_SIDE,
 ): Promise<DetectionMap | null> {
-  const scale = Math.min(1, TILT_SIDE / Math.max(source.width, source.height));
+  const scale = Math.min(1, side / Math.max(source.width, source.height));
   const sw = Math.max(1, Math.round(source.width * scale));
   const sh = Math.max(1, Math.round(source.height * scale));
   // The model needs sides that are multiples of 32.
@@ -165,12 +167,16 @@ interface Reader {
 
 type Box = { x: number; y: number; width: number; height: number };
 
-/** One read item of a line; `probs` is kept when the worker re-read the line itself. */
+/**
+ * One read item of a line; `probs` is kept when the worker read the line
+ * itself, and `strip` when it read it from a straightened copy.
+ */
 interface LineItem {
   text: string;
   box: Box;
   confidence: number;
   probs?: { data: Float32Array; frames: number };
+  strip?: OffscreenCanvas;
 }
 
 // Lines read below this confidence are re-read along their traced path;
@@ -295,6 +301,74 @@ async function rescueWeakLines(
   return out;
 }
 
+// The map the curved-line reader traces lines on: finer than the tilt
+// pass, so lines set close together on a small label stay apart.
+const LINE_SIDE = 1600;
+
+/**
+ * Every line of `source` read along its own path, or null when the lines
+ * are straight enough for ppu-paddle-ocr's upright boxes (see curvedLines.ts).
+ */
+async function readCurvedLines(
+  reader: Reader,
+  source: OffscreenCanvas,
+): Promise<LineItem[][] | null> {
+  const det = await detectionMap(reader.detector, source, LINE_SIDE);
+  if (!det) return null;
+  const all = traceLines(det.map, det.width, det.height);
+  const typical = all.map((l) => l.thickness).sort((a, b) => a - b)[all.length >> 1] ?? 0;
+  const traced = all.filter(
+    // Specks and dots aren't lines; the map's padding holds no photo.
+    (l) =>
+      l.x1 - l.x0 >= Math.max(l.thickness * 2, typical) &&
+      l.x0 < source.width * det.scale &&
+      l.centres[0]! < source.height * det.scale,
+  );
+  if (!linesAreCurved(traced)) return null;
+  const ctx = source.getContext("2d");
+  if (!ctx) return null;
+  const pixels = ctx.getImageData(0, 0, source.width, source.height);
+  const out: LineItem[][] = [];
+  for (const line of traced) {
+    const flat = straightenLine(pixels, line, det.scale);
+    if (!flat) continue;
+    const strip = new OffscreenCanvas(flat.width, flat.height);
+    const sctx = strip.getContext("2d");
+    if (!sctx) continue;
+    sctx.putImageData(new ImageData(flat.data, flat.width, flat.height), 0, 0);
+    const probs = await recogniseBox(reader, strip, {
+      x: 0,
+      y: 0,
+      width: flat.width,
+      height: flat.height,
+    });
+    if (!probs) continue;
+    const read = decodeGreedy(
+      probs.data,
+      probs.frames,
+      alignClasses(reader.dictionary, probs.numClasses),
+    );
+    // Where the line lies in the photo: the spotter keeps a box per line.
+    let top = Infinity;
+    let bottom = -Infinity;
+    for (const c of line.centres) {
+      top = Math.min(top, c);
+      bottom = Math.max(bottom, c);
+    }
+    const half = flat.height / 2;
+    const y = Math.max(0, top / det.scale - half);
+    const x = Math.max(0, line.x0 / det.scale);
+    const box = {
+      x,
+      y,
+      width: Math.min(source.width, line.x1 / det.scale) - x,
+      height: Math.min(source.height, bottom / det.scale + half) - y,
+    };
+    out.push([{ text: read.text, box, confidence: read.confidence, probs, strip }]);
+  }
+  return out;
+}
+
 /** One line of the photo as the recogniser's input: grey levels scaled to -1..1, 48px high. */
 function lineTensor(source: OffscreenCanvas, box: Box): ort.Tensor | null {
   const width = Math.max(8, Math.round((REC_HEIGHT * box.width) / Math.max(1, box.height)));
@@ -339,6 +413,7 @@ async function spotNames(
 ): Promise<Spot[]> {
   const best = new Map<string, { score: number; line: number }>();
   const lineBoxes: Box[] = [];
+  const lineStrips: (OffscreenCanvas | undefined)[] = [];
   const lineTexts: string[] = [];
   for (const items of lines) {
     if (items.length === 0) continue;
@@ -363,6 +438,7 @@ async function spotNames(
       });
     }
     const n = lineBoxes.push(box) - 1;
+    lineStrips.push(items.length === 1 ? items[0]!.strip : undefined);
     lineTexts.push(items.map((i) => i.text).join(" "));
     for (const hit of spotter.spot(out.data, frames)) {
       const prev = best.get(hit.key);
@@ -373,11 +449,14 @@ async function spotNames(
   const snippet = (n: number) => {
     let p = snippets.get(n);
     if (!p) {
-      const box = lineBoxes[n]!;
+      // A straightened line shows the user the line itself, not the
+      // slice of its neighbours an upright box round a curve takes in.
+      const from = lineStrips[n];
+      const box = from ? { x: 0, y: 0, width: from.width, height: from.height } : lineBoxes[n]!;
       const scale = Math.min(1, SNIPPET_WIDTH / box.width);
       const c = new OffscreenCanvas(Math.round(box.width * scale), Math.round(box.height * scale));
       const ctx = c.getContext("2d");
-      ctx?.drawImage(source, box.x, box.y, box.width, box.height, 0, 0, c.width, c.height);
+      ctx?.drawImage(from ?? source, box.x, box.y, box.width, box.height, 0, 0, c.width, c.height);
       p = ctx ? c.convertToBlob({ type: "image/jpeg", quality: 0.85 }) : Promise.resolve(null);
       snippets.set(n, p);
     }
@@ -532,11 +611,18 @@ self.addEventListener("message", (event: MessageEvent<WorkerRequest>) => {
           (w, h) => new OffscreenCanvas(w, h),
           measured ?? undefined,
         );
-        // Every line, however unsure: weak lines are re-read, and the
-        // spotter looks at them before any are dropped from the text.
-        const result = await service.recognize(level, { minimumConfidence: 0 });
-        const read: LineItem[][] = "lines" in result ? result.lines : [];
-        const lines = await rescueWeakLines(reader, level, read).catch(() => read);
+        // On a curved label every line is read along its own path; a
+        // failure there falls back to the library's reading.
+        const curved = await readCurvedLines(reader, level).catch(() => null);
+        let lines: LineItem[][];
+        if (curved) lines = curved;
+        else {
+          // Every line, however unsure: weak lines are re-read, and the
+          // spotter looks at them before any are dropped from the text.
+          const result = await service.recognize(level, { minimumConfidence: 0 });
+          const read: LineItem[][] = "lines" in result ? result.lines : [];
+          lines = await rescueWeakLines(reader, level, read).catch(() => read);
+        }
         // Spotting is extra evidence; a failure there must not lose the read.
         const spots = await spotNames(reader, level, lines).catch(() => []);
         const kept = lines
